@@ -5,7 +5,6 @@ Content\Graphics\Shaders\Bloom.xnb
 Content\Graphics\Shaders\BloomExtract.xnb
 Content\Graphics\Shaders\BloomCombine.xnb
 Content\Graphics\Shaders\GaussianBlur.xnb
-Content\Graphics\Shaders\Edge.xnb
 Content\Audio\SE\buy.xnb
 Content\Audio\SE\choose.xnb
 Content\Audio\SE\hit.xnb
@@ -15,7 +14,6 @@ Content\Audio\SE\boss_shoot.xnb
 Content\Audio\SE\pass.xnb
 Content\Audio\SE\dead.xnb
 Content\Audio\SE\boss_dead.xnb
-Content\Graphics\Entities\eye_orbit.xnb
 Content\Graphics\Entities\boss_bullet_type1.xnb
 Content\Graphics\Entities\boss_bullet_type2.xnb
 Content\Graphics\Entities\boss_bullet_type3.xnb
@@ -33,12 +31,14 @@ Content\Graphics\Pictures\logo.xnb
 Content\Graphics\Entities\boss_bullet_type4.xnb
 Content\Graphics\Entities\boss_bullet_type5.xnb
 Content\Graphics\Entities\boss_bullet_type6.xnb
+Content\Audio\Musics\background.xnb
+Content\Audio\Musics\menu.xnb
+Content\Graphics\Shaders\Edge.xnb
+Content\Graphics\Entities\eye_orbit.xnb
 Content\Graphics\Pictures\laser.xnb
 Content\Graphics\Pictures\glow.xnb
 Content\Graphics\Entities\base_turret.xnb
 Content\Graphics\Entities\boss_core.xnb
-Content\Audio\Musics\background.xnb
-Content\Audio\Musics\menu.xnb
 Content\Graphics\Entities\shield.xnb
 Content\Graphics\Pictures\trail.xnb
 Content\Audio\Musics\background.wma

@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Danmaku no Kyojin", "Danmaku no Kyojin\Danmaku no Kyojin\Danmaku no Kyojin.csproj", "{574375AD-4203-4AC3-B2C6-D52A31E20A05}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Danmaku no KyojinContent", "Danmaku no Kyojin\Danmaku no KyojinContent\Danmaku no KyojinContent.contentproj", "{F4482B84-3BC1-4237-B74A-0E87CDBC7BCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanmakuNoKyojin", "DanmakuNoKyojin\DanmakuNoKyojin.csproj", "{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,16 @@ Global
 		{F4482B84-3BC1-4237-B74A-0E87CDBC7BCE}.DVD-5|x86.ActiveCfg = Debug|x86
 		{F4482B84-3BC1-4237-B74A-0E87CDBC7BCE}.Release|x86.ActiveCfg = Release|x86
 		{F4482B84-3BC1-4237-B74A-0E87CDBC7BCE}.SingleImage|x86.ActiveCfg = Release|x86
+		{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}.CD_ROM|x86.ActiveCfg = Release|x86
+		{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}.CD_ROM|x86.Build.0 = Release|x86
+		{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}.Debug|x86.ActiveCfg = Debug|x86
+		{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}.Debug|x86.Build.0 = Debug|x86
+		{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}.DVD-5|x86.ActiveCfg = Debug|x86
+		{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}.DVD-5|x86.Build.0 = Debug|x86
+		{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}.Release|x86.ActiveCfg = Release|x86
+		{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}.Release|x86.Build.0 = Release|x86
+		{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}.SingleImage|x86.ActiveCfg = Release|x86
+		{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}.SingleImage|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

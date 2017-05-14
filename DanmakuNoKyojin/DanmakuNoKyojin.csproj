@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C7D397A6-80F5-45A0-AB1B-FD5364B5CF85}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DanmakuNoKyojin</RootNamespace>
+    <AssemblyName>DanmakuNoKyojin</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MonoGamePlatform>Windows</MonoGamePlatform>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\$(MonoGamePlatform)\$(Platform)\$(Configuration)\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\$(MonoGamePlatform)\$(Platform)\$(Configuration)\</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="BulletEngine\Bullet.cs" />
+    <Compile Include="BulletEngine\BulletMLNode.cs" />
+    <Compile Include="BulletEngine\BulletPattern.cs" />
+    <Compile Include="BulletEngine\ENodeName.cs" />
+    <Compile Include="BulletEngine\ENodeType.cs" />
+    <Compile Include="BulletEngine\EPatternType.cs" />
+    <Compile Include="BulletEngine\Equationator\BaseNode.cs" />
+    <Compile Include="BulletEngine\Equationator\BulletMLEquation.cs" />
+    <Compile Include="BulletEngine\Equationator\Equation.cs" />
+    <Compile Include="BulletEngine\Equationator\EquationNode.cs" />
+    <Compile Include="BulletEngine\Equationator\FunctionDelegate.cs" />
+    <Compile Include="BulletEngine\Equationator\FunctionNode.cs" />
+    <Compile Include="BulletEngine\Equationator\NumberNode.cs" />
+    <Compile Include="BulletEngine\Equationator\OperatorNode.cs" />
+    <Compile Include="BulletEngine\Equationator\ParamDelegate.cs" />
+    <Compile Include="BulletEngine\Equationator\ParamNode.cs" />
+    <Compile Include="BulletEngine\Equationator\PemdasValue.cs" />
+    <Compile Include="BulletEngine\Equationator\Token.cs" />
+    <Compile Include="BulletEngine\Equationator\TokenType.cs" />
+    <Compile Include="BulletEngine\ERunStatus.cs" />
+    <Compile Include="BulletEngine\FireData.cs" />
+    <Compile Include="BulletEngine\GameManager.cs" />
+    <Compile Include="BulletEngine\IBulletManager.cs" />
+    <Compile Include="BulletEngine\Mover.cs" />
+    <Compile Include="BulletEngine\MoverManager.cs" />
+    <Compile Include="BulletEngine\PositionDelegate.cs" />
+    <Compile Include="BulletEngine\Tasks\Accel.cs" />
+    <Compile Include="BulletEngine\Tasks\Action.cs" />
+    <Compile Include="BulletEngine\Tasks\ChangeDirection.cs" />
+    <Compile Include="BulletEngine\Tasks\ChangeSpeed.cs" />
+    <Compile Include="BulletEngine\Tasks\Fire.cs" />
+    <Compile Include="BulletEngine\Tasks\SetDirection.cs" />
+    <Compile Include="BulletEngine\Tasks\SetSpeed.cs" />
+    <Compile Include="BulletEngine\Tasks\Task.cs" />
+    <Compile Include="BulletEngine\Tasks\Vanish.cs" />
+    <Compile Include="BulletEngine\Tasks\Wait.cs" />
+    <Compile Include="Camera\Camera2D.cs" />
+    <Compile Include="Collisions\CollisionCircle.cs" />
+    <Compile Include="Collisions\CollisionConvexPolygon.cs" />
+    <Compile Include="Collisions\CollisionElement.cs" />
+    <Compile Include="Collisions\CollisionElements.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Controls\Control.cs" />
+    <Compile Include="Controls\ControlManager.cs" />
+    <Compile Include="Controls\GameState.cs" />
+    <Compile Include="Controls\GameStateManager.cs" />
+    <Compile Include="Controls\InputHandler.cs" />
+    <Compile Include="DnK.cs" />
+    <Compile Include="Entities\BaseBullet.cs" />
+    <Compile Include="Entities\Boss\Boss.cs" />
+    <Compile Include="Entities\Boss\BossCore.cs" />
+    <Compile Include="Entities\Boss\BossPart.cs" />
+    <Compile Include="Entities\Boss\BossStructure.cs" />
+    <Compile Include="Entities\Bullet.cs" />
+    <Compile Include="Entities\BulletLauncherEntity.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\ICollidable.cs" />
+    <Compile Include="Entities\Laser.cs" />
+    <Compile Include="Entities\Line.cs" />
+    <Compile Include="Entities\Player.cs" />
+    <Compile Include="Entities\SpriteEntity.cs" />
+    <Compile Include="Entities\Timer.cs" />
+    <Compile Include="Entities\Turret.cs" />
+    <Compile Include="Improvements.cs" />
+    <Compile Include="Particles\ParticleManager.cs" />
+    <Compile Include="Particles\ParticleState.cs" />
+    <Compile Include="PlayerData.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Screens\BaseGameState.cs" />
+    <Compile Include="Screens\DebugScreen.cs" />
+    <Compile Include="Screens\GameConfigurationScreen.cs" />
+    <Compile Include="Screens\GameoverScreen.cs" />
+    <Compile Include="Screens\GamepadInputsScreen.cs" />
+    <Compile Include="Screens\GameplayScreen.cs" />
+    <Compile Include="Screens\ImprovementScreen.cs" />
+    <Compile Include="Screens\KeyboardInputsScreen.cs" />
+    <Compile Include="Screens\LeaderboardScreen.cs" />
+    <Compile Include="Screens\OptionsScreen.cs" />
+    <Compile Include="Screens\PatternTestScreen.cs" />
+    <Compile Include="Screens\TitleScreen.cs" />
+    <Compile Include="Shaders\BloomComponent.cs" />
+    <Compile Include="Shaders\BloomSettings.cs" />
+    <Compile Include="Shaders\Edge.cs" />
+    <Compile Include="Shaders\IBloomService.cs" />
+    <Compile Include="Shapes\PolygonShape.cs" />
+    <Compile Include="Sprites\AnimatedSprite.cs" />
+    <Compile Include="Sprites\Animation.cs" />
+    <Compile Include="Sprites\BaseSprite.cs" />
+    <Compile Include="Triangulator\Triangulator.cs" />
+    <Compile Include="Triangulator\Utils\CyclicalList.cs" />
+    <Compile Include="Triangulator\Utils\IndexableCyclicalLinkedList.cs" />
+    <Compile Include="Triangulator\Utils\LineSegment.cs" />
+    <Compile Include="Triangulator\Utils\Triangle.cs" />
+    <Compile Include="Triangulator\Utils\Vertex.cs" />
+    <Compile Include="Utils\ColorUtil.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\FrameRateCounter.cs" />
+    <Compile Include="Utils\ImprovementElement.cs" />
+    <Compile Include="Utils\MathUtil.cs" />
+    <Compile Include="Utils\Primitives2D.cs" />
+    <Compile Include="Utils\StaticClassSerializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Content\Audio\Musics\Background.mp3" />
+    <Compile Include="Content\Audio\Musics\Menu.mp3" />
+    <Compile Include="Content\Audio\SE\boss_dead.wav" />
+    <Compile Include="Content\Audio\SE\boss_shoot.wav" />
+    <Compile Include="Content\Audio\SE\buy.wav" />
+    <Compile Include="Content\Audio\SE\choose.wav" />
+    <Compile Include="Content\Audio\SE\dead.wav" />
+    <Compile Include="Content\Audio\SE\hit.wav" />
+    <Compile Include="Content\Audio\SE\hurt.wav" />
+    <Compile Include="Content\Audio\SE\pass.wav" />
+    <Compile Include="Content\Audio\SE\select.wav" />
+    <None Include="Content\Data\Patterns\Core\circle.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Data\Patterns\Core\double_circles.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Data\Patterns\Core\sharingan.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Data\Patterns\Core\spiral.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Data\Patterns\Core\swarm.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Data\Patterns\test.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Data\Patterns\Turret\basic.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Data\Patterns\Turret\homing.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Data\Patterns\Turret\shootgun.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Compile Include="Content\Graphics\Entities\base_turret.png" />
+    <Compile Include="Content\Graphics\Entities\boss_bullet_type1.png" />
+    <Compile Include="Content\Graphics\Entities\boss_bullet_type2.png" />
+    <Compile Include="Content\Graphics\Entities\boss_bullet_type3.png" />
+    <Compile Include="Content\Graphics\Entities\boss_bullet_type4.png" />
+    <Compile Include="Content\Graphics\Entities\boss_bullet_type5.png" />
+    <Compile Include="Content\Graphics\Entities\boss_bullet_type6.png" />
+    <Compile Include="Content\Graphics\Entities\boss_core.png" />
+    <Compile Include="Content\Graphics\Entities\eye_orbit.png" />
+    <Compile Include="Content\Graphics\Entities\player.png" />
+    <Compile Include="Content\Graphics\Entities\player_bullet.png" />
+    <Compile Include="Content\Graphics\Entities\shield.png" />
+    <Compile Include="Content\Graphics\Pictures\background.png" />
+    <Compile Include="Content\Graphics\Pictures\gamepad_icon.png" />
+    <Compile Include="Content\Graphics\Pictures\gauge_left.png" />
+    <Compile Include="Content\Graphics\Pictures\gauge_middle.png" />
+    <Compile Include="Content\Graphics\Pictures\gauge_right.png" />
+    <Compile Include="Content\Graphics\Pictures\glow.png" />
+    <Compile Include="Content\Graphics\Pictures\keyboard_icon.png" />
+    <Compile Include="Content\Graphics\Pictures\laser.png" />
+    <Compile Include="Content\Graphics\Pictures\life_icon.png" />
+    <Compile Include="Content\Graphics\Pictures\logo.png" />
+    <Compile Include="Content\Graphics\Pictures\player_hitbox.png" />
+    <Compile Include="Content\Graphics\Pictures\trail.png" />
+    <Compile Include="Content\Graphics\Shaders\Bloom.fx" />
+    <Compile Include="Content\Graphics\Shaders\BloomCombine.fx" />
+    <Compile Include="Content\Graphics\Shaders\BloomExtract.fx" />
+    <Compile Include="Content\Graphics\Shaders\Edge.fx" />
+    <Compile Include="Content\Graphics\Shaders\GaussianBlur.fx" />
+    <Content Include="Icon.ico" />
+    <Compile Include="Content\Graphics\Fonts\ControlFont.spritefont" />
+    <Compile Include="Content\Graphics\Fonts\TimerSeconds.spritefont" />
+    <Compile Include="Content\Graphics\Fonts\TitleFont.spritefont" />
+  </ItemGroup>
+  <ItemGroup>
+    <MonoGameContentReference Include="Content\Content.mgcb" />
+    <None Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Effects\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
