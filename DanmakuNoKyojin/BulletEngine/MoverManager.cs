@@ -14,11 +14,11 @@ namespace Danmaku_no_Kyojin.BulletEngine
 
         public PositionDelegate GetPlayerPosition;
 
-        private DnK _gameRef;
+        private GameProcessor _gameRef;
 
         private SoundEffect _shoot;
 
-        public MoverManager(DnK game)
+        public MoverManager(GameProcessor game)
         {
             _gameRef = game;
         }

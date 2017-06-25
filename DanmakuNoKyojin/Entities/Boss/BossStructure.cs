@@ -23,7 +23,7 @@ namespace Danmaku_no_Kyojin.Entities.Boss
         private enum Direction { Up, Down, Right, Left, UpLeft, DownLeft, UpRight, DownRight };
         private enum Symmetry { Vertical, Horizontal };
 
-        private DnK _gameRef;
+        private GameProcessor _gameRef;
 
         private Entity _parent;
         private PolygonShape _polygonShape;
@@ -57,7 +57,7 @@ namespace Danmaku_no_Kyojin.Entities.Boss
             return _polygonShape.Vertices;
         }
 
-        public BossStructure(DnK game, Entity parent, int iteration = 50, float step = 25, PolygonShape polygonShape = null)
+        public BossStructure(GameProcessor game, Entity parent, int iteration = 50, float step = 25, PolygonShape polygonShape = null)
         {
             _gameRef = game;
             _parent = parent;

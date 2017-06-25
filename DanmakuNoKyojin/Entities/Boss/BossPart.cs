@@ -78,7 +78,7 @@ namespace Danmaku_no_Kyojin.Entities.Boss
         
 
         public BossPart(
-            DnK gameRef,
+            GameProcessor gameRef,
             Boss bossRef,
             List<Player> playerList,
             MoverManager moverManager, 

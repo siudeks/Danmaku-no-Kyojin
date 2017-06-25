@@ -88,7 +88,7 @@
     <Compile Include="Controls\GameState.cs" />
     <Compile Include="Controls\GameStateManager.cs" />
     <Compile Include="Controls\InputHandler.cs" />
-    <Compile Include="DnK.cs" />
+    <Compile Include="GameProcessor.cs" />
     <Compile Include="Entities\BaseBullet.cs" />
     <Compile Include="Entities\Boss\Boss.cs" />
     <Compile Include="Entities\Boss\BossCore.cs" />

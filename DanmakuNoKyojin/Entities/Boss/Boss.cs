@@ -15,7 +15,7 @@ namespace Danmaku_no_Kyojin.Entities.Boss
 {
     class Boss
     {
-        private DnK _gameRef;
+        private GameProcessor _gameRef;
 
         private TimeSpan _timer;
         private int _defeatCounter;
@@ -56,7 +56,7 @@ namespace Danmaku_no_Kyojin.Entities.Boss
             get { return _core; }
         }
 
-        public Boss(DnK gameRef, List<Player> players, int iteration = 50, float step = 25)
+        public Boss(GameProcessor gameRef, List<Player> players, int iteration = 50, float step = 25)
         {
             _gameRef = gameRef;
             _defeatCounter = 0;

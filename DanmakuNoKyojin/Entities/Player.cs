@@ -84,7 +84,7 @@ namespace Danmaku_no_Kyojin.Entities
 
         #endregion
 
-        public Player(DnK gameRef, Viewport viewport, int id, Config.Controller controller, Vector2 position)
+        public Player(GameProcessor gameRef, Viewport viewport, int id, Config.Controller controller, Vector2 position)
             : base(gameRef)
         {
             _viewport = viewport;

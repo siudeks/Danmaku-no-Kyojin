@@ -13,7 +13,7 @@ namespace Danmaku_no_Kyojin.Entities
             return Bullets;
         }
 
-        protected BulletLauncherEntity(DnK gameRef)
+        protected BulletLauncherEntity(GameProcessor gameRef)
             : base(gameRef)
         {
             Bullets = new List<BaseBullet>();

@@ -7,7 +7,7 @@ namespace Danmaku_no_Kyojin
     {
         static void Main(string[] args)
         {
-            using (var game = new DnK())
+            using (var game = new GameProcessor())
             {
                 game.Run();
             }

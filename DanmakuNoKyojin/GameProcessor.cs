@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Danmaku_no_Kyojin
 {
-    public class DnK : Microsoft.Xna.Framework.Game
+    public class GameProcessor : Microsoft.Xna.Framework.Game
     {
         public GraphicsDeviceManager Graphics;
         public SpriteBatch SpriteBatch;
@@ -49,7 +49,7 @@ namespace Danmaku_no_Kyojin
         public SoundEffect Select;
         public SoundEffect Choose;
 
-        public DnK()
+        public GameProcessor()
         {
             Graphics = new GraphicsDeviceManager(this)
             {

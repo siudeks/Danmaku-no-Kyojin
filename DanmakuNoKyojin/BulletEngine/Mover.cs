@@ -32,7 +32,7 @@ namespace Danmaku_no_Kyojin.BulletEngine
         /// </summary>
         /// <param name="gameRef">Game reference</param>
         /// <param name="myBulletManager">My bullet manager.</param>
-        public Mover(DnK gameRef, IBulletManager myBulletManager) : base(gameRef, myBulletManager)
+        public Mover(GameProcessor gameRef, IBulletManager myBulletManager) : base(gameRef, myBulletManager)
 		{
             Position = Vector2.Zero;
             Rotation = 0f;

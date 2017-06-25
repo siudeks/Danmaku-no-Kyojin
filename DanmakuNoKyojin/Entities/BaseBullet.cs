@@ -13,7 +13,7 @@ namespace Danmaku_no_Kyojin.Entities
         protected Vector2 Velocity;
         public float Power { get; set; }
 
-        protected BaseBullet(DnK gameRef, Texture2D sprite, Vector2 position, Vector2 direction, Vector2 velocity)
+        protected BaseBullet(GameProcessor gameRef, Texture2D sprite, Vector2 position, Vector2 direction, Vector2 velocity)
             : base(gameRef)
         {
             Sprite = sprite;

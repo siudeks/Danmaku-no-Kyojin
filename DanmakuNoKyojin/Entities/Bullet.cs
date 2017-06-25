@@ -11,7 +11,7 @@ namespace Danmaku_no_Kyojin.Entities
         public bool WaveMode { get; set; }
         private float _distance;
 
-        public Bullet(DnK gameRef, Texture2D sprite, Vector2 position, Vector2 direction, Vector2 velocity)
+        public Bullet(GameProcessor gameRef, Texture2D sprite, Vector2 position, Vector2 direction, Vector2 velocity)
             : base(gameRef, sprite, position, direction, velocity)
         {
             Rotation = (float)Math.Atan2(direction.Y, direction.X) - MathHelper.PiOver2;

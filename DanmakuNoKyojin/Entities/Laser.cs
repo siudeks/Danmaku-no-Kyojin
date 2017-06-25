@@ -17,7 +17,7 @@ namespace Danmaku_no_Kyojin.Entities
         private Vector2 _end;
         private float _thickness;
 
-        public Laser(DnK gameRef, Vector2 start, Vector2 end, float thickness = 1) : base(gameRef)
+        public Laser(GameProcessor gameRef, Vector2 start, Vector2 end, float thickness = 1) : base(gameRef)
         {
             _start = start;
             _end = end;

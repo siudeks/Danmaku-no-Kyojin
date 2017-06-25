@@ -10,7 +10,7 @@ namespace Danmaku_no_Kyojin.Shapes
 {
     public class PolygonShape
     {
-        private DnK _gameRef;
+        private GameProcessor _gameRef;
         private Vector2[] _vertices;
         private bool _triangulated;
         private readonly BasicEffect _effect;
@@ -43,7 +43,7 @@ namespace Danmaku_no_Kyojin.Shapes
         /// </summary>
         /// <param name="graphicsDevice">The graphicsdevice from a GameRef object</param>
         /// <param name="vertices">The vertices in a clockwise order</param>
-        public PolygonShape(DnK game, Vector2[] vertices)
+        public PolygonShape(GameProcessor game, Vector2[] vertices)
         {
             _gameRef = game;
             _vertices = vertices;

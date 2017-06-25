@@ -25,7 +25,7 @@ namespace Danmaku_no_Kyojin.Entities.Boss
         }
 
         public BossCore(
-            DnK gameRef, 
+            GameProcessor gameRef, 
             Entity parent, 
             PositionDelegate playerPositionDelegate, 
             MoverManager moverManager,

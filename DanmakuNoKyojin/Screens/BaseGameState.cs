@@ -13,7 +13,7 @@ namespace Danmaku_no_Kyojin.Screens
     {
         #region Fields region
 
-        protected DnK GameRef;
+        protected GameProcessor GameRef;
 
         protected ControlManager ControlManager;
 
@@ -31,7 +31,7 @@ namespace Danmaku_no_Kyojin.Screens
         public BaseGameState(Game game, GameStateManager manager)
             : base(game, manager)
         {
-            GameRef = (DnK)game;
+            GameRef = (GameProcessor)game;
 
             playerIndexInControl = PlayerIndex.One;
 

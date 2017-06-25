@@ -50,7 +50,7 @@ namespace Danmaku_no_Kyojin.Screens
             _backgroundMainRectangle = new Rectangle(0, 0, Config.GameArea.X, Config.GameArea.Y);
 
             // Bullet manager
-            _moverManager = new MoverManager((DnK)Game);
+            _moverManager = new MoverManager((GameProcessor)Game);
             GameManager.GameDifficulty = Config.GameDifficultyDelegate;
 
             base.Initialize();
