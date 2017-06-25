@@ -149,20 +149,21 @@
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Content\Audio\Musics\Background.mp3" />
-    <Compile Include="Content\Audio\Musics\Menu.mp3" />
-    <Compile Include="Content\Audio\SE\boss_dead.wav" />
-    <Compile Include="Content\Audio\SE\boss_shoot.wav" />
-    <Compile Include="Content\Audio\SE\buy.wav" />
-    <Compile Include="Content\Audio\SE\choose.wav" />
-    <Compile Include="Content\Audio\SE\dead.wav" />
-    <Compile Include="Content\Audio\SE\hit.wav" />
-    <Compile Include="Content\Audio\SE\hurt.wav" />
-    <Compile Include="Content\Audio\SE\pass.wav" />
-    <Compile Include="Content\Audio\SE\select.wav" />
+    <Content Include="Content\Audio\Musics\Background.mp3" />
+    <Content Include="Content\Audio\Musics\Menu.mp3" />
+    <Content Include="Content\Audio\SE\boss_dead.wav" />
+    <Content Include="Content\Audio\SE\boss_shoot.wav" />
+    <Content Include="Content\Audio\SE\buy.wav" />
+    <Content Include="Content\Audio\SE\choose.wav" />
+    <Content Include="Content\Audio\SE\dead.wav" />
+    <Content Include="Content\Audio\SE\hit.wav" />
+    <Content Include="Content\Audio\SE\hurt.wav" />
+    <Content Include="Content\Audio\SE\pass.wav" />
+    <Content Include="Content\Audio\SE\select.wav" />
     <None Include="Content\Data\Patterns\Core\circle.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -190,39 +191,39 @@
     <None Include="Content\Data\Patterns\Turret\shootgun.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Include="Content\Graphics\Entities\base_turret.png" />
-    <Compile Include="Content\Graphics\Entities\boss_bullet_type1.png" />
-    <Compile Include="Content\Graphics\Entities\boss_bullet_type2.png" />
-    <Compile Include="Content\Graphics\Entities\boss_bullet_type3.png" />
-    <Compile Include="Content\Graphics\Entities\boss_bullet_type4.png" />
-    <Compile Include="Content\Graphics\Entities\boss_bullet_type5.png" />
-    <Compile Include="Content\Graphics\Entities\boss_bullet_type6.png" />
-    <Compile Include="Content\Graphics\Entities\boss_core.png" />
-    <Compile Include="Content\Graphics\Entities\eye_orbit.png" />
-    <Compile Include="Content\Graphics\Entities\player.png" />
-    <Compile Include="Content\Graphics\Entities\player_bullet.png" />
-    <Compile Include="Content\Graphics\Entities\shield.png" />
-    <Compile Include="Content\Graphics\Pictures\background.png" />
-    <Compile Include="Content\Graphics\Pictures\gamepad_icon.png" />
-    <Compile Include="Content\Graphics\Pictures\gauge_left.png" />
-    <Compile Include="Content\Graphics\Pictures\gauge_middle.png" />
-    <Compile Include="Content\Graphics\Pictures\gauge_right.png" />
-    <Compile Include="Content\Graphics\Pictures\glow.png" />
-    <Compile Include="Content\Graphics\Pictures\keyboard_icon.png" />
-    <Compile Include="Content\Graphics\Pictures\laser.png" />
-    <Compile Include="Content\Graphics\Pictures\life_icon.png" />
-    <Compile Include="Content\Graphics\Pictures\logo.png" />
-    <Compile Include="Content\Graphics\Pictures\player_hitbox.png" />
-    <Compile Include="Content\Graphics\Pictures\trail.png" />
-    <Compile Include="Content\Graphics\Shaders\Bloom.fx" />
-    <Compile Include="Content\Graphics\Shaders\BloomCombine.fx" />
-    <Compile Include="Content\Graphics\Shaders\BloomExtract.fx" />
-    <Compile Include="Content\Graphics\Shaders\Edge.fx" />
-    <Compile Include="Content\Graphics\Shaders\GaussianBlur.fx" />
+    <Content Include="Content\Graphics\Entities\base_turret.png" />
+    <Content Include="Content\Graphics\Entities\boss_bullet_type1.png" />
+    <Content Include="Content\Graphics\Entities\boss_bullet_type2.png" />
+    <Content Include="Content\Graphics\Entities\boss_bullet_type3.png" />
+    <Content Include="Content\Graphics\Entities\boss_bullet_type4.png" />
+    <Content Include="Content\Graphics\Entities\boss_bullet_type5.png" />
+    <Content Include="Content\Graphics\Entities\boss_bullet_type6.png" />
+    <Content Include="Content\Graphics\Entities\boss_core.png" />
+    <Content Include="Content\Graphics\Entities\eye_orbit.png" />
+    <Content Include="Content\Graphics\Entities\player.png" />
+    <Content Include="Content\Graphics\Entities\player_bullet.png" />
+    <Content Include="Content\Graphics\Entities\shield.png" />
+    <Content Include="Content\Graphics\Pictures\background.png" />
+    <Content Include="Content\Graphics\Pictures\gamepad_icon.png" />
+    <Content Include="Content\Graphics\Pictures\gauge_left.png" />
+    <Content Include="Content\Graphics\Pictures\gauge_middle.png" />
+    <Content Include="Content\Graphics\Pictures\gauge_right.png" />
+    <Content Include="Content\Graphics\Pictures\glow.png" />
+    <Content Include="Content\Graphics\Pictures\keyboard_icon.png" />
+    <Content Include="Content\Graphics\Pictures\laser.png" />
+    <Content Include="Content\Graphics\Pictures\life_icon.png" />
+    <Content Include="Content\Graphics\Pictures\logo.png" />
+    <Content Include="Content\Graphics\Pictures\player_hitbox.png" />
+    <Content Include="Content\Graphics\Pictures\trail.png" />
+    <Content Include="Content\Graphics\Shaders\Bloom.fx" />
+    <Content Include="Content\Graphics\Shaders\BloomCombine.fx" />
+    <Content Include="Content\Graphics\Shaders\BloomExtract.fx" />
+    <Content Include="Content\Graphics\Shaders\Edge.fx" />
+    <Content Include="Content\Graphics\Shaders\GaussianBlur.fx" />
     <Content Include="Icon.ico" />
-    <Compile Include="Content\Graphics\Fonts\ControlFont.spritefont" />
-    <Compile Include="Content\Graphics\Fonts\TimerSeconds.spritefont" />
-    <Compile Include="Content\Graphics\Fonts\TitleFont.spritefont" />
+    <Content Include="Content\Graphics\Fonts\ControlFont.spritefont" />
+    <Content Include="Content\Graphics\Fonts\TimerSeconds.spritefont" />
+    <Content Include="Content\Graphics\Fonts\TitleFont.spritefont" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
