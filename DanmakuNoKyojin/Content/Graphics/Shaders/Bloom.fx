@@ -66,6 +66,6 @@ float4 bloomEffect(PixelShaderInput Input) : COLOR0 {
 
 technique Bloom { 
     pass P0{ 
-        PixelShader = compile ps_2_0 bloomEffect(); 
+        PixelShader = compile ps_4_0_level_9_1 bloomEffect();
     } 
 }
