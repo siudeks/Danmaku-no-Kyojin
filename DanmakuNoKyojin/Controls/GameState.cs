@@ -1,59 +1,31 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Danmaku_no_Kyojin.Controls
 {
     public abstract partial class GameState : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        #region Fields and Properties
-
-        List<GameComponent> childComponents;
-
-        public List<GameComponent> Components
-        {
-            get { return childComponents; }
-        }
-
-        GameState tag;
-
-        public GameState Tag
-        {
-            get { return tag; }
-        }
+        public List<GameComponent> Components { get; private set; } = new List<GameComponent>();
+        public GameState Tag { get; private set; }
 
         protected GameStateManager StateManager;
-
-        #endregion
-
-        #region Constructor Region
 
         public GameState(Game game, GameStateManager manager)
             : base(game)
         {
             StateManager = manager;
 
-            childComponents = new List<GameComponent>();
-            tag = this;
-        }
-
-        #endregion
-
-        #region XNA Drawable Game Component Methods
-
-        public override void Initialize()
-        {
-            base.Initialize();
+            Tag = this;
         }
 
         public override void Update(GameTime gameTime)
         {
-            foreach (GameComponent component in childComponents)
+            foreach (var component in Components)
             {
-                if (component.Enabled)
-                    component.Update(gameTime);
+                if (!component.Enabled) continue;
+
+                component.Update(gameTime);
             }
 
             base.Update(gameTime);
@@ -63,23 +35,18 @@ namespace Danmaku_no_Kyojin.Controls
         {
             DrawableGameComponent drawComponent;
 
-            foreach (GameComponent component in childComponents)
+            foreach (var component in Components)
             {
-                if (component is DrawableGameComponent)
+                if (component is DrawableGameComponent drawable)
                 {
-                    drawComponent = component as DrawableGameComponent;
+                    if (!drawable.Visible) continue;
 
-                    if (drawComponent.Visible)
-                        drawComponent.Draw(gameTime);
+                    drawable.Draw(gameTime);
                 }
             }
 
             base.Draw(gameTime);
         }
-
-        #endregion
-
-        #region GameState Method Region
 
         internal protected virtual void StateChange(object sender, EventArgs e)
         {
@@ -94,11 +61,11 @@ namespace Danmaku_no_Kyojin.Controls
             Visible = true;
             Enabled = true;
 
-            foreach (GameComponent component in childComponents)
+            foreach (var component in Components)
             {
                 component.Enabled = true;
-                if (component is DrawableGameComponent)
-                    ((DrawableGameComponent)component).Visible = true;
+                if (component is DrawableGameComponent drawable)
+                    drawable.Visible = true;
             }
         }
 
@@ -107,14 +74,12 @@ namespace Danmaku_no_Kyojin.Controls
             Visible = false;
             Enabled = false;
 
-            foreach (GameComponent component in childComponents)
+            foreach (GameComponent component in Components)
             {
                 component.Enabled = false;
-                if (component is DrawableGameComponent)
-                    ((DrawableGameComponent)component).Visible = false;
+                if (component is DrawableGameComponent drawable)
+                    drawable.Visible = false;
             }
         }
-
-        #endregion
     }
 }
