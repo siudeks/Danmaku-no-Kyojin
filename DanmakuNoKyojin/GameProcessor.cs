@@ -7,6 +7,7 @@ using Danmaku_no_Kyojin.Controls;
 using Danmaku_no_Kyojin.Screens;
 using Danmaku_no_Kyojin.Utils;
 using Microsoft.Xna.Framework.Input;
+using System.Reactive.Disposables;
 
 namespace Danmaku_no_Kyojin
 {
@@ -15,6 +16,9 @@ namespace Danmaku_no_Kyojin
         public GraphicsDeviceManager Graphics;
         public SpriteBatch SpriteBatch;
         private GameStateManager _stateManager;
+
+        // single instance to dispose all disposable resources owned by GameProcessor
+        private CompositeDisposable instanceDisposer = new CompositeDisposable();
 
         // Screens
         public TitleScreen TitleScreen;
@@ -74,7 +78,7 @@ namespace Danmaku_no_Kyojin
             Content.RootDirectory = "Content";
 
             Pixel = new Texture2D(GraphicsDevice, 1, 1);
-            Pixel.SetData(new [] { Color.White });
+            Pixel.SetData(new[] { Color.White });
         }
 
         protected override void Initialize()
@@ -87,21 +91,21 @@ namespace Danmaku_no_Kyojin
             // Display FPS at the top left screen's corner
             Components.Add(new FrameRateCounter(this));
 
-            _stateManager = new GameStateManager(this);
+            _stateManager = new GameStateManager(this).DisposeWith(instanceDisposer);
             Components.Add(_stateManager);
 
             // Screens
-            TitleScreen = new TitleScreen(this, _stateManager);
-            DebugScreen = new DebugScreen(this, _stateManager);
-            PatternTestScreen = new PatternTestScreen(this, _stateManager);
-            GameConfigurationScreen = new GameConfigurationScreen(this, _stateManager);
-            GameplayScreen = new GameplayScreen(this, _stateManager);
-            LeaderboardScreen = new LeaderboardScreen(this, _stateManager);
-            ImprovementScreen = new ImprovementScreen(this, _stateManager);
-            GameOverScreen = new GameOverScreen(this, _stateManager);
-            OptionsScreen = new OptionsScreen(this, _stateManager);
-            KeyboardInputsScreen = new KeyboardInputsScreen(this, _stateManager);
-            GamepadInputsScreen = new GamepadInputsScreen(this, _stateManager);
+            TitleScreen = new TitleScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            DebugScreen = new DebugScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            PatternTestScreen = new PatternTestScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            GameConfigurationScreen = new GameConfigurationScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            GameplayScreen = new GameplayScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            LeaderboardScreen = new LeaderboardScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            ImprovementScreen = new ImprovementScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            GameOverScreen = new GameOverScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            OptionsScreen = new OptionsScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            KeyboardInputsScreen = new KeyboardInputsScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            GamepadInputsScreen = new GamepadInputsScreen(this, _stateManager).DisposeWith(instanceDisposer);
 
             _stateManager.ChangeState(TitleScreen);
 
@@ -112,27 +116,18 @@ namespace Danmaku_no_Kyojin
 
         protected override void Dispose(bool disposing)
         {
-            TitleScreen.Dispose();
-            GameConfigurationScreen.Dispose();
-            GameplayScreen.Dispose();
-            LeaderboardScreen.Dispose();
-            ImprovementScreen.Dispose();
-            GameOverScreen.Dispose();
-            OptionsScreen.Dispose();
-            KeyboardInputsScreen.Dispose();
-            GamepadInputsScreen.Dispose();
-
-            _stateManager.Dispose();
-            SpriteBatch.Dispose();
-
-            StaticClassSerializer.Save(typeof(PlayerData), "data.bin");
+            if (disposing)
+            {
+                instanceDisposer.Dispose();
+                StaticClassSerializer.Save(typeof(PlayerData), "data.bin");
+            }
 
             base.Dispose(disposing);
         }
 
         protected override void LoadContent()
         {
-            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            SpriteBatch = new SpriteBatch(GraphicsDevice).DisposeWith(instanceDisposer);
 
             Select = Content.Load<SoundEffect>(@"Audio/SE/select");
             Choose = Content.Load<SoundEffect>(@"Audio/SE/choose");
@@ -151,7 +146,7 @@ namespace Danmaku_no_Kyojin
             if (InputHandler.KeyPressed(Keys.F1) || InputHandler.ButtonPressed(Buttons.Start, PlayerIndex.One))
             {
                 Config.FullScreen = !Config.FullScreen;
-                Graphics.IsFullScreen = Config.FullScreen; 
+                Graphics.IsFullScreen = Config.FullScreen;
                 Graphics.ApplyChanges();
             }
 
