@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Formatters.Soap;
 
-namespace Danmaku_no_Kyojin.Utils
+namespace DanmakuNoKyojin.Utils
 {
     public static class StaticClassSerializer
     {

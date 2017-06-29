@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Danmaku_no_Kyojin.Entities
+namespace DanmakuNoKyojin.Entities
 {
     class Laser : Entity
     {

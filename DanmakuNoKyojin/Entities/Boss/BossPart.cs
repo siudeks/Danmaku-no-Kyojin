@@ -4,18 +4,18 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Danmaku_no_Kyojin.BulletEngine;
-using Danmaku_no_Kyojin.Collisions;
-using Danmaku_no_Kyojin.Controls;
-using Danmaku_no_Kyojin.Particles;
-using Danmaku_no_Kyojin.Shapes;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.BulletEngine;
+using DanmakuNoKyojin.Collisions;
+using DanmakuNoKyojin.Controls;
+using DanmakuNoKyojin.Particles;
+using DanmakuNoKyojin.Shapes;
+using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Danmaku_no_Kyojin.Entities.Boss
+namespace DanmakuNoKyojin.Entities.Boss
 {
     // BossPart class contains motion + turrets logic and can be splitted in 2 BossPart
     class BossPart : Entity, ICloneable

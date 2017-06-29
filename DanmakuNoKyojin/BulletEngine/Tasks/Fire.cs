@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// A task to shoot a bullet

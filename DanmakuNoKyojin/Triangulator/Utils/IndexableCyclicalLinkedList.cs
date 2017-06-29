@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Danmaku_no_Kyojin.Triangulator.Utils
+namespace DanmakuNoKyojin.Triangulator.Utils
 {
 	/// <summary>
 	/// Implements a LinkedList that is both indexable as well as cyclical. Thus

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// This is a callback method for getting a position

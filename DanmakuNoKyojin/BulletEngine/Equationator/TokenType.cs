@@ -1,6 +1,6 @@
 using System;
 
-namespace Danmaku_no_Kyojin.BulletEngine.Equationator
+namespace DanmakuNoKyojin.BulletEngine.Equationator
 {
 	/// <summary>
 	/// All the different types of values that might be stored in a Token object

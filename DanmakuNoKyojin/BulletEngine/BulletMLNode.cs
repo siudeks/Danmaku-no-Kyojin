@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Xml;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// This is a single node from a BulletML document.

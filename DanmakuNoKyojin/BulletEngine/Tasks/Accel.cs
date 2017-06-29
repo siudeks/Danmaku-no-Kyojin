@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Diagnostics;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// This task adds acceleration to a bullet.

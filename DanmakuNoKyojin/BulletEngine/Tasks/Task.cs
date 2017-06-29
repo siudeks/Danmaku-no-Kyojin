@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// This is a task..each task is the action from a single xml node, for one bullet.

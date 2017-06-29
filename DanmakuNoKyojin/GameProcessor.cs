@@ -1,15 +1,15 @@
 using System;
-using Danmaku_no_Kyojin.Particles;
+using DanmakuNoKyojin.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Danmaku_no_Kyojin.Controls;
-using Danmaku_no_Kyojin.Screens;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.Controls;
+using DanmakuNoKyojin.Screens;
+using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework.Input;
 using System.Reactive.Disposables;
 
-namespace Danmaku_no_Kyojin
+namespace DanmakuNoKyojin
 {
     public class GameProcessor : Microsoft.Xna.Framework.Game
     {

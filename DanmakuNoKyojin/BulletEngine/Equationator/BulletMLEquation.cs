@@ -1,8 +1,8 @@
 using System;
-using Danmaku_no_Kyojin.BulletEngine.Equationator;
+using DanmakuNoKyojin.BulletEngine.Equationator;
 using System.Diagnostics;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// This is an equation used in BulletML nodes.

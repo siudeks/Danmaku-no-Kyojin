@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Danmaku_no_Kyojin.Collisions;
+using DanmakuNoKyojin.Collisions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Danmaku_no_Kyojin.Entities
+namespace DanmakuNoKyojin.Entities
 {
     class Bullet : BaseBullet
     {

@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Danmaku_no_Kyojin.Triangulator.Utils
+namespace DanmakuNoKyojin.Triangulator.Utils
 {
 	struct LineSegment
 	{

@@ -1,6 +1,6 @@
 using System;
 
-namespace Danmaku_no_Kyojin.BulletEngine.Equationator
+namespace DanmakuNoKyojin.BulletEngine.Equationator
 {
 	/// <summary>
 	/// Enum used to sort out the equation tree by order of operations.

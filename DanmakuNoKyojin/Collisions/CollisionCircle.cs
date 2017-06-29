@@ -1,11 +1,11 @@
 ﻿using System;
-using Danmaku_no_Kyojin.Entities;
+using DanmakuNoKyojin.Entities;
 using Microsoft.Xna.Framework.Graphics;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
-namespace Danmaku_no_Kyojin.Collisions
+namespace DanmakuNoKyojin.Collisions
 {
     public class CollisionCircle : CollisionElement
     {

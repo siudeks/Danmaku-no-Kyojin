@@ -1,10 +1,10 @@
-﻿using Danmaku_no_Kyojin.Collisions;
+﻿using DanmakuNoKyojin.Collisions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// 弾や敵オブジェクト（自身が弾源になる場合も、弾源から呼び出される場合もあります）
@@ -28,7 +28,7 @@ namespace Danmaku_no_Kyojin.BulletEngine
         #region Methods
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Danmaku_no_Kyojin.BulletEngine.Mover"/> class.
+        /// Initializes a new instance of the <see cref="DanmakuNoKyojin.BulletEngine.Mover"/> class.
         /// </summary>
         /// <param name="gameRef">Game reference</param>
         /// <param name="myBulletManager">My bullet manager.</param>

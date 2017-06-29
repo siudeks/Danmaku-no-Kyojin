@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Danmaku_no_Kyojin.Collisions;
+using DanmakuNoKyojin.Collisions;
 using Microsoft.Xna.Framework;
-using Danmaku_no_Kyojin.Entities;
+using DanmakuNoKyojin.Entities;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
     /// <summary>
     /// This is the bullet class that outside assemblies will interact with.

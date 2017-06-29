@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.Utils;
 
-namespace Danmaku_no_Kyojin
+namespace DanmakuNoKyojin
 {
     static class Improvements
     {

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Danmaku_no_Kyojin.Collisions;
-using Danmaku_no_Kyojin.Particles;
-using Danmaku_no_Kyojin.Shapes;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.Collisions;
+using DanmakuNoKyojin.Particles;
+using DanmakuNoKyojin.Shapes;
+using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 
-namespace Danmaku_no_Kyojin.Entities.Boss
+namespace DanmakuNoKyojin.Entities.Boss
 {
     public struct BossStructureVertices
     {

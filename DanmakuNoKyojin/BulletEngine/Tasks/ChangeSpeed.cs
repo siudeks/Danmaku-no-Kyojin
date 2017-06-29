@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// This task changes the speed a little bit every frame.

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// This task pauses for a specified amount of time before resuming

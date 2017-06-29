@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Danmaku_no_Kyojin.Utils
+namespace DanmakuNoKyojin.Utils
 {
     /// <summary>
     /// </summary>

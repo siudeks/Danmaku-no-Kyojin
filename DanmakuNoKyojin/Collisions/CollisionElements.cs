@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Danmaku_no_Kyojin.Collisions
+namespace DanmakuNoKyojin.Collisions
 {
     public class CollisionElements : List<CollisionElement>
     {

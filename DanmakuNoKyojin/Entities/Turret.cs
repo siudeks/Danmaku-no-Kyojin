@@ -1,10 +1,10 @@
 ﻿using System;
-using Danmaku_no_Kyojin.BulletEngine;
-using Danmaku_no_Kyojin.Collisions;
+using DanmakuNoKyojin.BulletEngine;
+using DanmakuNoKyojin.Collisions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Danmaku_no_Kyojin.Entities
+namespace DanmakuNoKyojin.Entities
 {
     class Turret : SpriteEntity
     {

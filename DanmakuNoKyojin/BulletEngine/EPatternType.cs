@@ -1,6 +1,6 @@
 using System;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// Different types of bullet patterns

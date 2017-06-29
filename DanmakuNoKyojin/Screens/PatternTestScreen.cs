@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading;
-using Danmaku_no_Kyojin.BulletEngine;
-using Danmaku_no_Kyojin.Controls;
-using Danmaku_no_Kyojin.Entities;
+using DanmakuNoKyojin.BulletEngine;
+using DanmakuNoKyojin.Controls;
+using DanmakuNoKyojin.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Danmaku_no_Kyojin.Screens
+namespace DanmakuNoKyojin.Screens
 {
     public class PatternTestScreen : BaseGameState
     {

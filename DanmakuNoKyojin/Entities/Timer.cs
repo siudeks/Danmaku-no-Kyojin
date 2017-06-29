@@ -1,11 +1,11 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using Danmaku_no_Kyojin.Controls;
+using DanmakuNoKyojin.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Danmaku_no_Kyojin.Entities
+namespace DanmakuNoKyojin.Entities
 {
     public class Timer : DrawableGameComponent
     {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Danmaku_no_Kyojin.BulletEngine;
-using Danmaku_no_Kyojin.Collisions;
-using Danmaku_no_Kyojin.Sprites;
+using DanmakuNoKyojin.BulletEngine;
+using DanmakuNoKyojin.Collisions;
+using DanmakuNoKyojin.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Danmaku_no_Kyojin.Entities.Boss
+namespace DanmakuNoKyojin.Entities.Boss
 {
     class BossCore : SpriteEntity
     {

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Danmaku_no_Kyojin.Shaders
+namespace DanmakuNoKyojin.Shaders
 {
     public class BloomComponent : DrawableGameComponent
     {

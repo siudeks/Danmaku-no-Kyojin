@@ -1,8 +1,8 @@
 ﻿using System;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 
-namespace Danmaku_no_Kyojin.Particles
+namespace DanmakuNoKyojin.Particles
 {
     public enum ParticleType { None, Enemy, Bullet, IgnoreGravity }
 

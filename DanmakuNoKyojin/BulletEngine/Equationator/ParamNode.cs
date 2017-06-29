@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System;
 
-namespace Danmaku_no_Kyojin.BulletEngine.Equationator
+namespace DanmakuNoKyojin.BulletEngine.Equationator
 {
 	/// <summary>
 	/// This node evaluates to a paramter that is passed into the equation at solve time

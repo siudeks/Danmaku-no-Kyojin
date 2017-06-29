@@ -3,7 +3,7 @@ using System;
 using System.Text;
 using System.Diagnostics;
 
-namespace Danmaku_no_Kyojin.BulletEngine.Equationator
+namespace DanmakuNoKyojin.BulletEngine.Equationator
 {
 	/// <summary>
 	/// This is the main class of teh Equationator. 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Danmaku_no_Kyojin.Utils
+namespace DanmakuNoKyojin.Utils
 {
     class ImprovementElement
     {

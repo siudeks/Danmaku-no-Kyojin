@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
-namespace Danmaku_no_Kyojin
+namespace DanmakuNoKyojin
 {
     public static class Config
     {

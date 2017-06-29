@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// An action task, this dude contains a list of tasks that are repeated

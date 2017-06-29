@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace Danmaku_no_Kyojin
+namespace DanmakuNoKyojin
 {
     static class PlayerData
     {

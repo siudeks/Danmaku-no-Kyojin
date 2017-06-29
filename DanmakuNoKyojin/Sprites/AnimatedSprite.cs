@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace Danmaku_no_Kyojin.Sprites
+namespace DanmakuNoKyojin.Sprites
 {
     public class AnimatedSprite
     {

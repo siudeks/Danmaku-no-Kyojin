@@ -1,8 +1,8 @@
-﻿using Danmaku_no_Kyojin.Collisions;
+﻿using DanmakuNoKyojin.Collisions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Danmaku_no_Kyojin.Entities
+namespace DanmakuNoKyojin.Entities
 {
     public abstract class SpriteEntity : Entity
     {

@@ -1,18 +1,18 @@
 ﻿using System.Globalization;
-using Danmaku_no_Kyojin.BulletEngine;
-using Danmaku_no_Kyojin.Controls;
-using Danmaku_no_Kyojin.Entities;
-using Danmaku_no_Kyojin.Shaders;
+using DanmakuNoKyojin.BulletEngine;
+using DanmakuNoKyojin.Controls;
+using DanmakuNoKyojin.Entities;
+using DanmakuNoKyojin.Shaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using Danmaku_no_Kyojin.Entities.Boss;
+using DanmakuNoKyojin.Entities.Boss;
 using Microsoft.Xna.Framework.Media;
 
-namespace Danmaku_no_Kyojin.Screens
+namespace DanmakuNoKyojin.Screens
 {
     public class GameplayScreen : BaseGameState
     {

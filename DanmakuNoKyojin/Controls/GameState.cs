@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Danmaku_no_Kyojin.Controls
+namespace DanmakuNoKyojin.Controls
 {
     public abstract partial class GameState : Microsoft.Xna.Framework.DrawableGameComponent
     {

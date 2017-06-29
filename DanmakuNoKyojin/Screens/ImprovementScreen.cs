@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Danmaku_no_Kyojin.Controls;
+using DanmakuNoKyojin.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 
-namespace Danmaku_no_Kyojin.Screens
+namespace DanmakuNoKyojin.Screens
 {
     public class ImprovementScreen : BaseGameState
     {

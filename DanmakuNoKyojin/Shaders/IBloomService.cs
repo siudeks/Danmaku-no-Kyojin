@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Danmaku_no_Kyojin.Shaders
+namespace DanmakuNoKyojin.Shaders
 {
     public interface IBloomService
     {

@@ -1,4 +1,4 @@
-namespace Danmaku_no_Kyojin.Triangulator.Utils
+namespace DanmakuNoKyojin.Triangulator.Utils
 {
 	/// <summary>
 	/// A basic triangle structure that holds the three vertices that make up a given triangle.

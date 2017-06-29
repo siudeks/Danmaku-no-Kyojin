@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Danmaku_no_Kyojin.Controls;
-using Danmaku_no_Kyojin.Entities;
-using Danmaku_no_Kyojin.Entities.Boss;
-using Danmaku_no_Kyojin.Particles;
-using Danmaku_no_Kyojin.Shaders;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.Controls;
+using DanmakuNoKyojin.Entities;
+using DanmakuNoKyojin.Entities.Boss;
+using DanmakuNoKyojin.Particles;
+using DanmakuNoKyojin.Shaders;
+using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Danmaku_no_Kyojin.Screens
+namespace DanmakuNoKyojin.Screens
 {
     public class DebugScreen : BaseGameState
     {

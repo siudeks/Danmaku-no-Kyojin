@@ -1,11 +1,11 @@
 ﻿using System;
-using Danmaku_no_Kyojin.Entities;
+using DanmakuNoKyojin.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.Utils;
 
-namespace Danmaku_no_Kyojin.Collisions
+namespace DanmakuNoKyojin.Collisions
 {
     class CollisionConvexPolygon : CollisionElement
     {

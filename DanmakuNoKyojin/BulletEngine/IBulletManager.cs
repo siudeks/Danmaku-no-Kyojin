@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// This is the interface that outisde assemblies will use to manage bullets... mostly for creating/destroying them

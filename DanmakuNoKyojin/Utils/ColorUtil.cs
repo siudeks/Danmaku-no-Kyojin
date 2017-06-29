@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace Danmaku_no_Kyojin.Utils
+namespace DanmakuNoKyojin.Utils
 {
     class ColorUtil
     {

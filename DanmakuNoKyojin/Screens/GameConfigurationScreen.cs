@@ -1,8 +1,8 @@
-﻿using Danmaku_no_Kyojin.Controls;
+﻿using DanmakuNoKyojin.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Danmaku_no_Kyojin.Screens
+namespace DanmakuNoKyojin.Screens
 {
     public class GameConfigurationScreen : BaseGameState
     {

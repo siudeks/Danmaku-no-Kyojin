@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Danmaku_no_Kyojin.Particles
+namespace DanmakuNoKyojin.Particles
 {
     public class ParticleManager<T>
     {

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System;
 using System.Globalization;
 
-namespace Danmaku_no_Kyojin.BulletEngine.Equationator
+namespace DanmakuNoKyojin.BulletEngine.Equationator
 {
 	/// <summary>
 	/// This a node in the equation that holds a number.

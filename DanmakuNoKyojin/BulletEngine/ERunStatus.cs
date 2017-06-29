@@ -1,6 +1,6 @@
 using System;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// Theese are used for tasks during runtime...

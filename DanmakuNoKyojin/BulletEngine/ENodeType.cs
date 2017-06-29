@@ -1,5 +1,5 @@
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	public enum ENodeType
 	{

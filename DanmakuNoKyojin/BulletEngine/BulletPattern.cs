@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Xml;
 using System.IO;
 
-namespace Danmaku_no_Kyojin.BulletEngine
+namespace DanmakuNoKyojin.BulletEngine
 {
 	/// <summary>
 	/// This is a complete document that describes a bullet pattern.

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using Danmaku_no_Kyojin.Triangulator.Utils;
+using DanmakuNoKyojin.Triangulator.Utils;
 using Microsoft.Xna.Framework;
 
-namespace Danmaku_no_Kyojin.Triangulator
+namespace DanmakuNoKyojin.Triangulator
 {
 	/// <summary>
 	/// A static class exposing methods for triangulating 2D polygons. This is the sole public

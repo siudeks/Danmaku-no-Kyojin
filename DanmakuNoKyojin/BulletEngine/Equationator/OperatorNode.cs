@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System;
 
-namespace Danmaku_no_Kyojin.BulletEngine.Equationator
+namespace DanmakuNoKyojin.BulletEngine.Equationator
 {
 	/// <summary>
 	/// This node is an operator in the equation.

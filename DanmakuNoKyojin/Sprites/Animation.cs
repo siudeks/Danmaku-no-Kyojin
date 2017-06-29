@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Danmaku_no_Kyojin.Sprites
+namespace DanmakuNoKyojin.Sprites
 {
     public enum AnimationKey { Down, Left, Right, Up, Middle, Horizontal, Vertical }
 

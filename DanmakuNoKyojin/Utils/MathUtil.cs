@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace Danmaku_no_Kyojin.Utils
+namespace DanmakuNoKyojin.Utils
 {
     class MathUtil
     {

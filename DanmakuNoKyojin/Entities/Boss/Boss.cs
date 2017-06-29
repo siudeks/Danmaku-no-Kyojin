@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Danmaku_no_Kyojin.BulletEngine;
-using Danmaku_no_Kyojin.Controls;
-using Danmaku_no_Kyojin.Particles;
-using Danmaku_no_Kyojin.Shapes;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.BulletEngine;
+using DanmakuNoKyojin.Controls;
+using DanmakuNoKyojin.Particles;
+using DanmakuNoKyojin.Shapes;
+using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Danmaku_no_Kyojin.Entities.Boss
+namespace DanmakuNoKyojin.Entities.Boss
 {
     class Boss
     {

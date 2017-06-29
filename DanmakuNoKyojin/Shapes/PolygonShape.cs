@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
-using Danmaku_no_Kyojin.Controls;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.Controls;
+using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Danmaku_no_Kyojin.Shapes
+namespace DanmakuNoKyojin.Shapes
 {
     public class PolygonShape
     {

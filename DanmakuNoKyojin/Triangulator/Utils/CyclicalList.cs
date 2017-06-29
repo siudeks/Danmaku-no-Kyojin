@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Danmaku_no_Kyojin.Triangulator.Utils
+namespace DanmakuNoKyojin.Triangulator.Utils
 {
 	/// <summary>
 	/// Implements a List structure as a cyclical list where indices are wrapped.

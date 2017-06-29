@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
-using Danmaku_no_Kyojin.Particles;
-using Danmaku_no_Kyojin.Utils;
+using DanmakuNoKyojin.Particles;
+using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -9,14 +9,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Danmaku_no_Kyojin.Controls;
+using DanmakuNoKyojin.Controls;
 using Microsoft.Xna.Framework.Input;
-using Danmaku_no_Kyojin.Collisions;
+using DanmakuNoKyojin.Collisions;
 using System.Diagnostics;
 
-using Danmaku_no_Kyojin.Camera;
+using DanmakuNoKyojin.Camera;
 
-namespace Danmaku_no_Kyojin.Entities
+namespace DanmakuNoKyojin.Entities
 {
     public class Player : BulletLauncherEntity
     {

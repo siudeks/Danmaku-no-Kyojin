@@ -1,6 +1,6 @@
 using System;
 
-namespace Danmaku_no_Kyojin
+namespace DanmakuNoKyojin
 {
 #if WINDOWS || XBOX
     static class Program
