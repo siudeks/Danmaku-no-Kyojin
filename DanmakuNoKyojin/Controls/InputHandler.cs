@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DanmakuNoKyojin.Controls
 {
-    class InputHandler : Microsoft.Xna.Framework.GameComponent
+    class InputHandler : IDrawableComponent
     {
         #region Mouse Field Region
 
@@ -72,10 +72,7 @@ namespace DanmakuNoKyojin.Controls
 
         #endregion
 
-        #region Constructor Region
-
-        public InputHandler(Game game)
-            : base(game)
+        public InputHandler()
         {
             mouseState = Mouse.GetState();
 
@@ -87,16 +84,8 @@ namespace DanmakuNoKyojin.Controls
                 gamePadStates[(int)index] = GamePad.GetState(index);
         }
 
-        #endregion
 
-        #region XNA methods
-
-        public override void Initialize()
-        {
-            base.Initialize();
-        }
-
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             lastMouseState = mouseState;
             mouseState = Mouse.GetState();
@@ -108,10 +97,7 @@ namespace DanmakuNoKyojin.Controls
             foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
                 gamePadStates[(int)index] = GamePad.GetState(index);
 
-            base.Update(gameTime);
         }
-
-        #endregion
 
         #region General Method Region
 
