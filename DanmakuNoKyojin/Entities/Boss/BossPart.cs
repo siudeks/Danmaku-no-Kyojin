@@ -39,7 +39,6 @@ namespace DanmakuNoKyojin.Entities.Boss
         private float _accelerationDecreaseFactor;
         private Vector2 _targetPosition;
         private float _targetAngle;
-        private BossCore _core;
         private Dictionary<CollisionConvexPolygon, float> _collisionBoxesHp; 
 
         // Turrets

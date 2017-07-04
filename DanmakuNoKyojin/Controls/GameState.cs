@@ -33,8 +33,6 @@ namespace DanmakuNoKyojin.Controls
 
         public override void Draw(GameTime gameTime)
         {
-            DrawableGameComponent drawComponent;
-
             foreach (var component in Components)
             {
                 if (component is DrawableGameComponent drawable)

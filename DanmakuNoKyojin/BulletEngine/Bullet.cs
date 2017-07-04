@@ -49,8 +49,6 @@ namespace DanmakuNoKyojin.BulletEngine
         //TODO: do a task factory, we are going to be creating a LOT of those little dudes
 
 
-        private CollisionElement _collisionBox;
-
         #endregion //Members
 
         #region Properties

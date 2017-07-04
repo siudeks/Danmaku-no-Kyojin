@@ -1,23 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using DanmakuNoKyojin.Collisions;
-using DanmakuNoKyojin.Particles;
 using DanmakuNoKyojin.Shapes;
-using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 
 namespace DanmakuNoKyojin.Entities.Boss
 {
-    public struct BossStructureVertices
-    {
-        private List<Vector2> bottomRightVertices;
-        private List<Vector2> bottomLeftVertices;
-        private List<Vector2> topRightVertices;
-        private List<Vector2> topLeftVertices;
-    };
-
     class BossStructure
     {
         private enum Direction { Up, Down, Right, Left, UpLeft, DownLeft, UpRight, DownRight };
