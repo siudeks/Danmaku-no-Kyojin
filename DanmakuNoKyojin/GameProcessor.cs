@@ -91,8 +91,9 @@ namespace DanmakuNoKyojin
             // Display FPS at the top left screen's corner
             Components.Add(new FrameRateCounter(this));
 
-            _stateManager = new GameStateManager(this).DisposeWith(instanceDisposer);
-            Components.Add(_stateManager);
+            _stateManager = new GameStateManager();
+            _stateManager.ComponentAdded += (s, arg) => Components.Add(arg);
+            _stateManager.ComponentRemoved += (s, arg) => Components.Remove(arg);
 
             // Screens
             TitleScreen = new TitleScreen(this, _stateManager).DisposeWith(instanceDisposer);

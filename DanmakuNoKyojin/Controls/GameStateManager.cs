@@ -1,59 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DanmakuNoKyojin.Controls
 {
-    public class GameStateManager : GameComponent
+    public sealed class GameStateManager
     {
-        #region Event Region
-
-        public event EventHandler OnStateChange;
-
-        #endregion
-
-        #region Fields and Properties Region
-
-        Stack<GameState> gameStates = new Stack<GameState>();
-
         const int startDrawOrder = 5000;
         const int drawOrderInc = 100;
-        int drawOrder;
+
+        public event EventHandler<IGameComponent> ComponentAdded;
+        public event EventHandler<IGameComponent> ComponentRemoved;
+
+        private readonly Stack<GameState> gameStates = new Stack<GameState>();
+        private int drawOrder = startDrawOrder;
 
         public GameState CurrentState
         {
             get { return gameStates.Peek(); }
         }
-
-        #endregion
-
-        #region Constructor Region
-
-        public GameStateManager(Game game)
-            : base(game)
-        {
-            drawOrder = startDrawOrder;
-        }
-
-        #endregion
-
-        #region XNA Method Region
-
-        public override void Initialize()
-        {
-            base.Initialize();
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-        }
-
-        #endregion
-
-        #region Methods Region
 
         public void PopState()
         {
@@ -61,9 +26,6 @@ namespace DanmakuNoKyojin.Controls
             {
                 RemoveState();
                 drawOrder -= drawOrderInc;
-
-                if (OnStateChange != null)
-                    OnStateChange(this, null);
             }
         }
 
@@ -71,8 +33,7 @@ namespace DanmakuNoKyojin.Controls
         {
             GameState State = gameStates.Peek();
 
-            OnStateChange -= State.StateChange;
-            Game.Components.Remove(State);
+            ComponentRemoved?.Invoke(this, State);
             gameStates.Pop();
         }
 
@@ -82,18 +43,13 @@ namespace DanmakuNoKyojin.Controls
             newState.DrawOrder = drawOrder;
 
             AddState(newState);
-
-            if (OnStateChange != null)
-                OnStateChange(this, null);
         }
 
         private void AddState(GameState newState)
         {
             gameStates.Push(newState);
 
-            Game.Components.Add(newState);
-
-            OnStateChange += newState.StateChange;
+            ComponentAdded?.Invoke(this, newState);
         }
 
         public void ChangeState(GameState newState)
@@ -105,11 +61,6 @@ namespace DanmakuNoKyojin.Controls
             drawOrder = startDrawOrder;
 
             AddState(newState);
-
-            if (OnStateChange != null)
-                OnStateChange(this, null);
         }
-
-        #endregion
     }
 }
