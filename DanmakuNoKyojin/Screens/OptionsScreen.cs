@@ -2,15 +2,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 namespace DanmakuNoKyojin.Screens
 {
-    public class OptionsScreen : BaseGameState
+    public sealed class OptionsScreen : BaseGameState
     {
-        #region Field region
-
         private string _title;
         private readonly string[] _menuText;
         private int _menuIndex;
@@ -24,10 +21,6 @@ namespace DanmakuNoKyojin.Screens
         private Point _menuStartCoord;
 
         private Texture2D _volumeBar;
-
-        #endregion
-
-        #region Constructor region
 
         public OptionsScreen(Game game, GameStateManager manager)
             : base(game, manager)
@@ -45,10 +38,6 @@ namespace DanmakuNoKyojin.Screens
                 Game.GraphicsDevice.Viewport.Width / 2,
                 Game.GraphicsDevice.Viewport.Height / 2 - 100);
         }
-
-        #endregion
-
-        #region XNA Method region
 
         public override void Initialize()
         {
@@ -273,7 +262,5 @@ namespace DanmakuNoKyojin.Screens
 
             base.Draw(gameTime);
         }
-
-        #endregion
     }
 }

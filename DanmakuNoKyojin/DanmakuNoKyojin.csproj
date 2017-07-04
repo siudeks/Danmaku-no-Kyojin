@@ -90,6 +90,7 @@
     <Compile Include="Controls\InputHandler.cs" />
     <Compile Include="DisposableExtensions.cs" />
     <Compile Include="Framework\GameComponentCollectionExtensions.cs" />
+    <Compile Include="Framework\IContentLoader.cs" />
     <Compile Include="Framework\IUpdatableComponent.cs" />
     <Compile Include="GameProcessor.cs" />
     <Compile Include="Entities\BaseBullet.cs" />
