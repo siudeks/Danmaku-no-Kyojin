@@ -13,20 +13,10 @@ namespace DanmakuNoKyojin.Controls
         public event EventHandler<IGameComponent> ComponentRemoved;
 
         private readonly Stack<GameState> gameStates = new Stack<GameState>();
-        private int drawOrder = startDrawOrder;
 
         public GameState CurrentState
         {
             get { return gameStates.Peek(); }
-        }
-
-        public void PopState()
-        {
-            if (gameStates.Count > 0)
-            {
-                RemoveState();
-                drawOrder -= drawOrderInc;
-            }
         }
 
         private void RemoveState()
@@ -35,14 +25,6 @@ namespace DanmakuNoKyojin.Controls
 
             ComponentRemoved?.Invoke(this, State);
             gameStates.Pop();
-        }
-
-        public void PushState(GameState newState)
-        {
-            drawOrder += drawOrderInc;
-            newState.DrawOrder = drawOrder;
-
-            AddState(newState);
         }
 
         private void AddState(GameState newState)
@@ -58,7 +40,6 @@ namespace DanmakuNoKyojin.Controls
                 RemoveState();
 
             newState.DrawOrder = startDrawOrder;
-            drawOrder = startDrawOrder;
 
             AddState(newState);
         }

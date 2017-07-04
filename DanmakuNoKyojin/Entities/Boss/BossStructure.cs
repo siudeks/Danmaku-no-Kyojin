@@ -19,7 +19,6 @@ namespace DanmakuNoKyojin.Entities.Boss
         private int _iteration;
         private float _step;
         private Vector2 _size;
-        private float _area;
 
         private List<Vector2> _bottomRightVertices;
         private List<Vector2> _bottomLeftVertices;
@@ -54,7 +53,6 @@ namespace DanmakuNoKyojin.Entities.Boss
             _iteration = iteration;
             _step = step;
             _iteration = iteration;
-            _area = 0f;
 
             _bottomRightVertices = new List<Vector2>();
             _bottomLeftVertices = new List<Vector2>();
