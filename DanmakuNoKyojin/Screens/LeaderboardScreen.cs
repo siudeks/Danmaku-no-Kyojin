@@ -8,18 +8,12 @@ namespace DanmakuNoKyojin.Screens
 {
     public class LeaderboardScreen : BaseGameState
     {
-        #region Field region
-
         private string _title;
         private List<string> _content;
         private string[] _messages;
 
         private Texture2D _background;
         private SpriteFont _titleFont;
-
-        #endregion
-
-        #region Constructor region
 
         public LeaderboardScreen(Game game, GameStateManager manager)
             : base(game, manager)
@@ -30,15 +24,6 @@ namespace DanmakuNoKyojin.Screens
                     "This functionnality is not implemented yet !",
                     "[Press Escape to go back to the title screen]"
                 };       
-        }
-
-        #endregion
-
-        #region XNA Method region
-
-        public override void Initialize()
-        {
-            base.Initialize();
         }
 
         protected override void LoadContent()
@@ -91,7 +76,5 @@ namespace DanmakuNoKyojin.Screens
 
             base.Draw(gameTime);
         }
-
-        #endregion
     }
 }
