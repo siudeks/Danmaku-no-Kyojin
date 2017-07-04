@@ -3,15 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DanmakuNoKyojin.Controls
 {
     public class ControlManager : List<Control>
     {
-        #region Fields and Properties
-
         int selectedControl = 0;
         bool acceptInput = true;
 
@@ -28,15 +24,7 @@ namespace DanmakuNoKyojin.Controls
             set { acceptInput = value; }
         }
 
-        #endregion
-
-        #region Event Region
-
         public event EventHandler FocusChanged;
-
-        #endregion
-
-        #region Constructors
 
         public ControlManager(SpriteFont spriteFont)
             : base()
@@ -55,10 +43,6 @@ namespace DanmakuNoKyojin.Controls
         {
             ControlManager.spriteFont = spriteFont;
         }
-
-        #endregion
-
-        #region Methods
 
         public void Update(GameTime gameTime, PlayerIndex playerIndex)
         {
@@ -159,7 +143,5 @@ namespace DanmakuNoKyojin.Controls
 
             this[selectedControl].HasFocus = true;
         }
-
-        #endregion
     }
 }

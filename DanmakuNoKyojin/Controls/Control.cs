@@ -1,27 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DanmakuNoKyojin.Controls
 {
     public abstract class Control
     {
-        #region Field Region
-
         private Vector2 _position;
 
-        #endregion
-
-        #region Event Region
-
         public event EventHandler Selected;
-
-        #endregion
-
-        #region Property Region
 
         public string Name { get; set; }
 
@@ -55,10 +42,6 @@ namespace DanmakuNoKyojin.Controls
 
         public string Type { get; set; }
 
-        #endregion
-
-        #region Constructor Region
-
         protected Control(bool tabStop)
         {
             TabStop = tabStop;
@@ -68,26 +51,13 @@ namespace DanmakuNoKyojin.Controls
             SpriteFont = ControlManager.SpriteFont;
         }
 
-        #endregion
-
-        #region Abstract Methods
-
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(SpriteBatch spriteBatch);
         public abstract void HandleInput(PlayerIndex playerIndex);
 
-        #endregion
-
-        #region Virtual Methods
-
         protected virtual void OnSelected(EventArgs e)
         {
-            if (Selected != null)
-            {
-                Selected(this, e);
-            }
+            Selected?.Invoke(this, e);
         }
-
-        #endregion
     }
 }
