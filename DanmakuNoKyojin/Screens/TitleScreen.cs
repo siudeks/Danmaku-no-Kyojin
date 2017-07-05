@@ -83,8 +83,6 @@ namespace DanmakuNoKyojin.Screens
 
         public override void Update(GameTime gameTime)
         {
-            ControlManager.Update(gameTime, PlayerIndex.One);
-
             if (InputHandler.PressedCancel() && _passStep != 8)
                 Game.Exit();
 
@@ -212,8 +210,6 @@ namespace DanmakuNoKyojin.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            ControlManager.Draw(GameRef.SpriteBatch);
-
             GameRef.SpriteBatch.Begin();
 
             GameRef.SpriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, Color.White);

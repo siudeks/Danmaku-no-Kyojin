@@ -38,8 +38,6 @@ namespace DanmakuNoKyojin.Screens
 
         public override void Update(GameTime gameTime)
         {
-            ControlManager.Update(gameTime, PlayerIndex.One);
-
             if (InputHandler.PressedCancel())
                 StateManager.ChangeState(GameRef.TitleScreen);
 
@@ -57,8 +55,6 @@ namespace DanmakuNoKyojin.Screens
                     Game.GraphicsDevice.Viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_message).X / 2, 
                     Game.GraphicsDevice.Viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_message).Y / 2), 
                 Color.White);
-
-            ControlManager.Draw(GameRef.SpriteBatch);
 
             GameRef.SpriteBatch.End();
         }

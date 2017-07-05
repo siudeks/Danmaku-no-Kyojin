@@ -83,7 +83,6 @@
     <Compile Include="Collisions\CollisionElement.cs" />
     <Compile Include="Collisions\CollisionElements.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\ControlManager.cs" />
     <Compile Include="Controls\GameState.cs" />
     <Compile Include="Controls\GameStateManager.cs" />

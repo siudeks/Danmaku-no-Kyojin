@@ -181,8 +181,6 @@ namespace DanmakuNoKyojin.Screens
             if (!_useBloom)
                 base.Draw(gameTime);
 
-            ControlManager.Draw(GameRef.SpriteBatch);
-
             var backgroundColor = new Color(50, 50, 50);
             GraphicsDevice.Clear(backgroundColor);
 

@@ -48,8 +48,6 @@ namespace DanmakuNoKyojin.Screens
 
         public override void Update(GameTime gameTime)
         {
-            ControlManager.Update(gameTime, PlayerIndex.One);
-
             if (InputHandler.PressedCancel())
                 StateManager.ChangeState(GameRef.OptionsScreen);
 
@@ -93,8 +91,6 @@ namespace DanmakuNoKyojin.Screens
             }
 
             GameRef.SpriteBatch.End();
-
-            ControlManager.Draw(GameRef.SpriteBatch);
 
             base.Draw(gameTime);
         }

@@ -271,16 +271,7 @@ namespace DanmakuNoKyojin.Screens
         {
             _bloom.BeginDraw();
 
-            ControlManager.Draw(GameRef.SpriteBatch);
-
             GameRef.SpriteBatch.Begin(0, BlendState.Opaque);
-
-            /*
-            GameRef.SpriteBatch.Draw(_background, new Rectangle(
-                (int)(Config.Resolution.X / 2f), (int)(Config.Resolution.Y / 2f), 
-                Config.Resolution.X * 2, Config.Resolution.Y * 2), 
-                null, Color.White, _counter, new Vector2(_background.Width / 2f, _background.Height / 2f), SpriteEffects.None, 0f);
-            */
 
             GameRef.SpriteBatch.End();
 
