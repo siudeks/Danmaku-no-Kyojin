@@ -3,7 +3,7 @@
 namespace DanmakuNoKyojin
 {
     [TestFixture]
-    public sealed class GameProcessorShould
+    public sealed class GameRunnerShould
     {
         [Test]
         public void BeInstantiable()
