@@ -1,3 +1,4 @@
+using Ninject;
 using System;
 
 namespace DanmakuNoKyojin
@@ -7,10 +8,14 @@ namespace DanmakuNoKyojin
     {
         static void Main(string[] args)
         {
-            using (var game = new GameRunner())
-            {
-                game.Run();
-            }
+            var kernel = new StandardKernel();
+            kernel.Load(AppDomain.CurrentDomain.GetAssemblies());
+
+            var game = kernel.Get<GameRunner>();
+            
+            game.Run();
+
+            kernel.Dispose();
         }
     }
 #endif

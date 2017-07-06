@@ -110,6 +110,7 @@
     <Compile Include="Entities\Timer.cs" />
     <Compile Include="Entities\Turret.cs" />
     <Compile Include="Improvements.cs" />
+    <Compile Include="IocDefinitions.cs" />
     <Compile Include="Particles\ParticleManager.cs" />
     <Compile Include="Particles\ParticleState.cs" />
     <Compile Include="PlayerData.cs" />
