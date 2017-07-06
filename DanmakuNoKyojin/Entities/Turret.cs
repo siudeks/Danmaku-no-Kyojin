@@ -29,7 +29,7 @@ namespace DanmakuNoKyojin.Entities
         }
 
         public Turret(
-            GameProcessor gameRef, 
+            GameRunner gameRef, 
             Entity parent, 
             Entity target,
             MoverManager moverManager,

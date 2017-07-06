@@ -8,7 +8,7 @@ namespace DanmakuNoKyojin
         [Test]
         public void BeInstantiable()
         {
-            new GameProcessor();
+            new GameRunner();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace DanmakuNoKyojin.Entities
 
         #endregion
 
-        protected SpriteEntity(GameProcessor gameRef) : base(gameRef)
+        protected SpriteEntity(GameRunner gameRef) : base(gameRef)
         {
         }
 

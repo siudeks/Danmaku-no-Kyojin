@@ -111,7 +111,7 @@ namespace DanmakuNoKyojin.BulletEngine
         /// Initializes a new instance of the <see cref="BulletMLLib.Bullet"/> class.
         /// </summary>
         /// <param name="myBulletManager">My bullet manager.</param>
-        public Bullet(GameProcessor gameRef, IBulletManager myBulletManager)
+        public Bullet(GameRunner gameRef, IBulletManager myBulletManager)
             : base(gameRef)
         {
             //grba the bullet manager for this dude

@@ -8,7 +8,7 @@ namespace DanmakuNoKyojin.Entities
     {
         #region Fields
 
-        protected readonly GameProcessor GameRef;
+        protected readonly GameRunner GameRef;
         private Vector2 _position;
         private float _rotation;
         private Vector2 _origin;
@@ -73,7 +73,7 @@ namespace DanmakuNoKyojin.Entities
 
         #endregion
 
-        protected Entity(GameProcessor gameRef)
+        protected Entity(GameRunner gameRef)
         {
             GameRef = gameRef;
 

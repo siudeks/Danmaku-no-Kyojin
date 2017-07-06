@@ -8,10 +8,11 @@ using DanmakuNoKyojin.Screens;
 using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework.Input;
 using System.Reactive.Disposables;
+using DanmakuNoKyojin.Framework;
 
 namespace DanmakuNoKyojin
 {
-    public class GameProcessor : Microsoft.Xna.Framework.Game
+    public class GameRunner : Game, IContentLoader
     {
         public GraphicsDeviceManager Graphics;
         public SpriteBatch SpriteBatch;
@@ -53,7 +54,7 @@ namespace DanmakuNoKyojin
         public SoundEffect Select;
         public SoundEffect Choose;
 
-        public GameProcessor()
+        public GameRunner()
         {
             Graphics = new GraphicsDeviceManager(this)
             {
@@ -159,6 +160,11 @@ namespace DanmakuNoKyojin
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             base.Draw(gameTime);
+        }
+
+        public T Load<T>(string assetName)
+        {
+            return Content.Load<T>(assetName);
         }
     }
 }
