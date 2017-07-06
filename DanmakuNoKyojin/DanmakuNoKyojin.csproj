@@ -92,7 +92,7 @@
     <Compile Include="Framework\GameComponentCollectionExtensions.cs" />
     <Compile Include="Framework\IContentLoader.cs" />
     <Compile Include="Framework\IUpdatableComponent.cs" />
-    <Compile Include="GameProcessor.cs" />
+    <Compile Include="GameRunner.cs" />
     <Compile Include="Entities\BaseBullet.cs" />
     <Compile Include="Entities\Boss\Boss.cs" />
     <Compile Include="Entities\Boss\BossCore.cs" />
