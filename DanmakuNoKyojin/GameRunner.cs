@@ -9,6 +9,7 @@ using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework.Input;
 using System.Reactive.Disposables;
 using DanmakuNoKyojin.Framework;
+using Ninject;
 
 namespace DanmakuNoKyojin
 {
@@ -20,6 +21,9 @@ namespace DanmakuNoKyojin
 
         // single instance to dispose all disposable resources owned by GameProcessor
         private CompositeDisposable instanceDisposer = new CompositeDisposable();
+
+        [Inject]
+        public GameProcessor GameProcessor { private get; set; }
 
         // Screens
         public TitleScreen TitleScreen;
@@ -145,6 +149,8 @@ namespace DanmakuNoKyojin
 
         protected override void Update(GameTime gameTime)
         {
+            GameProcessor.Update(gameTime);
+
             if (InputHandler.KeyPressed(Keys.F1) || InputHandler.ButtonPressed(Buttons.Start, PlayerIndex.One))
             {
                 Config.FullScreen = !Config.FullScreen;
