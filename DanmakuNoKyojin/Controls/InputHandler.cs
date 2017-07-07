@@ -1,36 +1,23 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DanmakuNoKyojin.Controls
 {
-    class InputHandler : IUpdatableComponent , IInputHandler
+    /// <summary>
+    /// Manage inputs like keyboard or gamepad
+    /// </summary>
+    public sealed class InputHandler : IUpdatablePart , IInputHandler
     {
-        #region Mouse Field Region
-
-        static MouseState mouseState;
-        static MouseState lastMouseState;
-
-        #endregion
-
-        #region Keyboard Field Region
+        static MouseState mouseState = default(MouseState);
+        static MouseState lastMouseState = default(MouseState);
 
         static KeyboardState keyboardState;
         static KeyboardState lastKeyboardState;
 
-        #endregion
-
-        #region Game Pad Field Region
-
         static GamePadState[] gamePadStates;
         static GamePadState[] lastGamePadStates;
-
-        #endregion
-
-        #region Mouse Property Region
 
         public static MouseState MouseState
         {
@@ -42,10 +29,6 @@ namespace DanmakuNoKyojin.Controls
             get { return lastMouseState; }
         }
 
-        #endregion
-
-        #region Keyboard Property Region
-
         public static KeyboardState KeyboardState
         {
             get { return keyboardState; }
@@ -55,10 +38,6 @@ namespace DanmakuNoKyojin.Controls
         {
             get { return lastKeyboardState; }
         }
-
-        #endregion
-
-        #region Game Pad Property Region
 
         public static GamePadState[] GamePadStates
         {
@@ -70,14 +49,8 @@ namespace DanmakuNoKyojin.Controls
             get { return lastGamePadStates; }
         }
 
-        #endregion
-
         public InputHandler()
         {
-            mouseState = Mouse.GetState();
-
-            keyboardState = Keyboard.GetState();
-
             gamePadStates = new GamePadState[Enum.GetValues(typeof(PlayerIndex)).Length];
 
             foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
@@ -98,8 +71,6 @@ namespace DanmakuNoKyojin.Controls
                 gamePadStates[(int)index] = GamePad.GetState(index);
 
         }
-
-        #region General Method Region
 
         public static void Flush()
         {
@@ -153,10 +124,6 @@ namespace DanmakuNoKyojin.Controls
                 ButtonPressed(Buttons.B, PlayerIndex.One));
         }
 
-        #endregion
-
-        #region Mouse Region
-
         public static bool Scroll()
         {
             return mouseState.ScrollWheelValue == lastMouseState.ScrollWheelValue;
@@ -171,10 +138,6 @@ namespace DanmakuNoKyojin.Controls
         {
             return mouseState.ScrollWheelValue < lastMouseState.ScrollWheelValue;
         }
-
-        #endregion
-
-        #region Keyboard Region
 
         public static bool KeyReleased(Keys key)
         {
@@ -203,10 +166,6 @@ namespace DanmakuNoKyojin.Controls
             return keyboardState.GetPressedKeys();
         }
 
-        #endregion
-
-        #region Game Pad Region
-
         public static bool ButtonReleased(Buttons button, PlayerIndex index)
         {
             return gamePadStates[(int)index].IsButtonUp(button) &&
@@ -233,7 +192,5 @@ namespace DanmakuNoKyojin.Controls
         {
             return Enum.GetValues(typeof(Buttons)).Cast<Buttons>().Where(button => ButtonPressed(button, index)).ToArray();
         }
-
-        #endregion
     }
 }

@@ -111,6 +111,7 @@
     <Compile Include="Entities\Timer.cs" />
     <Compile Include="Entities\Turret.cs" />
     <Compile Include="Improvements.cs" />
+    <Compile Include="IocConventions.cs" />
     <Compile Include="IocDefinitions.cs" />
     <Compile Include="Particles\ParticleManager.cs" />
     <Compile Include="Particles\ParticleState.cs" />
@@ -159,6 +160,9 @@
     <Reference Include="Ninject, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.4.0.0-beta-0134\lib\net45\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject.Extensions.Conventions, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.Conventions.3.2.1-unstable-005\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Reactive, Version=4.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reactive.4.0.0-preview00001\lib\net45\System.Reactive.dll</HintPath>
@@ -181,6 +185,7 @@
     <Content Include="Content\Audio\SE\hurt.wav" />
     <Content Include="Content\Audio\SE\pass.wav" />
     <Content Include="Content\Audio\SE\select.wav" />
+    <None Include="app.config" />
     <None Include="Content\Data\Patterns\Core\circle.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

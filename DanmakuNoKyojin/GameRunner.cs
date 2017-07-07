@@ -90,9 +90,6 @@ namespace DanmakuNoKyojin
         {
             StaticClassSerializer.Load(typeof(PlayerData), "data.bin");
 
-            // Manage inputs like keyboard or gamepad
-            Components.Add(new InputHandler(), this);
-
             // Display FPS at the top left screen's corner
             Components.Add(new FrameRateCounter(this));
 
@@ -142,10 +139,6 @@ namespace DanmakuNoKyojin
             Glow = Content.Load<Texture2D>("Graphics/Pictures/glow");
         }
 
-        protected override void UnloadContent()
-        {
-
-        }
 
         protected override void Update(GameTime gameTime)
         {
