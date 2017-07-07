@@ -3,16 +3,11 @@ using DanmakuNoKyojin.Particles;
 using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using DanmakuNoKyojin.Controls;
 using Microsoft.Xna.Framework.Input;
 using DanmakuNoKyojin.Collisions;
-using System.Diagnostics;
 
 using DanmakuNoKyojin.Camera;
 
