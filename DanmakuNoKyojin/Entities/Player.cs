@@ -10,11 +10,16 @@ using Microsoft.Xna.Framework.Input;
 using DanmakuNoKyojin.Collisions;
 
 using DanmakuNoKyojin.Camera;
+using DanmakuNoKyojin.Framework;
+using Ninject;
 
 namespace DanmakuNoKyojin.Entities
 {
-    public class Player : BulletLauncherEntity
+    public sealed class Player : BulletLauncherEntity
     {
+        [Inject]
+        public IObserver<FrameworkInitialized> OnFrameworkInitialized { private get; set; }
+
         public int ID { get; set; }
         private Config.Controller _controller;
 

@@ -110,19 +110,14 @@ namespace DanmakuNoKyojin.Screens
                 {
                     StateManager.ChangeState(GameRef.GameplayScreen);
                 }
-                // 2 Players
-                else if (_menuIndex == 1)
-                {
-                    StateManager.ChangeState(GameRef.GameplayScreen);
-                }
                 // Improvements
-                else if (_menuIndex == 2)
+                else if (_menuIndex == 1)
                     StateManager.ChangeState(GameRef.ImprovementScreen);
                 // Options
-                else if (_menuIndex == 3)
+                else if (_menuIndex == 2)
                     StateManager.ChangeState(GameRef.OptionsScreen);
                 // Exit
-                else if (_menuIndex == 4)
+                else if (_menuIndex == 3)
                     Game.Exit();
             }
 
