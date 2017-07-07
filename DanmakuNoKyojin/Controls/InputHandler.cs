@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Ninject;
 using System;
 using System.Linq;
 
@@ -10,6 +11,9 @@ namespace DanmakuNoKyojin.Controls
     /// </summary>
     public sealed class InputHandler : IUpdatablePart , IInputHandler
     {
+        [Inject]
+        public IObserver<MouseState> MouseStateDispatcher { private get; set; }
+
         static MouseState mouseState = default(MouseState);
         static MouseState lastMouseState = default(MouseState);
 
@@ -62,6 +66,7 @@ namespace DanmakuNoKyojin.Controls
         {
             lastMouseState = mouseState;
             mouseState = Mouse.GetState();
+            MouseStateDispatcher.OnNext(mouseState);
 
             lastKeyboardState = keyboardState;
             keyboardState = Keyboard.GetState();

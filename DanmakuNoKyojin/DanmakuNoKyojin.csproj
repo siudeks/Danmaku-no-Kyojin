@@ -88,6 +88,8 @@
     <Compile Include="Controls\GameStateManager.cs" />
     <Compile Include="Controls\IInputHandler.cs" />
     <Compile Include="Controls\InputHandler.cs" />
+    <Compile Include="Controls\IocRegistration.cs" />
+    <Compile Include="Controls\Observable.cs" />
     <Compile Include="DisposableExtensions.cs" />
     <Compile Include="Framework\ContentLoaderExtensions.cs" />
     <Compile Include="Framework\GameComponentCollectionExtensions.cs" />
@@ -153,9 +155,15 @@
     <Compile Include="Utils\StaticClassSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Akka, Version=1.2.2.39, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.1.2.2\lib\net45\Akka.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.6.0.1625\lib\net40\MonoGame.Framework.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.4.0.0-beta-0134\lib\net45\Ninject.dll</HintPath>
@@ -164,6 +172,9 @@
       <HintPath>..\packages\Ninject.Extensions.Conventions.3.2.1-unstable-005\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Reactive, Version=4.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reactive.4.0.0-preview00001\lib\net45\System.Reactive.dll</HintPath>
     </Reference>
