@@ -15,7 +15,6 @@ namespace DanmakuNoKyojin.Entities
 {
     public class Player : BulletLauncherEntity
     {
-        #region Fields
         public int ID { get; set; }
         private Config.Controller _controller;
 
@@ -76,8 +75,6 @@ namespace DanmakuNoKyojin.Entities
         {
             get { return _camera; }
         }
-
-        #endregion
 
         public Player(GameRunner gameRef, Viewport viewport, int id, Config.Controller controller, Vector2 position)
             : base(gameRef)
@@ -538,9 +535,10 @@ namespace DanmakuNoKyojin.Entities
 
                     Vector2 offset = Vector2.Transform(new Vector2(0, 0), aimQuat);
 
-                    var bullet = new Bullet(GameRef, _bulletSprite, Position + offset, direction, Config.PlayerBulletVelocity);
-                    bullet.WaveMode = false;
-
+                    var bullet = new Bullet(GameRef, _bulletSprite, Position + offset, direction, Config.PlayerBulletVelocity)
+                    {
+                        WaveMode = false
+                    };
                     AddBullet(bullet);
                 }
 

@@ -54,8 +54,6 @@ namespace DanmakuNoKyojin.Screens
             _content.Add("Time: " + Math.Round(Time.TotalSeconds, 2).ToString(CultureInfo.InvariantCulture) + " second(s)");
             _content.Add("Wave number: " + WaveNumber.ToString(CultureInfo.InvariantCulture));
             _content.Add("P1 Score: " + Player1Score.ToString(CultureInfo.InvariantCulture));
-            if (Config.PlayersNumber == 2)
-                _content.Add("P2 Score: " + Player2Score.ToString(CultureInfo.InvariantCulture));
 
             _content.Add("Total Score: " + TotalScore.ToString(CultureInfo.InvariantCulture));
 

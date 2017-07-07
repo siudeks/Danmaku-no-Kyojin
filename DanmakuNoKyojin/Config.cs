@@ -27,9 +27,6 @@ namespace DanmakuNoKyojin
         // Bullet Time
         public const float DesiredTimeModifier = 2f;
 
-        // Player
-        public static int PlayersNumber = 1;
-
         public static readonly Dictionary<string, Keys> PlayerKeyboardInputs = new Dictionary<string, Keys>()
         {
             {"Up", Keys.Z },

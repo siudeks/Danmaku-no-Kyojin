@@ -22,7 +22,7 @@ namespace DanmakuNoKyojin.Entities.Boss
     {
         private readonly Boss _bossRef;
         private readonly bool _mainPart;
-        private List<Player> _players;
+        private Player player;
         private BossStructure _structure;
         private MoverManager _moverManager;
         private Mover _mover;
@@ -79,7 +79,7 @@ namespace DanmakuNoKyojin.Entities.Boss
         public BossPart(
             GameRunner gameRef,
             Boss bossRef,
-            List<Player> playerList,
+            Player player,
             MoverManager moverManager, 
             List<BulletPattern> bulletPatterns, 
             Color color, 
@@ -93,7 +93,7 @@ namespace DanmakuNoKyojin.Entities.Boss
         {
             _bossRef = bossRef;
             _mainPart = mainPart;
-            _players = playerList;
+            this.player = player;
             _moverManager = moverManager;
             _bulletPatterns = bulletPatterns ?? new List<BulletPattern>();
 
@@ -221,7 +221,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             Y += Direction.Y * (Velocity * Acceleration.Y) * dt;
 
 
-            _targetPosition = _players.First().Position;
+            _targetPosition = player.Position;
 
             /*
             if (_targetPosition != Position)
@@ -233,7 +233,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             }
             */
 
-            var playerPosition = _players.First().Position;
+            var playerPosition = player.Position;
             var distance = playerPosition - Position;
             _targetAngle = (float)Math.Atan2(distance.Y, distance.X) - MathHelper.PiOver2;
 
@@ -383,7 +383,7 @@ namespace DanmakuNoKyojin.Entities.Boss
                 if (newPolygonShape.Vertices != null && newPolygonShape.GetArea() > Config.MinBossPartArea)
                 {
                     var bossPart = new BossPart(
-                        GameRef, _bossRef, _players, _moverManager, null, _color,
+                        GameRef, _bossRef, player, _moverManager, null, _color,
                         _health, 0, 25f, null, newPolygonShape
                     );
 

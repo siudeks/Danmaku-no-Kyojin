@@ -29,8 +29,7 @@ namespace DanmakuNoKyojin.Entities.Boss
 
         private bool _ready;
 
-        // Players
-        private List<Player> _players;
+        private Player player;
 
         // Structure
         private BossPart _mainPart;
@@ -56,13 +55,13 @@ namespace DanmakuNoKyojin.Entities.Boss
             get { return _core; }
         }
 
-        public Boss(GameRunner gameRef, List<Player> players, int iteration = 50, float step = 25)
+        public Boss(GameRunner gameRef, Player player, int iteration = 50, float step = 25)
         {
             _gameRef = gameRef;
             _defeatCounter = 0;
             MoverManager = new MoverManager(gameRef);
             GameManager.GameDifficulty = Config.GameDifficultyDelegate;
-            _players = players;
+            this.player = player;
             _iteration = iteration;
             _step = step;
             _previousBossPart = null;
@@ -70,8 +69,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             _parts = new List<BossPart>();
             _currentPartIndex = 0;
 
-            int targetPlayerId = _gameRef.Rand.Next(0, _players.Count);
-            MoverManager.Initialize(_players[targetPlayerId].GetPosition);
+            MoverManager.Initialize(player.GetPosition);
         }
 
         public void Initialize()
@@ -107,7 +105,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             if (_previousBossPart == null)
             {
                 _mainPart = new BossPart(
-                    _gameRef, this, _players, MoverManager, _completeBulletPatterns, new Color(0f, 0.75f, 0f, 0.65f),
+                    _gameRef, this, player, MoverManager, _completeBulletPatterns, new Color(0f, 0.75f, 0f, 0.65f),
                     4242f, _iteration, _step, null, null, true
                 );
 
@@ -123,8 +121,7 @@ namespace DanmakuNoKyojin.Entities.Boss
 
             _parts.Add(_mainPart);
 
-            int targetPlayerId = _gameRef.Rand.Next(0, _players.Count);
-            _core = new BossCore(_gameRef, _mainPart, _players[targetPlayerId].GetPosition, MoverManager, _completeBulletPatterns);
+            _core = new BossCore(_gameRef, _mainPart, player.GetPosition, MoverManager, _completeBulletPatterns);
             _core.Initialize();
         }
 
@@ -193,7 +190,6 @@ namespace DanmakuNoKyojin.Entities.Boss
             // Check bullets to players collision
             for (int i = 0; i < MoverManager.movers.Count; i++)
             {
-                foreach (var player in _players)
                 {
                     if (MoverManager.movers[i].Intersects(player))
                     {

@@ -61,7 +61,7 @@ namespace DanmakuNoKyojin.Screens
             player1.Initialize();
             Players.Add(player1);
 
-            _boss = new Boss(GameRef, Players, Config.MinBossIteration);
+            _boss = new Boss(GameRef, player1, Config.MinBossIteration);
             _boss.Initialize();
 
         }

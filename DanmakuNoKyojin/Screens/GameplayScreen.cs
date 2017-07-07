@@ -18,20 +18,17 @@ namespace DanmakuNoKyojin.Screens
     {
         // Camera
         Viewport defaultView;
-        Viewport leftView;
-        Viewport rightView;
 
         private Texture2D _pixel;
 
-        public List<Player> Players { get; set; }
-        private bool _singlePlayer;
+        public Player Player { get; set; }
         private Boss _enemy;
 
         private int _waveNumber;
 
         // Audio
         private SoundEffect hit = null;
-        
+
         // Timer (descending)
         private readonly Timer _timer;
 
@@ -51,8 +48,6 @@ namespace DanmakuNoKyojin.Screens
             : base(game, manager)
         {
 
-            Players = new List<Player>();
-
             // Timer
             _timer = new Timer(Game);
 
@@ -69,8 +64,6 @@ namespace DanmakuNoKyojin.Screens
 
             _playTime = TimeSpan.Zero;
 
-            _singlePlayer = (Config.PlayersNumber == 1);
-
             _waveNumber = 0;
 
             _timer.Initialize();
@@ -85,36 +78,15 @@ namespace DanmakuNoKyojin.Screens
             _timer.Initialize();
 
             defaultView = GraphicsDevice.Viewport;
-            leftView = defaultView;
-            rightView = defaultView;
-
-            if (!_singlePlayer)
-            {
-                leftView.Width = leftView.Width / 2;
-                rightView.Width = rightView.Width / 2;
-                rightView.X = leftView.Width;
-            }
-
-            Players.Clear();
 
             // First player
-            var player1 = new Player(GameRef, leftView, 1, Config.PlayersController[0],
+            var player1 = new Player(GameRef, defaultView, 1, Config.PlayersController[0],
                                         new Vector2(Config.GameArea.X / 2f,
                                                     Config.GameArea.Y - 150));
             player1.Initialize();
-            Players.Add(player1);
+            Player = player1;
 
-            // Second player
-            if (!_singlePlayer)
-            {
-                var player2 = new Player(GameRef, rightView, 2, Config.PlayersController[1],
-                                        new Vector2(Config.GameArea.X / 2f,
-                                                    Config.GameArea.Y - 150));
-                player2.Initialize();
-                Players.Add(player2);
-            }
-
-            _enemy = new Boss(GameRef, Players);
+            _enemy = new Boss(GameRef, Player);
             _enemy.Initialize();
         }
 
@@ -163,8 +135,8 @@ namespace DanmakuNoKyojin.Screens
 
             base.Update(gameTime);
 
-            foreach (Player p in Players)
             {
+                var p = Player;
                 if (p.IsAlive)
                 {
                     if (p.BulletTime)
@@ -239,16 +211,14 @@ namespace DanmakuNoKyojin.Screens
             */
 
             // GameRef Over
-            if ((!Players[0].IsAlive && (Config.PlayersNumber == 1 || (Config.PlayersNumber == 2 && !Players[1].IsAlive))) || _timer.IsFinished)
+            if (!Player.IsAlive || _timer.IsFinished)
             {
                 UnloadContent();
 
                 GameRef.GameOverScreen.Died = !_timer.IsFinished;
                 GameRef.GameOverScreen.Time = _playTime;
                 GameRef.GameOverScreen.WaveNumber = _waveNumber;
-                GameRef.GameOverScreen.Player1Score = Players[0].Score;
-                if (Config.PlayersNumber == 2)
-                    GameRef.GameOverScreen.Player2Score = Players[1].Score;
+                GameRef.GameOverScreen.Player1Score = Player.Score;
 
                 int totalScore =
                     GameRef.GameOverScreen.Player1Score +
@@ -280,54 +250,26 @@ namespace DanmakuNoKyojin.Screens
             Color backgroundColor = new Color(5, 5, 5);
             GraphicsDevice.Clear(backgroundColor);
 
-            if (_singlePlayer)
+            GameRef.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Player.Camera.GetTransformation());
+
+            Color randomColor = Color.White;//new Color(Rand.Next(255), Rand.Next(255), Rand.Next(255));
+            GameRef.SpriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, randomColor);
+
+            foreach (var bullet in Player.GetBullets())
             {
-                GameRef.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Players[0].Camera.GetTransformation());
-
-                Color randomColor = Color.White;//new Color(Rand.Next(255), Rand.Next(255), Rand.Next(255));
-                GameRef.SpriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, randomColor);
-
-                foreach (var bullet in Players[0].GetBullets())
-                {
-                    bullet.Draw(gameTime);
-                }
-
-                Players[0].Draw(gameTime);
-
-                /*
-                if (_enemy.IsAlive)
-                {
-                    _enemy.Draw(gameTime);
-                }
-                */
-
-                GameRef.SpriteBatch.End();
+                bullet.Draw(gameTime);
             }
-            else
+
+            Player.Draw(gameTime);
+
+            /*
+            if (_enemy.IsAlive)
             {
-                if (Players[1].IsInvincible)
-                {
-                    // Player 2
-                    GraphicsDevice.Viewport = rightView;
-                    DrawPlayerCamera(gameTime, Players[1]);
-
-                    // Player 1
-                    GraphicsDevice.Viewport = leftView;
-                    DrawPlayerCamera(gameTime, Players[0]);
-                }
-                else
-                {
-                    // Player 1
-                    GraphicsDevice.Viewport = leftView;
-                    DrawPlayerCamera(gameTime, Players[0]);
-
-                    // Player 2
-                    GraphicsDevice.Viewport = rightView;
-                    DrawPlayerCamera(gameTime, Players[1]);
-                }
-
-                GraphicsDevice.Viewport = defaultView;
+                _enemy.Draw(gameTime);
             }
+            */
+
+            GameRef.SpriteBatch.End();
 
             base.Draw(gameTime);
 
@@ -335,11 +277,9 @@ namespace DanmakuNoKyojin.Screens
 
             _timer.Draw(gameTime);
 
-            if (!_singlePlayer)
-                GameRef.SpriteBatch.Draw(_pixel, new Rectangle((int)(Config.Resolution.X / 2 - 2), 0, 2, Config.Resolution.Y), Color.Black);
-
-            foreach (Player p in Players)
+            
             {
+                var p = Player;
                 if (p.IsAlive)
                 {
                     p.DrawString(gameTime);
@@ -406,8 +346,7 @@ namespace DanmakuNoKyojin.Screens
                     bullet.Draw(gameTime);
                 }
 
-                Players[0].Draw(gameTime);
-                Players[1].Draw(gameTime);
+                Player.Draw(gameTime);
 
                 /*
                 if (_enemy.IsAlive)
