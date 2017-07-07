@@ -31,7 +31,7 @@ namespace DanmakuNoKyojin.Entities
         private Vector2 _direction;
         public bool SlowMode { get; set; }
         private float _velocitySlowMode;
-        private Vector2 _distance;
+        //private Vector2 _distance;
 
         // Bullet Time
         public bool BulletTime { get; set; }
@@ -100,7 +100,7 @@ namespace DanmakuNoKyojin.Entities
             _velocitySlowMode = Config.PlayerMaxSlowVelocity;
             _direction = Vector2.Zero;
             Rotation = 0f;
-            _distance = Vector2.Zero;
+            //_distance = Vector2.Zero;
 
             _lives = 10;//Improvements.LivesNumberData[PlayerData.LivesNumberIndex].Key;
 
@@ -126,7 +126,7 @@ namespace DanmakuNoKyojin.Entities
             Sprite = GameRef.Content.Load<Texture2D>("Graphics/Entities/player");
             _bulletSprite = GameRef.Content.Load<Texture2D>("Graphics/Entities/player_bullet");
             _hitboxSprite = GameRef.Content.Load<Texture2D>("Graphics/Pictures/player_hitbox");
-            CollisionBoxes.Add(new CollisionCircle(this, new Vector2(Sprite.Height / 6f, Sprite.Height / 6f), _hitboxRadius/2f));
+            CollisionBoxes.Add(new CollisionCircle(this, new Vector2(Sprite.Height / 6f, Sprite.Height / 6f), _hitboxRadius / 2f));
 
             _shieldSprite = GameRef.Content.Load<Texture2D>("Graphics/Entities/shield");
             _shieldOrigin = new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f);
@@ -180,79 +180,47 @@ namespace DanmakuNoKyojin.Entities
 
                 _direction = Vector2.Zero;
 
-                if (_controller == Config.Controller.Keyboard)
+                var inputState = ReadInput(_controller, _viewport);
+
+                Rotation = inputState.Rotation;
+                _direction = inputState.Direction;
+
+                //// Debug
+                //if (InputHandler.KeyDown(Keys.R))
+                //    Rotation = 0;
+                //else if (InputHandler.KeyPressed(Keys.V))
+                //{
+                //    Hit();
+                //}
+
+                //if (_direction != Vector2.Zero)
+                //{
+                //    _velocitySlowMode = Config.PlayerMaxSlowVelocity / 2;
+                //    _velocity = Config.PlayerMaxVelocity / 2;
+                //}
+                //else
+                //{
+                //    _velocitySlowMode = Config.PlayerMaxSlowVelocity;
+                    _velocity = Config.PlayerMaxVelocity;
+                //}
+
+                SlowMode = (PlayerData.SlowModeEnabled && inputState.SlowMode) ? true : false;
+                BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
+
+                if (inputState.Fire)
                 {
-                    // Keyboard
-                    if (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Up"]))
-                        _direction.Y = -1;
-                    if (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Right"]))
-                        _direction.X = 1;
-                    if (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Down"]))
-                        _direction.Y = 1;
-                    if (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Left"]))
-                        _direction.X = -1;
-
-                    SlowMode = (PlayerData.SlowModeEnabled && (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Slow"]))) ? true : false;
-                    BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && InputHandler.MouseState.RightButton == ButtonState.Pressed)) ? true : false;
-
-                    if (_direction != Vector2.Zero)
-                    {
-                        _velocitySlowMode = Config.PlayerMaxSlowVelocity / 2;
-                        _velocity = Config.PlayerMaxVelocity / 2;
-                    }
-                    else
-                    {
-                        _velocitySlowMode = Config.PlayerMaxSlowVelocity;
-                        _velocity = Config.PlayerMaxVelocity;
-                    }
-
-                    // Mouse
-                    _distance.X = (_viewport.Width / 2f) - InputHandler.MouseState.X;
-                    _distance.Y = (_viewport.Height / 2f) - InputHandler.MouseState.Y;
-
-                    Rotation = (float)Math.Atan2(_distance.Y, _distance.X) - MathHelper.PiOver2;
-
-                    // Debug
-                    if (InputHandler.KeyDown(Keys.R))
-                        Rotation = 0;
-                    else if (InputHandler.KeyPressed(Keys.V))
-                    {
-                        Hit();
-                    }
-
-                    if (InputHandler.MouseState.LeftButton == ButtonState.Pressed)
-                    {
-                        Fire(gameTime);
-                    }
-
-                    if (InputHandler.MouseState.RightButton == ButtonState.Pressed)
-                    {
-                        _focusMode = true;
-                        SlowMode = true;
-                    }
-                    else if (_focusMode)
-                    {
-                        _focusMode = false;
-                        SlowMode = false;
-                    }
+                    Fire(gameTime);
                 }
-                else if (_controller == Config.Controller.GamePad)
+
+                if (inputState.Fire)
                 {
-                    _direction.X = InputHandler.GamePadStates[0].ThumbSticks.Left.X;
-                    _direction.Y = (-1) * InputHandler.GamePadStates[0].ThumbSticks.Left.Y;
-
-                    SlowMode = (PlayerData.SlowModeEnabled && (InputHandler.ButtonDown(Config.PlayerGamepadInput[0], PlayerIndex.One))) ? true : false;
-                    BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && InputHandler.ButtonDown(Config.PlayerGamepadInput[1], PlayerIndex.One))) ? true : false;
-
-                    if (InputHandler.GamePadStates[0].ThumbSticks.Right.Length() > 0)
-                    {
-                        Rotation =
-                            (float)
-                            Math.Atan2(InputHandler.GamePadStates[0].ThumbSticks.Right.Y * (-1),
-                                       InputHandler.GamePadStates[0].ThumbSticks.Right.X) + MathHelper.PiOver2;
-
-                        Fire(gameTime);
-                    }
+                    _focusMode = true;
+                    SlowMode = true;
+                }
+                else if (_focusMode)
+                {
+                    _focusMode = false;
+                    SlowMode = false;
                 }
 
                 if (BulletTime)
@@ -279,17 +247,17 @@ namespace DanmakuNoKyojin.Entities
 
                 UpdatePosition(dt);
             }
-            
+
             // Update camera position
             _cameraPosition.X = MathHelper.Lerp(
-                _cameraPosition.X, 
-                Position.X - Config.CameraDistanceFromPlayer.X * (float)Math.Cos(Rotation + MathHelper.PiOver2), 
+                _cameraPosition.X,
+                Position.X - Config.CameraDistanceFromPlayer.X * (float)Math.Cos(Rotation + MathHelper.PiOver2),
                 Config.CameraMotionInterpolationAmount
             );
 
             _cameraPosition.Y = MathHelper.Lerp(
-                _cameraPosition.Y, 
-                Position.Y - Config.CameraDistanceFromPlayer.Y * (float)Math.Sin(Rotation + MathHelper.PiOver2), 
+                _cameraPosition.Y,
+                Position.Y - Config.CameraDistanceFromPlayer.Y * (float)Math.Sin(Rotation + MathHelper.PiOver2),
                 Config.CameraMotionInterpolationAmount
             );
 
@@ -299,8 +267,8 @@ namespace DanmakuNoKyojin.Entities
             {
                 // Update camera zoom according to mouse distance from player
                 var mouseWorldPosition = new Vector2(
-                    _cameraPosition.X - GameRef.Graphics.GraphicsDevice.Viewport.Width/2f + InputHandler.MouseState.X,
-                    _cameraPosition.Y - GameRef.Graphics.GraphicsDevice.Viewport.Height/2f + InputHandler.MouseState.Y
+                    _cameraPosition.X - GameRef.Graphics.GraphicsDevice.Viewport.Width / 2f + InputHandler.MouseState.X,
+                    _cameraPosition.Y - GameRef.Graphics.GraphicsDevice.Viewport.Height / 2f + InputHandler.MouseState.Y
                     );
 
                 var mouseDistanceFromPlayer =
@@ -308,17 +276,72 @@ namespace DanmakuNoKyojin.Entities
                         Math.Sqrt(Math.Pow(Position.X - mouseWorldPosition.X, 2) +
                                   Math.Pow(Position.Y - mouseWorldPosition.Y, 2));
 
-                var cameraZoom = GameRef.Graphics.GraphicsDevice.Viewport.Width/mouseDistanceFromPlayer;
+                var cameraZoom = GameRef.Graphics.GraphicsDevice.Viewport.Width / mouseDistanceFromPlayer;
 
                 if (_focusMode)
                     cameraZoom = 1f;
                 else
                     cameraZoom = cameraZoom > Config.CameraZoomLimit
                         ? 1f
-                        : MathHelper.Clamp(cameraZoom/Config.CameraZoomLimit, Config.CameraZoomMin, Config.CameraZoomMax);
+                        : MathHelper.Clamp(cameraZoom / Config.CameraZoomLimit, Config.CameraZoomMin, Config.CameraZoomMax);
 
                 _camera.Zoom = MathHelper.Lerp(_camera.Zoom, cameraZoom, Config.CameraZoomInterpolationAmount);
             }
+        }
+
+        private static InputData ReadInputFromKeyboard(Viewport _viewport)
+        {
+            var slowMode = InputHandler.KeyDown(Config.PlayerKeyboardInputs["Slow"]);
+
+            var bulletTime = InputHandler.MouseState.RightButton == ButtonState.Pressed;
+
+            var fire = InputHandler.MouseState.LeftButton == ButtonState.Pressed;
+
+            var direction = Vector2.Zero;
+            if (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Up"]))
+                direction.Y = -1;
+            if (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Right"]))
+                direction.X = 1;
+            if (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Down"]))
+                direction.Y = 1;
+            if (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Left"]))
+                direction.X = -1;
+
+            var distanceX = (_viewport.Width / 2f) - InputHandler.MouseState.X;
+            var distanceY = (_viewport.Height / 2f) - InputHandler.MouseState.Y;
+            var rotation = (float)Math.Atan2(distanceY, distanceX) - MathHelper.PiOver2;
+
+            return new InputData(slowMode, bulletTime, fire, direction, rotation);
+        }
+
+        private static InputData ReadInputFromPad()
+        {
+            var slowMode = InputHandler.ButtonDown(Config.PlayerGamepadInput[0], PlayerIndex.One);
+
+            var bulletTime = InputHandler.ButtonDown(Config.PlayerGamepadInput[1], PlayerIndex.One);
+
+            var fire = InputHandler.GamePadStates[0].ThumbSticks.Right.Length() > 0;
+
+            var direction = Vector2.Zero;
+            direction.X = InputHandler.GamePadStates[0].ThumbSticks.Left.X;
+            direction.Y = (-1) * InputHandler.GamePadStates[0].ThumbSticks.Left.Y;
+
+            var rotation = (float)
+                Math.Atan2(InputHandler.GamePadStates[0].ThumbSticks.Right.Y * (-1),
+               InputHandler.GamePadStates[0].ThumbSticks.Right.X) + MathHelper.PiOver2;
+
+            return new InputData(slowMode, bulletTime, fire, direction, rotation);
+        }
+
+        private static InputData ReadInput(Config.Controller controller, Viewport viewport)
+        {
+            if (controller == Config.Controller.Keyboard)
+                return ReadInputFromKeyboard(viewport);
+
+            if (controller == Config.Controller.GamePad)
+                return ReadInputFromPad();
+
+            throw new ArgumentException(nameof(controller));
         }
 
         private void UpdatePosition(float dt)
@@ -426,19 +449,19 @@ namespace DanmakuNoKyojin.Entities
                     hudY = 80;
 
                 GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, lives, new Vector2(
-                    Config.Resolution.X - ControlManager.SpriteFont.MeasureString(lives).X + 1, 
-                    Config.Resolution.Y - hudY + 1), 
+                    Config.Resolution.X - ControlManager.SpriteFont.MeasureString(lives).X + 1,
+                    Config.Resolution.Y - hudY + 1),
                 Color.Black);
                 GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, lives, new Vector2(
-                    Config.Resolution.X - ControlManager.SpriteFont.MeasureString(lives).X, 
-                    Config.Resolution.Y - hudY), 
+                    Config.Resolution.X - ControlManager.SpriteFont.MeasureString(lives).X,
+                    Config.Resolution.Y - hudY),
                 Color.White);
 
                 for (int i = 0; i < _lives; i++)
                 {
                     GameRef.SpriteBatch.Draw(_lifeIcon, new Vector2(
-                        Config.Resolution.X - (ControlManager.SpriteFont.MeasureString(lives).X * 2) - i * _lifeIcon.Width + 10, 
-                        Config.Resolution.Y - (hudY - 7)), 
+                        Config.Resolution.X - (ControlManager.SpriteFont.MeasureString(lives).X * 2) - i * _lifeIcon.Width + 10,
+                        Config.Resolution.Y - (hudY - 7)),
                     Color.White);
                 }
 
@@ -452,13 +475,13 @@ namespace DanmakuNoKyojin.Entities
                     // Text
                     GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont,
                                                 bulletTimeBarWidth.ToString(CultureInfo.InvariantCulture), new Vector2(
-                                                    Config.Resolution.X - ControlManager.SpriteFont.MeasureString("100").X, 
-                                                    Config.Resolution.Y - 39), 
+                                                    Config.Resolution.X - ControlManager.SpriteFont.MeasureString("100").X,
+                                                    Config.Resolution.Y - 39),
                                                 Color.Black);
                     GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont,
                                                 bulletTimeBarWidth.ToString(CultureInfo.InvariantCulture), new Vector2(
                                                     Config.Resolution.X - ControlManager.SpriteFont.MeasureString("100").X,
-                                                    Config.Resolution.Y - 40), 
+                                                    Config.Resolution.Y - 40),
                                                 Color.White);
 
                     // Bar
@@ -512,7 +535,7 @@ namespace DanmakuNoKyojin.Entities
 
                     direction = MathUtil.FromPolar(aimAngle + randomSpread, 11f);
                     direction.Normalize();
-                    
+
                     Vector2 offset = Vector2.Transform(new Vector2(0, 0), aimQuat);
 
                     var bullet = new Bullet(GameRef, _bulletSprite, Position + offset, direction, Config.PlayerBulletVelocity);
@@ -663,6 +686,24 @@ namespace DanmakuNoKyojin.Entities
                 GameRef.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
                 new ParticleState(vel2, ParticleType.Enemy)
             );
+        }
+    }
+
+    struct InputData
+    {
+        public bool SlowMode;
+        public bool BulletTime;
+        public bool Fire;
+        public Vector2 Direction;
+        public float Rotation;
+
+        public InputData(bool slowMode, bool bulletTime, bool fire, Vector2 direction, float rotation)
+        {
+            SlowMode = slowMode;
+            BulletTime = bulletTime;
+            Fire = fire;
+            Direction = direction;
+            Rotation = rotation;
         }
     }
 }

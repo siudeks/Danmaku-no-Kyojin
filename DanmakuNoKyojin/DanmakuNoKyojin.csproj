@@ -89,7 +89,6 @@
     <Compile Include="Controls\IInputHandler.cs" />
     <Compile Include="Controls\InputHandler.cs" />
     <Compile Include="Controls\IocRegistration.cs" />
-    <Compile Include="Controls\Observable.cs" />
     <Compile Include="DisposableExtensions.cs" />
     <Compile Include="Framework\ContentLoaderExtensions.cs" />
     <Compile Include="Framework\GameComponentCollectionExtensions.cs" />
@@ -175,6 +174,7 @@
     <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Reactive, Version=4.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reactive.4.0.0-preview00001\lib\net45\System.Reactive.dll</HintPath>
     </Reference>
@@ -182,6 +182,9 @@
       <HintPath>..\packages\System.Reactive.PlatformServices.4.0.0-preview00001\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0-preview2-25405-01\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -257,7 +260,9 @@
     <Content Include="Content\Graphics\Fonts\ControlFont.spritefont" />
     <Content Include="Content\Graphics\Fonts\TimerSeconds.spritefont" />
     <Content Include="Content\Graphics\Fonts\TitleFont.spritefont" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />

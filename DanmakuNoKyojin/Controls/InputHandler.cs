@@ -28,11 +28,6 @@ namespace DanmakuNoKyojin.Controls
             get { return mouseState; }
         }
 
-        public static MouseState LastMouseState
-        {
-            get { return lastMouseState; }
-        }
-
         public static KeyboardState KeyboardState
         {
             get { return keyboardState; }
