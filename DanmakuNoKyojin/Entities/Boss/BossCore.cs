@@ -106,8 +106,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             if (!entity.Intersects(this))
                 return false;
 
-            var bullet = entity as BaseBullet;
-            if (bullet != null)
+            if (entity is BaseBullet bullet)
             {
                 _hp -= bullet.Power;
 
