@@ -86,6 +86,7 @@
     <Compile Include="Controls\ControlManager.cs" />
     <Compile Include="Controls\GameState.cs" />
     <Compile Include="Controls\GameStateManager.cs" />
+    <Compile Include="Controls\IInputHandler.cs" />
     <Compile Include="Controls\InputHandler.cs" />
     <Compile Include="DisposableExtensions.cs" />
     <Compile Include="Framework\ContentLoaderExtensions.cs" />

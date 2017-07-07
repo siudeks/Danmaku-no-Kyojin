@@ -3,7 +3,7 @@
     /// <summary>
     /// Allows to expose same functionality as GameComponent without inheritance.
     /// </summary>
-    public interface IDrawableComponent
+    public interface IUpdatableComponent
     {
         void Update(GameTime gameTime);
     }

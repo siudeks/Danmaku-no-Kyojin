@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DanmakuNoKyojin.Controls
 {
-    class InputHandler : IDrawableComponent
+    class InputHandler : IUpdatableComponent , IInputHandler
     {
         #region Mouse Field Region
 
