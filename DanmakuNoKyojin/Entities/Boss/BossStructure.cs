@@ -11,7 +11,7 @@ namespace DanmakuNoKyojin.Entities.Boss
     {
         private enum Direction { Up, Down, Right, Left, UpLeft, DownLeft, UpRight, DownRight };
         private enum Symmetry { Vertical, Horizontal };
-
+        private static Random random = new Random();
         private GameRunner _gameRef;
 
         private Entity _parent;
@@ -203,7 +203,7 @@ namespace DanmakuNoKyojin.Entities.Boss
                 possibleDirections.Remove(Direction.Down);
             }
 
-            var randomDirectionIndex = _gameRef.Rand.Next(possibleDirections.Count);
+            var randomDirectionIndex = random.Next(possibleDirections.Count);
             var randomDirection = possibleDirections[randomDirectionIndex];
 
             lastDirection = randomDirection;

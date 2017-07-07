@@ -7,6 +7,7 @@ namespace DanmakuNoKyojin.Entities
     class Laser : Entity
     {
         // Sprite
+        private SpriteBatch spriteBatch;
         private Texture2D _borderTexture;
         private Texture2D _middleTexture;
 
@@ -14,8 +15,9 @@ namespace DanmakuNoKyojin.Entities
         private Vector2 _end;
         private float _thickness;
 
-        public Laser(GameRunner gameRef, Vector2 start, Vector2 end, float thickness = 1) : base(gameRef)
+        public Laser(GameRunner gameRef, SpriteBatch spriteBatch, Vector2 start, Vector2 end, float thickness = 1) : base(gameRef)
         {
+            this.spriteBatch = spriteBatch;
             _start = start;
             _end = end;
             _thickness = thickness;
@@ -57,9 +59,9 @@ namespace DanmakuNoKyojin.Entities
 
             Color color = Color.White;
 
-            GameRef.SpriteBatch.Draw(_middleTexture, _start, null, color, rotation, middleOrigin, middleScale, SpriteEffects.None, 0f);
-            GameRef.SpriteBatch.Draw(_borderTexture, _start, null, color, rotation, capOrigin, thicknessScale, SpriteEffects.None, 0f);
-            GameRef.SpriteBatch.Draw(_borderTexture, _end, null, color, rotation + MathHelper.Pi, capOrigin, thicknessScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_middleTexture, _start, null, color, rotation, middleOrigin, middleScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_borderTexture, _start, null, color, rotation, capOrigin, thicknessScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_borderTexture, _end, null, color, rotation + MathHelper.Pi, capOrigin, thicknessScale, SpriteEffects.None, 0f);
         }
     }
 }

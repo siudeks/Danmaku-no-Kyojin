@@ -9,7 +9,7 @@ namespace DanmakuNoKyojin.Entities
     class Turret : SpriteEntity
     {
         private MoverManager _moverManager;
-
+        private static Random random = new Random();
         private Vector2 _initialPosition;
         private Entity _parent;
         private Entity _target;
@@ -45,7 +45,7 @@ namespace DanmakuNoKyojin.Entities
             _target = target;
             _moverManager = moverManager;
             _pattern = pattern;
-            _timer = new TimeSpan(0, 0, (int)(GameRef.Rand.NextDouble() * 30));
+            _timer = new TimeSpan(0, 0, (int)(random.NextDouble() * 30));
             _color = color;
             Scale = new Vector2(0.5f, 0.5f);
         }
@@ -70,7 +70,7 @@ namespace DanmakuNoKyojin.Entities
                 mover.Y = Position.Y;
                 mover.SetBullet(_pattern.RootNode);
 
-                _timer = new TimeSpan(0, 0, (int)(GameRef.Rand.NextDouble() * 30));
+                _timer = new TimeSpan(0, 0, (int)(random.NextDouble() * 30));
             }
 
             // Rotate to target

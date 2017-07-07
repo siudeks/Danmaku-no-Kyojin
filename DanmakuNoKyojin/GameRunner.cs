@@ -51,9 +51,6 @@ namespace DanmakuNoKyojin
         public Texture2D LineParticle;
         public Texture2D Glow;
 
-        // Random
-        public readonly Random Rand = new Random();
-
         // Audio
         public SoundEffect Select;
         public SoundEffect Choose;

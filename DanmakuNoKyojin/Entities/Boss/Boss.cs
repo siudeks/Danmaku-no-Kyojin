@@ -16,7 +16,7 @@ namespace DanmakuNoKyojin.Entities.Boss
     class Boss
     {
         private GameRunner _gameRef;
-
+        private static Random random = new Random();
         private TimeSpan _timer;
         private int _defeatCounter;
 
@@ -127,22 +127,22 @@ namespace DanmakuNoKyojin.Entities.Boss
 
         private void ParticleExplosion(Vector2 position)
         {
-            float hue1 = _gameRef.Rand.NextFloat(0, 6);
-            float hue2 = (hue1 + _gameRef.Rand.NextFloat(0, 2)) % 6f;
+            float hue1 = random.NextFloat(0, 6);
+            float hue2 = (hue1 + random.NextFloat(0, 2)) % 6f;
             Color color1 = ColorUtil.HSVToColor(hue1, 0.5f, 1);
             Color color2 = ColorUtil.HSVToColor(hue2, 0.5f, 1);
 
             for (int j = 0; j < 50; j++)
             {
-                float speed = 18f * (1f - 1 / _gameRef.Rand.NextFloat(1f, 10f));
+                float speed = 18f * (1f - 1 / random.NextFloat(1f, 10f));
                 var state = new ParticleState()
                 {
-                    Velocity = _gameRef.Rand.NextVector2(speed, speed),
+                    Velocity = random.NextVector2(speed, speed),
                     Type = ParticleType.Enemy,
                     LengthMultiplier = 1f
                 };
 
-                Color color = Color.Lerp(color1, color2, _gameRef.Rand.NextFloat(0, 1));
+                Color color = Color.Lerp(color1, color2, random.NextFloat(0, 1));
 
                 _gameRef.ParticleManager.CreateParticle(_gameRef.LineParticle, position,
                     color, 190, 1.5f, state);

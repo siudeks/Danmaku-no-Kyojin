@@ -10,6 +10,8 @@ namespace DanmakuNoKyojin.Entities.Boss
 {
     class BossCore : SpriteEntity
     {
+        private static Random random = new Random();
+
         private readonly Entity _parent;
         private AnimatedSprite _animatedSprite;
         private Texture2D _eyeOrbit;
@@ -96,7 +98,7 @@ namespace DanmakuNoKyojin.Entities.Boss
                 var mover = (Mover)_moverManager.CreateBullet();
                 mover.X = Position.X;
                 mover.Y = Position.Y;
-                var randomIndex = GameRef.Rand.Next(_bulletPatterns.Count - 1);
+                var randomIndex = random.Next(_bulletPatterns.Count - 1);
                 mover.SetBullet(_bulletPatterns[randomIndex].RootNode);
             }
         }

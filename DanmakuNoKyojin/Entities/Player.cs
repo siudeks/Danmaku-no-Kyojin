@@ -20,6 +20,8 @@ namespace DanmakuNoKyojin.Entities
         [Inject]
         public IObserver<FrameworkInitialized> OnFrameworkInitialized { private get; set; }
 
+        private static Random random = new Random();
+
         public int ID { get; set; }
         private Config.Controller _controller;
 
@@ -533,7 +535,7 @@ namespace DanmakuNoKyojin.Entities
                     if (_focusMode)
                         spreadAmount /= 3f;
 
-                    float randomSpread = GameRef.Rand.NextFloat(-spreadAmount, spreadAmount);
+                    float randomSpread = random.NextFloat(-spreadAmount, spreadAmount);
 
                     direction = MathUtil.FromPolar(aimAngle + randomSpread, 11f);
                     direction.Normalize();
@@ -622,11 +624,11 @@ namespace DanmakuNoKyojin.Entities
 
                 for (int i = 0; i < 1200; i++)
                 {
-                    float speed = 18f * (1f - 1 / GameRef.Rand.NextFloat(1f, 10f));
-                    Color color = Color.Lerp(Color.White, yellow, GameRef.Rand.NextFloat(0, 1));
+                    float speed = 18f * (1f - 1 / random.NextFloat(1f, 10f));
+                    Color color = Color.Lerp(Color.White, yellow, random.NextFloat(0, 1));
                     var state = new ParticleState()
                     {
-                        Velocity = GameRef.Rand.NextVector2(speed, speed),
+                        Velocity = random.NextVector2(speed, speed),
                         Type = ParticleType.None,
                         LengthMultiplier = 1
                     };
@@ -665,7 +667,7 @@ namespace DanmakuNoKyojin.Entities
             const float alpha = 0.7f;
 
             // middle particle stream
-            Vector2 velMid = baseVel + GameRef.Rand.NextVector2(0, 1);
+            Vector2 velMid = baseVel + random.NextVector2(0, 1);
 
             GameRef.ParticleManager.CreateParticle(GameRef.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
                 new ParticleState(velMid, ParticleType.Enemy));
@@ -673,8 +675,8 @@ namespace DanmakuNoKyojin.Entities
                 new ParticleState(velMid, ParticleType.Enemy));
 
             // side particle streams
-            Vector2 vel1 = baseVel + perpVel + GameRef.Rand.NextVector2(0, 0.3f);
-            Vector2 vel2 = baseVel - perpVel + GameRef.Rand.NextVector2(0, 0.3f);
+            Vector2 vel1 = baseVel + perpVel + random.NextVector2(0, 0.3f);
+            Vector2 vel2 = baseVel - perpVel + random.NextVector2(0, 0.3f);
 
             GameRef.ParticleManager.CreateParticle(GameRef.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
                 new ParticleState(vel1, ParticleType.Enemy));

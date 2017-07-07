@@ -17,6 +17,7 @@ namespace DanmakuNoKyojin.Screens
     {
         // Camera
         Viewport _defaultView;
+        private static Random random = new Random();
 
         private List<Player> Players { get; set; }
         private Boss _boss;
@@ -123,7 +124,7 @@ namespace DanmakuNoKyojin.Screens
                                     currentPlayerBullet.Position, Color.LightBlue, 50, 1,
                                     new ParticleState()
                                     {
-                                        Velocity = GameRef.Rand.NextVector2(0, 9),
+                                        Velocity = random.NextVector2(0, 9),
                                         Type = ParticleType.Bullet,
                                         LengthMultiplier = 1
                                     });
@@ -142,7 +143,7 @@ namespace DanmakuNoKyojin.Screens
                                     currentPlayerBullet.Position, Color.LightBlue, 50, 1,
                                     new ParticleState()
                                     {
-                                        Velocity = GameRef.Rand.NextVector2(0, 9),
+                                        Velocity = random.NextVector2(0, 9),
                                         Type = ParticleType.Bullet,
                                         LengthMultiplier = 1
                                     });
