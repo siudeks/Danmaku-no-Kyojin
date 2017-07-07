@@ -6,11 +6,7 @@ namespace DanmakuNoKyojin.Entities
 {
     public abstract class SpriteEntity : Entity
     {
-        #region Fields
-
         private Texture2D _sprite;
-
-        #endregion
 
         protected SpriteEntity(GameRunner gameRef) : base(gameRef)
         {

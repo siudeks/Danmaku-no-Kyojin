@@ -6,8 +6,6 @@ namespace DanmakuNoKyojin.Entities
 {
     public abstract class Entity : ICollidable
     {
-        #region Fields
-
         protected readonly GameRunner GameRef;
         private Vector2 _position;
         private float _rotation;
@@ -16,10 +14,6 @@ namespace DanmakuNoKyojin.Entities
         private Point _size;
 
         public bool IsAlive { get; set; }
-
-        #endregion
-
-        #region Accessors
 
         public float X
         {
@@ -70,8 +64,6 @@ namespace DanmakuNoKyojin.Entities
             get { return _scale; }
             set { _scale = value; }
         }
-
-        #endregion
 
         protected Entity(GameRunner gameRef)
         {
