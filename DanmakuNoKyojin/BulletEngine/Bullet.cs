@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using DanmakuNoKyojin.Collisions;
 using Microsoft.Xna.Framework;
 using DanmakuNoKyojin.Entities;
 
@@ -13,8 +12,6 @@ namespace DanmakuNoKyojin.BulletEngine
     /// </summary>
     public abstract class Bullet : SpriteEntity
     {
-        #region Members
-
         /// <summary>
         /// The direction this bullet is travelling.  Measured as an angle in radians
         /// </summary>
@@ -47,11 +44,6 @@ namespace DanmakuNoKyojin.BulletEngine
         private int _activeTaskNum = 0;
 
         //TODO: do a task factory, we are going to be creating a LOT of those little dudes
-
-
-        #endregion //Members
-
-        #region Properties
 
         /// <summary>
         /// The acceleration of this bullet
@@ -102,10 +94,6 @@ namespace DanmakuNoKyojin.BulletEngine
                 }
             }
         }
-
-        #endregion //Properties
-
-        #region Methods
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BulletMLLib.Bullet"/> class.
@@ -246,7 +234,5 @@ namespace DanmakuNoKyojin.BulletEngine
             Debug.Assert(_activeTaskNum < _fireData.Count);
             return _fireData[_activeTaskNum];
         }
-
-        #endregion //Methods
     }
 }

@@ -6,9 +6,6 @@ using System;
 
 namespace DanmakuNoKyojin.BulletEngine
 {
-	/// <summary>
-	/// 弾や敵オブジェクト（自身が弾源になる場合も、弾源から呼び出される場合もあります）
-	/// </summary>
 	class Mover : Bullet
 	{
 		#region Members
