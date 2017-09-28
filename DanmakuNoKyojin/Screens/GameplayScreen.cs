@@ -53,6 +53,8 @@ namespace DanmakuNoKyojin.Screens
 
             // Bloom effect
             _bloom = new BloomComponent(this.Game);
+            // Bloom effect doesnt' work - lets disable it and try to restore after refactor.
+            _bloom.Visible = false;
 
             Components.Add(_bloom);
         }
