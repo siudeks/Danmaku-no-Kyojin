@@ -10,8 +10,6 @@ namespace DanmakuNoKyojin.BulletEngine.Equationator
 	/// </summary>
 	public abstract class BaseNode
 	{
-		#region Members
-			
 		/// <summary>
 		/// Gets or sets the previous node.
 		/// </summary>
@@ -31,12 +29,6 @@ namespace DanmakuNoKyojin.BulletEngine.Equationator
 		/// <value>The pembas value.</value>
 		protected PemdasValue OrderOfOperationsValue { get; set; }
 			
-		#endregion Members
-		
-		#region Methods
-
-		#region Constructor
-			
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Equationator.EquationNode"/> class.
 		/// </summary>
@@ -48,10 +40,6 @@ namespace DanmakuNoKyojin.BulletEngine.Equationator
 			this.Next = null;
 		}
 
-		#endregion //Constructor
-
-		#region Linked List Functionality
-			
 		/// <summary>
 		/// Make this node into a head node.
 		/// </summary>
@@ -98,10 +86,6 @@ namespace DanmakuNoKyojin.BulletEngine.Equationator
 				return this;
 			}
 		}
-
-		#endregion //Linked List Functionality
-
-		#region Token Parsing Functionality
 
 		/// <summary>
 		/// Parse a list of tokens into a linked list of equation nodes.
@@ -298,10 +282,6 @@ namespace DanmakuNoKyojin.BulletEngine.Equationator
 		/// <param name="owner">the equation that this node is part of.  required to pull function delegates out of the dictionary</param>
 		protected abstract void ParseToken(List<Token> tokenList, ref int curIndex, Equation owner);
 
-		#endregion //Token Parsing Functionality
-
-		#region Treeifying Functionality
-
 		/// <summary>
 		/// This method takes a node from a linked list, and folds it into a binary tree.
 		/// The root node will have the highest pemdas value and the tree will be solved breadth first, ensuring that the root node is solved last.
@@ -369,10 +349,6 @@ namespace DanmakuNoKyojin.BulletEngine.Equationator
 			return RootNode;
 		}
 
-		#endregion //Treeifying Functionality
-
-		#region Solve Functionality
-
 		/// <summary>
 		/// Solve the equation!
 		/// This method recurses into the whole tree and returns a result from the equation.
@@ -380,9 +356,5 @@ namespace DanmakuNoKyojin.BulletEngine.Equationator
 		/// <param name="paramCallback">Parameter callback that will be used to get teh values of parameter nodes.</param>
 		/// <returns>The solution of this node and all its subnodes!</returns>
 		public abstract float Solve(ParamDelegate paramCallback);
-
-		#endregion //Solve Functionality
-
-		#endregion Methods
 	}
 }
