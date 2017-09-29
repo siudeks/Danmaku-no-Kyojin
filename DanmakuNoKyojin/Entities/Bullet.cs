@@ -6,7 +6,10 @@ using System;
 
 namespace DanmakuNoKyojin.Entities
 {
-    class Bullet : BaseBullet
+    /// <summary>
+    /// Represent a bullet visualization
+    /// </summary>
+    sealed class Bullet : BaseBullet
     {
         public bool WaveMode { get; set; }
         private float _distance;

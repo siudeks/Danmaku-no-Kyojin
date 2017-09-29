@@ -291,6 +291,11 @@ namespace DanmakuNoKyojin.Entities
 
                 _camera.Zoom = MathHelper.Lerp(_camera.Zoom, cameraZoom, Config.CameraZoomInterpolationAmount);
             }
+
+            foreach (var bullet in Bullets)
+            {
+                bullet.Update(gameTime);
+            }
         }
 
         private static InputData ReadInputFromKeyboard(Viewport _viewport)
