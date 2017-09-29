@@ -7,7 +7,8 @@ namespace Danmaku
     {
         public Vector2 Position { get; set; }
         public float Rotation { get; set; }
-        public Vector2 Direction;
+
+        private Vector2 direction;
 
         private float distance;
         private float power;
@@ -18,7 +19,7 @@ namespace Danmaku
         public BulletActor(Vector2 position, Vector2 direction, Vector2 velocity, float power, float spriteRadius)
         {
             this.Position = position;
-            this.Direction = direction;
+            this.direction = direction;
             this.velocity = velocity;
             //this.power = power;
 
@@ -34,13 +35,13 @@ namespace Danmaku
             if (waveMode)
             {
                 distance += 0.75f;
-                Direction.X = (float)Math.Cos(distance);
+                direction.X = (float)Math.Cos(distance);
             }
 
             // experimental feature
             // Rotation = (Rotation + 0.25f) % 360;
 
-            Position += Direction * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Position += direction * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             return true;
         }
     }
