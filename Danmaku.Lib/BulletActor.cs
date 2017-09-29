@@ -5,20 +5,24 @@ namespace Danmaku
 {
     public sealed class BulletActor : ReceiveActor
     {
-        public bool WaveMode { get; set; }
+        public Vector2 Position { get; set; }
+        public float Rotation { get; set; }
 
-        private float rotation;
         private float distance;
         private float power;
-        private CollisionElements CollisionBoxes;
+        private CollisionElements CollisionBoxes = new CollisionElements();
         private Vector2 direction;
         private Vector2 velocity;
-        public Vector2 position;
+        private bool waveMode { get; set; } = false;
 
         public BulletActor(Vector2 position, Vector2 direction, Vector2 velocity, float power, float spriteRadius)
         {
-            rotation = (float)Math.Atan2(direction.Y, direction.X) - MathHelper.PiOver2;
-            WaveMode = false;
+            this.Position = position;
+            this.direction = direction;
+            this.velocity = velocity;
+            this.power = power;
+
+            Rotation = (float)Math.Atan2(direction.Y, direction.X) - MathHelper.PiOver2;
             CollisionBoxes.Add(new CollisionCircle(this, new Vector2(), spriteRadius));
             this.power = power;
 
@@ -27,17 +31,16 @@ namespace Danmaku
 
         private bool Update(GameTime gameTime)
         {
-            if (WaveMode)
+            if (waveMode)
             {
                 distance += 0.75f;
                 direction.X = (float)Math.Cos(distance);
             }
 
-            // interesting feature
-            // will test and eihher use or remove later on
-            //Rotation = (Rotation + 0.25f) % 360;
+            // experimental feature
+            // Rotation = (Rotation + 0.25f) % 360;
 
-            position += direction * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Position += direction * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             return true;
         }
     }

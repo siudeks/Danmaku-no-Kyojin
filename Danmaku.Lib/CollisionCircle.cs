@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Danmaku
 {
     public class CollisionCircle : CollisionElement
     {
-        #region Fields
-
         public float Radius { get; set; }
 
         private List<Vector2> _axes;
 
-        #endregion
-
-        public CollisionCircle(object parent, Vector2 relativePosition, float radius) : base(parent, relativePosition)
+        public CollisionCircle(BulletActor parent, Vector2 relativePosition, float radius) : base(parent, relativePosition)
         {
             Radius = radius;
 
@@ -23,18 +18,10 @@ namespace Danmaku
 
         public override bool Intersects(CollisionElement collisionElement)
         {
-            if (collisionElement is CollisionConvexPolygon)
-                return Intersects(collisionElement as CollisionConvexPolygon);
-
             if (collisionElement is CollisionCircle)
                 return Intersects(collisionElement as CollisionCircle);
 
             return collisionElement.Intersects(this);
-        }
-
-        private bool Intersects(CollisionConvexPolygon element)
-        {
-            return element.Intersects(this);
         }
 
         private bool Intersects(CollisionCircle element)
