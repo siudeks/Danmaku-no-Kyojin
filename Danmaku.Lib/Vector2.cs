@@ -148,5 +148,39 @@
             value.Y = -value.Y;
             return value;
         }
+
+        /// <summary>
+        /// Compares whether current instance is equal to specified <see cref="Object"/>.
+        /// </summary>
+        /// <param name="obj">The <see cref="Object"/> to compare.</param>
+        /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj is Vector2)
+            {
+                return Equals((Vector2)obj);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Compares whether current instance is equal to specified <see cref="Vector2"/>.
+        /// </summary>
+        /// <param name="other">The <see cref="Vector2"/> to compare.</param>
+        /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
+        public bool Equals(Vector2 other)
+        {
+            return (X == other.X) && (Y == other.Y);
+        }
+
+        /// <summary>
+        /// Gets the hash code of this <see cref="Vector2"/>.
+        /// </summary>
+        /// <returns>Hash code of this <see cref="Vector2"/>.</returns>
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() + Y.GetHashCode();
+        }
     }
 }
