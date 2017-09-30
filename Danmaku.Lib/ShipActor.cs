@@ -64,7 +64,6 @@ namespace Danmaku
 
         private bool OnStatusRequest(StatusRequest req)
         {
-            Debug.WriteLine($"{Position.X}:{Position.Y}");
             Sender.Tell(new StatusResponse(Position.X, Position.Y));
 
             return true;
@@ -83,8 +82,8 @@ namespace Danmaku
             var y = Position.Y + Direction.Y * Velocity * dt;
 
             // do not allow to go outdside of game area
-            x = MathHelper.Clamp(x, SpriteSize.Width / 2f, Config.GameAreaX - SpriteSize.Width / 2f);
-            y = MathHelper.Clamp(y, SpriteSize.Height / 2f, Config.GameAreaY - SpriteSize.Height / 2f);
+            //x = MathHelper.Clamp(x, SpriteSize.Width / 2f, Config.GameAreaX - SpriteSize.Width / 2f);
+            //y = MathHelper.Clamp(y, SpriteSize.Height / 2f, Config.GameAreaY - SpriteSize.Height / 2f);
 
             Position = new Vector2(x, y);
 

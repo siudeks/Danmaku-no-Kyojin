@@ -19,8 +19,8 @@ namespace Danmaku
             actor.Tell(new ShipActor.UpdateMessage(TimeSpan.FromSeconds(2)));
 
             var status = await actor.Ask<ShipActor.StatusResponse>(new ShipActor.StatusRequest(), new CancellationTokenSource(100).Token);
-            Assert.Equal(status.PositionX, 1 + 3 * 2);
-            Assert.Equal(status.PositionY, 2 + 4 * 2);
+            Assert.Equal(status.PositionX, 1 + 3 * 2 * 800);
+            Assert.Equal(status.PositionY, 2 + 4 * 2 * 800);
         }
     }
 }
