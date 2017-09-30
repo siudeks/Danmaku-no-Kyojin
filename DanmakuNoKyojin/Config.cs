@@ -33,7 +33,6 @@ namespace DanmakuNoKyojin
             {"Right", Keys.D },
             {"Down", Keys.S },
             {"Left", Keys.Q },
-            {"Slow", Keys.LeftShift },
         };
 
         public static readonly Buttons[] PlayerGamepadInput =
@@ -52,7 +51,6 @@ namespace DanmakuNoKyojin
         public static readonly TimeSpan DefaultBulletTimeTimer = TimeSpan.FromSeconds(1);
         public static readonly TimeSpan PlayerShootFrequency = TimeSpan.FromMilliseconds(1);
         public const float PlayerMaxVelocity = 800f;
-        public const float PlayerMaxSlowVelocity = 125f;
         public static Vector2 PlayerBulletVelocity = new Vector2(1000f, 1000f);
         public const int PlayerLives = 5;
 

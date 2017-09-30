@@ -32,9 +32,6 @@ namespace DanmakuNoKyojin.Entities
         private float _hitboxRadius;
 
         private Vector2 _originPosition;
-        public bool SlowMode { get; set; }
-        private float _velocitySlowMode;
-        //private Vector2 _distance;
 
         // Bullet Time
         public bool BulletTime { get; set; }
@@ -96,8 +93,6 @@ namespace DanmakuNoKyojin.Entities
 
         public override void Initialize()
         {
-            // _velocity = (float)(Config.PlayerMaxVelocity * Improvements.SpeedData[PlayerData.SpeedIndex].Key);
-            _velocitySlowMode = Config.PlayerMaxSlowVelocity;
             Rotation = 0f;
             //_distance = Vector2.Zero;
 
@@ -183,7 +178,6 @@ namespace DanmakuNoKyojin.Entities
                 Rotation = inputState.Rotation;
                 ship.Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
 
-                SlowMode = (PlayerData.SlowModeEnabled && inputState.SlowMode) ? true : false;
                 BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
 
                 if (inputState.Fire)
@@ -194,12 +188,10 @@ namespace DanmakuNoKyojin.Entities
                 if (inputState.Fire)
                 {
                     _focusMode = true;
-                    SlowMode = true;
                 }
                 else if (_focusMode)
                 {
                     _focusMode = false;
-                    SlowMode = false;
                 }
 
                 if (BulletTime)
@@ -275,8 +267,6 @@ namespace DanmakuNoKyojin.Entities
 
         private static InputData ReadInputFromKeyboard(Viewport _viewport)
         {
-            var slowMode = InputHandler.KeyDown(Config.PlayerKeyboardInputs["Slow"]);
-
             var bulletTime = InputHandler.MouseState.RightButton == ButtonState.Pressed;
 
             var fire = InputHandler.MouseState.LeftButton == ButtonState.Pressed;
@@ -295,13 +285,11 @@ namespace DanmakuNoKyojin.Entities
             var distanceY = (_viewport.Height / 2f) - InputHandler.MouseState.Y;
             var rotation = (float)Math.Atan2(distanceY, distanceX) - MathHelper.PiOver2;
 
-            return new InputData(slowMode, bulletTime, fire, direction, rotation);
+            return new InputData(bulletTime, fire, direction, rotation);
         }
 
         private static InputData ReadInputFromPad()
         {
-            var slowMode = InputHandler.ButtonDown(Config.PlayerGamepadInput[0], PlayerIndex.One);
-
             var bulletTime = InputHandler.ButtonDown(Config.PlayerGamepadInput[1], PlayerIndex.One);
 
             var fire = InputHandler.GamePadStates[0].ThumbSticks.Right.Length() > 0;
@@ -314,7 +302,7 @@ namespace DanmakuNoKyojin.Entities
                 Math.Atan2(InputHandler.GamePadStates[0].ThumbSticks.Right.Y * (-1),
                InputHandler.GamePadStates[0].ThumbSticks.Right.X) + MathHelper.PiOver2;
 
-            return new InputData(slowMode, bulletTime, fire, direction, rotation);
+            return new InputData(bulletTime, fire, direction, rotation);
         }
 
         private static InputData ReadInput(Config.Controller controller, Viewport viewport)
@@ -330,17 +318,6 @@ namespace DanmakuNoKyojin.Entities
 
         private void UpdatePosition(TimeSpan elapsedGameTime)
         {
-            //if (SlowMode)
-            //{
-            //    X += _direction.X * _velocitySlowMode * dt;
-            //    Y += _direction.Y * _velocitySlowMode * dt;
-            //}
-            //else
-            //{
-            //X += _direction.X * _velocity * dt;
-            //Y += _direction.Y * _velocity * dt;
-            //}
-
             ship.Tell(new ShipActor.UpdateMessage(elapsedGameTime));
         }
 
@@ -360,17 +337,6 @@ namespace DanmakuNoKyojin.Entities
 
                 if (IsInvincible)
                     GameRef.SpriteBatch.Draw(_shieldSprite, Position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
-
-                // Draw Hitbox
-                if (SlowMode)
-                {
-                    GameRef.SpriteBatch.Draw(_hitboxSprite, new Rectangle(
-                        (int)(CollisionBoxes[0].GetCenter().X - _hitboxRadius / 2f),
-                        (int)(CollisionBoxes[0].GetCenter().Y - _hitboxRadius / 2f),
-                        (int)_hitboxRadius,
-                        (int)_hitboxRadius),
-                        Color.White);
-                }
             }
 
             base.Draw(gameTime);
@@ -475,11 +441,8 @@ namespace DanmakuNoKyojin.Entities
                     Vector2 directionRight = direction;
                     Vector2 positionRight = new Vector2(Position.X + 25f * (float)Math.Cos(Rotation), Position.Y + 25f * (float)Math.Sin(Rotation));
 
-                    if (!SlowMode)
-                    {
-                        directionLeft = new Vector2((float)Math.Sin(Rotation - Math.PI / 4), (float)Math.Cos(Rotation - Math.PI / 4) * -1);
-                        directionRight = new Vector2((float)Math.Sin(Rotation + Math.PI / 4), (float)Math.Cos(Rotation + Math.PI / 4) * -1);
-                    }
+                    directionLeft = new Vector2((float)Math.Sin(Rotation - Math.PI / 4), (float)Math.Cos(Rotation - Math.PI / 4) * -1);
+                    directionRight = new Vector2((float)Math.Sin(Rotation + Math.PI / 4), (float)Math.Cos(Rotation + Math.PI / 4) * -1);
 
                     var bulletLeft = new Bullet(GameRef, _bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
 
@@ -497,11 +460,8 @@ namespace DanmakuNoKyojin.Entities
                     Vector2 directionRight = direction;
                     Vector2 positionRight = new Vector2(Position.X + 10f * (float)Math.Cos(Rotation), Position.Y + 10f * (float)Math.Sin(Rotation));
 
-                    if (!SlowMode)
-                    {
-                        directionLeft = new Vector2((float)Math.Sin(Rotation - Math.PI / 8), (float)Math.Cos(Rotation - Math.PI / 8) * -1);
-                        directionRight = new Vector2((float)Math.Sin(Rotation + Math.PI / 8), (float)Math.Cos(Rotation + Math.PI / 8) * -1);
-                    }
+                    directionLeft = new Vector2((float)Math.Sin(Rotation - Math.PI / 8), (float)Math.Cos(Rotation - Math.PI / 8) * -1);
+                    directionRight = new Vector2((float)Math.Sin(Rotation + Math.PI / 8), (float)Math.Cos(Rotation + Math.PI / 8) * -1);
 
                     var bulletLeft = new Bullet(GameRef, _bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
                     bulletLeft.Power = 0.5f;
@@ -619,15 +579,13 @@ namespace DanmakuNoKyojin.Entities
 
     struct InputData
     {
-        public bool SlowMode;
         public bool BulletTime;
         public bool Fire;
         public Vector2 Direction;
         public float Rotation;
 
-        public InputData(bool slowMode, bool bulletTime, bool fire, Vector2 direction, float rotation)
+        public InputData(bool bulletTime, bool fire, Vector2 direction, float rotation)
         {
-            SlowMode = slowMode;
             BulletTime = bulletTime;
             Fire = fire;
             Direction = direction;

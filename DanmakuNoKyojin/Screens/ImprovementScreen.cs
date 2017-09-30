@@ -183,19 +183,6 @@ namespace DanmakuNoKyojin.Screens
                             error = true;
                         }
                         break;
-                    case 7:
-                        if (!_finished["slowMode"] &&
-                            !PlayerData.SlowModeEnabled &&
-                            PlayerData.Credits >= Improvements.SlowModePrice)
-                        {
-                            PlayerData.Credits -= Improvements.SlowModePrice;
-                            PlayerData.SlowModeEnabled = true;
-                        }
-                        else
-                        {
-                            error = true;
-                        }
-                        break;
                     case 8:
                         if (!_finished["bulletTime"] &&
                             !PlayerData.BulletTimeEnabled &&
@@ -439,18 +426,6 @@ namespace DanmakuNoKyojin.Screens
                 invicibleTime += "FINISHED";
             }
 
-            string slowMode = "Slow mode: ";
-            if (!PlayerData.SlowModeEnabled)
-            {
-                slowMode += "UNLOCK (" + Improvements.SlowModePrice + "$)";
-                _finished.Add("slowMode", false);
-            }
-            else
-            {
-                _finished.Add("slowMode", true);
-                slowMode += "UNLOCKED";
-            }
-
             string bulletTime = "Bullet time: ";
             if (!PlayerData.BulletTimeEnabled)
             {
@@ -498,7 +473,6 @@ namespace DanmakuNoKyojin.Screens
                     timerInitialTime,
                     timerExtraTime,
                     invicibleTime,
-                    slowMode,
                     bulletTime,
                     bulletTimeTimer,
                     bulletTimeDivisor

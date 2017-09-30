@@ -146,7 +146,6 @@ namespace DanmakuNoKyojin
                 new KeyValuePair<int, int>(150, 10000)
             };
 
-        public const int SlowModePrice = 50;
         public const int BulletTimePrice = 5000;
     }
 }

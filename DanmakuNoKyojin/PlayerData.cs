@@ -10,7 +10,6 @@ namespace DanmakuNoKyojin
         public static int Credits = 0; // Money to buy improvements
 
         public static bool BulletTimeEnabled = false; // true|false
-        public static bool SlowModeEnabled = false; // true|false
         public static bool HitBoxDisplay = false; // true|false
 
         // Improvements index
