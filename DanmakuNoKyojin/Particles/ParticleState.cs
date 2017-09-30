@@ -1,6 +1,7 @@
 ﻿using System;
 using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
+using NewConfig = Danmaku.Config;
 
 namespace DanmakuNoKyojin.Particles
 {
@@ -58,8 +59,8 @@ namespace DanmakuNoKyojin.Particles
             particle.Orientation = vel.ToAngle();
 
             var pos = particle.Position;
-            var width = (int)Config.GameArea.X;
-            var height = (int)Config.GameArea.Y;
+            var width = (int)NewConfig.GameAreaX;
+            var height = (int)NewConfig.GameAreaY;
 
             // collide with the edges of the screen
             if (pos.X < 0)

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using NewConfig = Danmaku.Config;
 
 
 namespace DanmakuNoKyojin.BulletEngine
@@ -63,7 +64,7 @@ namespace DanmakuNoKyojin.BulletEngine
 	        if (BulletRoot)
 	            Used = false;
 
-            if (X < 0 || X > Config.GameArea.X || Y < 0 || Y > Config.GameArea.Y)
+            if (X < 0 || X > NewConfig.GameAreaX || Y < 0 || Y > NewConfig.GameAreaY)
 			{
 				Used = false;
 			}

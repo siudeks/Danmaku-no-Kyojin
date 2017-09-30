@@ -12,11 +12,16 @@ using DanmakuNoKyojin.Collisions;
 using DanmakuNoKyojin.Camera;
 using DanmakuNoKyojin.Framework;
 using Ninject;
+using Akka.Actor;
+
+using ShipActor = Danmaku.ShipActor;
 
 namespace DanmakuNoKyojin.Entities
 {
-    public sealed class Player : BulletLauncherEntity
+    public sealed class Player : BulletLauncherEntity, IDisposable
     {
+        private IActorRef ship;
+
         [Inject]
         public IObserver<FrameworkInitialized> OnFrameworkInitialized { private get; set; }
 
@@ -33,8 +38,6 @@ namespace DanmakuNoKyojin.Entities
         private float _hitboxRadius;
 
         private Vector2 _originPosition;
-        private float _velocity;
-        private Vector2 _direction;
         public bool SlowMode { get; set; }
         private float _velocitySlowMode;
         //private Vector2 _distance;
@@ -100,9 +103,8 @@ namespace DanmakuNoKyojin.Entities
 
         public override void Initialize()
         {
-            _velocity = (float)(Config.PlayerMaxVelocity * Improvements.SpeedData[PlayerData.SpeedIndex].Key);
+            // _velocity = (float)(Config.PlayerMaxVelocity * Improvements.SpeedData[PlayerData.SpeedIndex].Key);
             _velocitySlowMode = Config.PlayerMaxSlowVelocity;
-            _direction = Vector2.Zero;
             Rotation = 0f;
             //_distance = Vector2.Zero;
 
@@ -146,6 +148,9 @@ namespace DanmakuNoKyojin.Entities
                 _shootSound = GameRef.Content.Load<SoundEffect>(@"Audio/SE/hit");
             if (_deadSound == null)
                 _deadSound = GameRef.Content.Load<SoundEffect>(@"Audio/SE/dead");
+
+            var size = (Sprite.Width, Sprite.Height);
+            ship = Program.system.ActorOf(Props.Create(() => new ShipActor(new Danmaku.Vector2(Position.X, Position.Y), size)));
         }
 
         public override void Update(GameTime gameTime)
@@ -180,33 +185,10 @@ namespace DanmakuNoKyojin.Entities
             }
             //else
             {
-                float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                _direction = Vector2.Zero;
-
                 var inputState = ReadInput(_controller, _viewport);
 
                 Rotation = inputState.Rotation;
-                _direction = inputState.Direction;
-
-                //// Debug
-                //if (InputHandler.KeyDown(Keys.R))
-                //    Rotation = 0;
-                //else if (InputHandler.KeyPressed(Keys.V))
-                //{
-                //    Hit();
-                //}
-
-                //if (_direction != Vector2.Zero)
-                //{
-                //    _velocitySlowMode = Config.PlayerMaxSlowVelocity / 2;
-                //    _velocity = Config.PlayerMaxVelocity / 2;
-                //}
-                //else
-                //{
-                //    _velocitySlowMode = Config.PlayerMaxSlowVelocity;
-                    _velocity = Config.PlayerMaxVelocity;
-                //}
+                ship.Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
 
                 SlowMode = (PlayerData.SlowModeEnabled && inputState.SlowMode) ? true : false;
                 BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
@@ -249,7 +231,7 @@ namespace DanmakuNoKyojin.Entities
                     }
                 }
 
-                UpdatePosition(dt);
+                UpdatePosition(gameTime.ElapsedGameTime);
             }
 
             // Update camera position
@@ -353,25 +335,32 @@ namespace DanmakuNoKyojin.Entities
             throw new ArgumentException(nameof(controller));
         }
 
-        private void UpdatePosition(float dt)
+        private void UpdatePosition(TimeSpan elapsedGameTime)
         {
-            if (SlowMode)
-            {
-                X += _direction.X * _velocitySlowMode * dt;
-                Y += _direction.Y * _velocitySlowMode * dt;
-            }
-            else
-            {
-                X += _direction.X * _velocity * dt;
-                Y += _direction.Y * _velocity * dt;
-            }
+            //if (SlowMode)
+            //{
+            //    X += _direction.X * _velocitySlowMode * dt;
+            //    Y += _direction.Y * _velocitySlowMode * dt;
+            //}
+            //else
+            //{
+            //X += _direction.X * _velocity * dt;
+            //Y += _direction.Y * _velocity * dt;
+            //}
 
-            X = MathHelper.Clamp(Position.X, Sprite.Width / 2f, Config.GameArea.X - Sprite.Width / 2f);
-            Y = MathHelper.Clamp(Position.Y, Sprite.Height / 2f, Config.GameArea.Y - Sprite.Height / 2f);
+            ship.Tell(new ShipActor.UpdateMessage(elapsedGameTime));
         }
 
         public override void Draw(GameTime gameTime)
         {
+            // for testing purposes let asyk synchronously about ship position
+            // later we need to improve it in async way.
+            var status = ship
+                .Ask<ShipActor.StatusResponse>(new ShipActor.StatusRequest())
+                .Result;
+
+            Position = new Vector2(status.PositionX, status.PositionY);
+
             if (_timeBeforeRespawn.TotalMilliseconds <= 0)
             {
                 GameRef.SpriteBatch.Draw(Sprite, Position, null, Color.White, Rotation, Origin, 1f, SpriteEffects.None, 0f);
@@ -697,6 +686,11 @@ namespace DanmakuNoKyojin.Entities
                 new ParticleState(vel2, ParticleType.Enemy)
             );
         }
+
+        public void Dispose()
+        {
+            ship.GracefulStop(TimeSpan.FromMilliseconds(100));
+        }
     }
 
     struct InputData
@@ -716,4 +710,5 @@ namespace DanmakuNoKyojin.Entities
             Rotation = rotation;
         }
     }
+
 }

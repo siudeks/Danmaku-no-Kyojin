@@ -9,6 +9,7 @@ using DanmakuNoKyojin.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using NewConfig = Danmaku.Config;
 
 namespace DanmakuNoKyojin.Screens
 {
@@ -39,7 +40,7 @@ namespace DanmakuNoKyojin.Screens
         public PatternTestScreen(Game game, GameStateManager manager)
             : base(game, manager)
         {
-            _bulletInitialPosition = new Vector2(Config.GameArea.X / 2f, Config.GameArea.Y / 3f);
+            _bulletInitialPosition = new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY / 3f);
             _patternDirectory = @"Content\Data\Patterns\";
             _patternFileName = "test.xml";
             _patternFile = new FileInfo(_patternDirectory + _patternFileName);
@@ -47,7 +48,7 @@ namespace DanmakuNoKyojin.Screens
 
         public override void Initialize()
         {
-            _backgroundMainRectangle = new Rectangle(0, 0, Config.GameArea.X, Config.GameArea.Y);
+            _backgroundMainRectangle = new Rectangle(0, 0, NewConfig.GameAreaX, NewConfig.GameAreaY);
 
             // Bullet manager
             _moverManager = new MoverManager((GameRunner)Game);
@@ -58,7 +59,7 @@ namespace DanmakuNoKyojin.Screens
             _defaultView = GraphicsDevice.Viewport;
 
             // First player
-            _player = new Player(GameRef, _defaultView, 1, Config.PlayersController[0], new Vector2(Config.GameArea.X / 2f, Config.GameArea.Y - 150));
+            _player = new Player(GameRef, _defaultView, 1, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - 150));
             _player.Initialize();
 
             _moverManager.Initialize(_player.GetPosition);

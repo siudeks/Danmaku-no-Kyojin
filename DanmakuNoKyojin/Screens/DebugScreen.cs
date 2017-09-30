@@ -10,6 +10,7 @@ using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using NewConfig = Danmaku.Config;
 
 namespace DanmakuNoKyojin.Screens
 {
@@ -47,7 +48,7 @@ namespace DanmakuNoKyojin.Screens
 
         public override void Initialize()
         {
-            _backgroundMainRectangle = new Rectangle(0, 0, Config.GameArea.X, Config.GameArea.Y);
+            _backgroundMainRectangle = new Rectangle(0, 0, NewConfig.GameAreaX, NewConfig.GameAreaY);
             
             base.Initialize();
 
@@ -58,7 +59,7 @@ namespace DanmakuNoKyojin.Screens
             Players.Clear();
 
             // First player
-            var player1 = new Player(GameRef, _defaultView, 1, Config.PlayersController[0], new Vector2(Config.GameArea.X / 2f, Config.GameArea.Y - Config.GameArea.Y / 4f));
+            var player1 = new Player(GameRef, _defaultView, 1, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - NewConfig.GameAreaY / 4f));
             player1.Initialize();
             Players.Add(player1);
 
@@ -134,8 +135,8 @@ namespace DanmakuNoKyojin.Screens
                             continue;
                         }
 
-                        if (currentPlayerBullet.X < 0 || currentPlayerBullet.X > Config.GameArea.X ||
-                            currentPlayerBullet.Y < 0 || currentPlayerBullet.Y > Config.GameArea.Y)
+                        if (currentPlayerBullet.X < 0 || currentPlayerBullet.X > NewConfig.GameAreaX ||
+                            currentPlayerBullet.Y < 0 || currentPlayerBullet.Y > NewConfig.GameAreaY)
                         {
                             for (var j = 0; j < 30; j++)
                             {

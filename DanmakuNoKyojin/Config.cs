@@ -73,7 +73,7 @@ namespace DanmakuNoKyojin
         public static int MinBossIteration = 5;
 
         // GameRef
-        public static readonly Point GameArea = new Point(2400, 1800);
+        // public static readonly Point GameArea = new Point(2400, 1800);
 
         public const float GameDifficulty = 0.5f;
 

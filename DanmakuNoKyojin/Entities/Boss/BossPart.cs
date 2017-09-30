@@ -10,6 +10,7 @@ using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using NewConfig = Danmaku.Config;
 
 namespace DanmakuNoKyojin.Entities.Boss
 {
@@ -119,7 +120,7 @@ namespace DanmakuNoKyojin.Entities.Boss
         {
             GenerateStructure();
 
-            Position = new Vector2(Config.GameArea.X / 2f, Config.GameArea.Y / 4f);
+            Position = new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY / 4f);
             Direction = Vector2.Zero;
             Velocity = (Config.PlayerMaxVelocity / 2) / 100f;
             Acceleration = Vector2.Zero;

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
+using NewConfig = Danmaku.Config;
 using DanmakuNoKyojin.Entities.Boss;
 using Microsoft.Xna.Framework.Media;
 
@@ -61,8 +61,8 @@ namespace DanmakuNoKyojin.Screens
 
         public override void Initialize()
         {
-            _backgroundMainRectangle = new Rectangle(0, 0, Config.GameArea.X, Config.GameArea.Y);
-            _backgroundTopRectangle = new Rectangle(0, -Config.GameArea.Y, Config.GameArea.X, Config.GameArea.Y);
+            _backgroundMainRectangle = new Rectangle(0, 0, NewConfig.GameAreaX, NewConfig.GameAreaY);
+            _backgroundTopRectangle = new Rectangle(0, -NewConfig.GameAreaY, NewConfig.GameAreaX, NewConfig.GameAreaY);
 
             _playTime = TimeSpan.Zero;
 
@@ -83,8 +83,8 @@ namespace DanmakuNoKyojin.Screens
 
             // First player
             var player1 = new Player(GameRef, defaultView, 1, Config.PlayersController[0],
-                                        new Vector2(Config.GameArea.X / 2f,
-                                                    Config.GameArea.Y - 150));
+                                        new Vector2(NewConfig.GameAreaX / 2f,
+                                                    NewConfig.GameAreaY - 150));
             player1.Initialize();
             Player = player1;
 
@@ -107,6 +107,8 @@ namespace DanmakuNoKyojin.Screens
 
         protected override void UnloadContent()
         {
+
+            Player.Dispose();
             MediaPlayer.Stop();
         }
 
@@ -169,8 +171,8 @@ namespace DanmakuNoKyojin.Screens
                         }
                         else
                         {
-                            if (p.GetBullets()[i].X < 0 || p.GetBullets()[i].X > Config.GameArea.X ||
-                                p.GetBullets()[i].Y < 0 || p.GetBullets()[i].Y > Config.GameArea.Y)
+                            if (p.GetBullets()[i].X < 0 || p.GetBullets()[i].X > NewConfig.GameAreaX ||
+                                p.GetBullets()[i].Y < 0 || p.GetBullets()[i].Y > NewConfig.GameAreaY)
                             {
                                 p.GetBullets().Remove(p.GetBullets()[i]);
                             }

@@ -5,7 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>Danmaku2</RootNamespace>
+    <RootNamespace>Danmaku</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

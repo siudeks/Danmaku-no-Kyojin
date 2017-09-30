@@ -2,10 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using NewConfig = Danmaku.Config;
 
 namespace DanmakuNoKyojin.Camera
 {
@@ -32,8 +29,8 @@ namespace DanmakuNoKyojin.Camera
             _pos = Vector2.Zero;
             _viewportWidth = viewport.Width;
             _viewportHeight = viewport.Height;
-            _worldWidth = Config.GameArea.X;
-            _worldHeight = Config.GameArea.Y;
+            _worldWidth = NewConfig.GameAreaX;
+            _worldHeight = NewConfig.GameAreaY;
         }
 
         #region Properties
