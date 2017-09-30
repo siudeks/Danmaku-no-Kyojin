@@ -82,7 +82,7 @@ namespace DanmakuNoKyojin.Screens
             defaultView = GraphicsDevice.Viewport;
 
             // First player
-            var player1 = new Player(GameRef, defaultView, 1, Config.PlayersController[0],
+            var player1 = new Player(GameRef, defaultView, Config.PlayersController[0],
                                         new Vector2(NewConfig.GameAreaX / 2f,
                                                     NewConfig.GameAreaY - 150));
             player1.Initialize();

@@ -59,7 +59,7 @@ namespace DanmakuNoKyojin.Screens
             Players.Clear();
 
             // First player
-            var player1 = new Player(GameRef, _defaultView, 1, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - NewConfig.GameAreaY / 4f));
+            var player1 = new Player(GameRef, _defaultView, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - NewConfig.GameAreaY / 4f));
             player1.Initialize();
             Players.Add(player1);
 

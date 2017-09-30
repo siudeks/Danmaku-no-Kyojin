@@ -59,7 +59,7 @@ namespace DanmakuNoKyojin.Screens
             _defaultView = GraphicsDevice.Viewport;
 
             // First player
-            _player = new Player(GameRef, _defaultView, 1, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - 150));
+            _player = new Player(GameRef, _defaultView, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - 150));
             _player.Initialize();
 
             _moverManager.Initialize(_player.GetPosition);
