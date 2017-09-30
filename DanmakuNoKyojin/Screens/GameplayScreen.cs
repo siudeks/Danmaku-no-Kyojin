@@ -239,6 +239,8 @@ namespace DanmakuNoKyojin.Screens
 
             if (Config.Debug && InputHandler.KeyPressed(Keys.C))
                 Config.DisplayCollisionBoxes = !Config.DisplayCollisionBoxes;
+
+            _enemy.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -266,12 +268,10 @@ namespace DanmakuNoKyojin.Screens
 
             Player.Draw(gameTime);
 
-            /*
-            if (_enemy.IsAlive)
-            {
-                _enemy.Draw(gameTime);
-            }
-            */
+            //if (_enemy.IsAlive)
+            //{
+               _enemy.Draw(gameTime, Player.Camera.GetTransformation());
+            //}
 
             GameRef.SpriteBatch.End();
 
