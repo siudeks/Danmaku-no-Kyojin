@@ -27,10 +27,23 @@ namespace Danmaku
             //CollisionBoxes.Add(new CollisionCircle(this, new Vector2(), spriteRadius));
             //this.power = power;
 
-            Receive<GameTime>(Update);
+            Receive<UpdateMessage>(Update);
         }
 
-        private bool Update(GameTime gameTime)
+        protected override void PreStart()
+        {
+            base.PreStart();
+            Context.System.EventStream.Subscribe(Self, typeof(UpdateMessage));
+        }
+
+        protected override void PostStop()
+        {
+            Context.System.EventStream.Unsubscribe(Self, typeof(UpdateMessage));
+            base.PostStop();
+        }
+
+
+        private bool Update(UpdateMessage gameTime)
         {
             if (waveMode)
             {

@@ -205,78 +205,38 @@ namespace DanmakuNoKyojin.Entities.Boss
                 }
             }
 
-            if (Config.Debug)
+            if (_parts.Count > 0)
             {
-                /*
-                //check input to increment/decrement the current bullet pattern
-                if (InputHandler.KeyPressed(Keys.A))
-                {
-                    //decrement the pattern
-                    if (0 >= _currentPatternIndex)
-                    {
-                        //if it is at the beginning, move to the end
-                        _currentPatternIndex = _bulletPatterns.Count - 1;
-                    }
-                    else
-                    {
-                        _currentPatternIndex--;
-                    }
+                var currentBossPart = _parts[_currentPartIndex];
+                var dt = (float)gameTime.ElapsedGameTime.TotalSeconds * 100;
 
-                    AddBullet(true);
+                if (InputHandler.KeyDown(Keys.Space))
+                {
+                    currentBossPart.GenerateStructure();
                 }
-                else if (InputHandler.KeyPressed(Keys.X))
+                else if (InputHandler.KeyPressed(Keys.OemPlus))
                 {
-                    //increment the pattern
-                    if ((_bulletPatterns.Count - 1) <= _currentPatternIndex)
-                    {
-                        //if it is at the beginning, move to the end
-                        _currentPatternIndex = 0;
-                    }
-                    else
-                    {
-                        _currentPatternIndex++;
-                    }
-
-                    AddBullet(true);
+                    currentBossPart.IterateStructure();
                 }
-                else if (InputHandler.KeyPressed(Keys.LeftControl))
+                else if (InputHandler.KeyDown(Keys.O))
                 {
-                    AddBullet(false);
+                    currentBossPart.IterateStructure();
                 }
-                else */
 
-                if (_parts.Count > 0)
-                {
-                    var currentBossPart = _parts[_currentPartIndex];
-                    var dt = (float)gameTime.ElapsedGameTime.TotalSeconds * 100;
+                // Motion
 
-                    if (InputHandler.KeyDown(Keys.Space))
-                    {
-                        currentBossPart.GenerateStructure();
-                    }
-                    else if (InputHandler.KeyPressed(Keys.OemPlus))
-                    {
-                        currentBossPart.IterateStructure();
-                    }
-                    else if (InputHandler.KeyDown(Keys.O))
-                    {
-                        currentBossPart.IterateStructure();
-                    }
+                if (InputHandler.KeyPressed(Keys.N))
+                    _currentPartIndex = (_currentPartIndex + 1) % _parts.Count;
 
-                    // Motion
-
-                    if (InputHandler.KeyPressed(Keys.N))
-                        _currentPartIndex = (_currentPartIndex + 1) % _parts.Count;
-
-                    var acceleration = 0.1f;
-                    if (InputHandler.KeyDown(Keys.I))
-                        currentBossPart.ApplyImpulse(new Vector2(0, -1), new Vector2(acceleration));
-                    if (InputHandler.KeyDown(Keys.L))
-                        currentBossPart.ApplyImpulse(new Vector2(1, 0), new Vector2(acceleration));
-                    if (InputHandler.KeyDown(Keys.K))
-                        currentBossPart.ApplyImpulse(new Vector2(0, 1), new Vector2(acceleration));
-                    if (InputHandler.KeyDown(Keys.J))
-                        currentBossPart.ApplyImpulse(new Vector2(-1, 0), new Vector2(acceleration));
+                var acceleration = 0.1f;
+                if (InputHandler.KeyDown(Keys.I))
+                    currentBossPart.ApplyImpulse(new Vector2(0, -1), new Vector2(acceleration));
+                if (InputHandler.KeyDown(Keys.L))
+                    currentBossPart.ApplyImpulse(new Vector2(1, 0), new Vector2(acceleration));
+                if (InputHandler.KeyDown(Keys.K))
+                    currentBossPart.ApplyImpulse(new Vector2(0, 1), new Vector2(acceleration));
+                if (InputHandler.KeyDown(Keys.J))
+                    currentBossPart.ApplyImpulse(new Vector2(-1, 0), new Vector2(acceleration));
 
                 // Left vector
                 if (InputHandler.KeyDown(Keys.F))
@@ -289,18 +249,18 @@ namespace DanmakuNoKyojin.Entities.Boss
                     currentBossPart.ApplyImpulse(direction, new Vector2(0.05f));
                 }
 
-                    // Right vector
-                    if (InputHandler.KeyPressed(Keys.G))
-                    {
-                        var direction = new Vector2(
-                            (float)-Math.Cos(currentBossPart.Rotation) * -1,
-                            (float)Math.Sin(currentBossPart.Rotation)
-                        );
+                // Right vector
+                if (InputHandler.KeyPressed(Keys.G))
+                {
+                    var direction = new Vector2(
+                        (float)-Math.Cos(currentBossPart.Rotation) * -1,
+                        (float)Math.Sin(currentBossPart.Rotation)
+                    );
 
-                        direction = new Vector2(-direction.Y, direction.X);
+                    direction = new Vector2(-direction.Y, direction.X);
 
-                        currentBossPart.ApplyImpulse(direction, new Vector2(acceleration));
-                    }
+                    currentBossPart.ApplyImpulse(direction, new Vector2(acceleration));
+                }
 
                 if (InputHandler.KeyDown(Keys.PageUp))
                 {
@@ -311,10 +271,9 @@ namespace DanmakuNoKyojin.Entities.Boss
                     currentBossPart.ApplyAngularImpulse(-0.1f);
                 }
 
-                    if (InputHandler.KeyPressed(Keys.H))
-                    {
-                        currentBossPart.DisplayHpSwitch();
-                    }
+                if (InputHandler.KeyPressed(Keys.H))
+                {
+                    currentBossPart.DisplayHpSwitch();
                 }
             }
 

@@ -318,7 +318,7 @@ namespace DanmakuNoKyojin.Entities
 
         private void UpdatePosition(TimeSpan elapsedGameTime)
         {
-            ship.Tell(new ShipActor.UpdateMessage(elapsedGameTime));
+            ship.Tell(new Danmaku.UpdateMessage(elapsedGameTime));
         }
 
         public override void Draw(GameTime gameTime)
@@ -326,7 +326,7 @@ namespace DanmakuNoKyojin.Entities
             // for testing purposes let asyk synchronously about ship position
             // later we need to improve it in async way.
             var status = ship
-                .Ask<ShipActor.StatusResponse>(new ShipActor.StatusRequest())
+                .Ask<ShipActor.StatusNotification>(new ShipActor.StatusRequest())
                 .Result;
 
             Position = new Vector2(status.PositionX, status.PositionY);
