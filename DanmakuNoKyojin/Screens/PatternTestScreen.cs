@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using NewConfig = Danmaku.Config;
+using Akka.Actor;
 
 namespace DanmakuNoKyojin.Screens
 {
@@ -57,6 +58,9 @@ namespace DanmakuNoKyojin.Screens
             base.Initialize();
 
             _defaultView = GraphicsDevice.Viewport;
+            
+            // beacon to support ships
+            Program.system.ActorOf(Props.Create(() => new Danmaku.BeaconActor()));
 
             // First player
             _player = new Player(GameRef, _defaultView, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - 150));

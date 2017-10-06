@@ -138,7 +138,7 @@ namespace DanmakuNoKyojin.Entities
                 _deadSound = GameRef.Content.Load<SoundEffect>(@"Audio/SE/dead");
 
             var size = (Sprite.Width, Sprite.Height);
-            ship = Program.system.ActorOf(Props.Create(() => new ShipActor(new Danmaku.Vector2(Position.X, Position.Y), size)));
+            ship = Program.system.ActorOf(Props.Create(() => new ShipActor(new Danmaku.Vector2(Position.X, Position.Y), size, 1000)));
         }
 
         public override void Update(GameTime gameTime)

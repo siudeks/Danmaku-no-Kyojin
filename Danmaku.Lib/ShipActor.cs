@@ -1,18 +1,21 @@
 ﻿using Akka.Actor;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Danmaku
 {
     public sealed class ShipActor : ReceiveActor
     {
 
-        public float Velocity = 800;
+        public float Velocity = 0;
         public Vector2 Direction = Vector2.Zero;
         public Vector2 Position;
         public bool IsInvicible;
         public (int Width, int Height) SpriteSize;
-        public IActorRef beacon = ActorRefs.Nobody;
+        public List<IActorRef> listeners = new List<IActorRef>();
 
+        [DebuggerDisplay("X:{X},Y:{Y}")]
         public sealed class ChangeDirection
         {
             public readonly float X;
@@ -53,47 +56,52 @@ namespace Danmaku
             }
         }
 
-        public ShipActor(Vector2 position, (int Width, int Height) spriteSize)
+        public sealed class CollisionDetected
+        {
+
+        }
+
+        public ShipActor(Vector2 position, (int Width, int Height) spriteSize, float velocity)
         {
             Position = position;
             SpriteSize = spriteSize;
+            Velocity = velocity;
 
             Initialize();
         }
 
         private void Initialize()
         {
-            Receive<BeaconActor.ShipRegistered>(msg =>
-            {
-                Become(BeaconFound);
-            });
-
-            Receive<ShipActor.FindBeacon>(msg =>
-            {
-                var currentStatus = new BeaconActor.ShipStatus(Position.X, Position.Y);
-                Context.System.EventStream.Publish(new BeaconActor.RegisterShip(currentStatus));
-
-                // just in case beacon is not yet ready - need to try reach it once again
-                Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromMilliseconds(10), Self, new FindBeacon(), ActorRefs.Nobody);
-                Self.Tell(new FindBeacon());
-            });
-
-            Self.Tell(new FindBeacon());
-        }
-
-        private void BeaconFound()
-        {
-            beacon = Sender;
-
+            Receive<BeaconActor.ShipRegistered>(OnShipRegistered);
             Receive<ChangeDirection>(OnChangeDirection);
             Receive<UpdateMessage>(OnUpdateMessage);
             Receive<StatusRequest>(OnStatusRequest);
+            Receive<CollisionDetected>(OnCollisionDetected);
+        }
+
+        private bool OnShipRegistered(BeaconActor.ShipRegistered obj)
+        {
+            listeners.Add(Sender);
+
+            return true;
+        }
+
+        private bool OnCollisionDetected(CollisionDetected obj)
+        {
+            IsInvicible = true;
+
+            CalculateStatusAndNotifyListeners();
+            return true;
         }
 
         protected override void PreStart()
         {
             base.PreStart();
             Context.System.EventStream.Subscribe(Self, typeof(UpdateMessage));
+
+            // inform a beacon about the ship.
+            var status = new BeaconActor.ShipStatus(Position.X, Position.Y);
+            Context.System.EventStream.Publish(new BeaconActor.RegisterShip(status));
         }
 
         protected override void PostStop()
@@ -104,12 +112,14 @@ namespace Danmaku
 
         StatusNotification lastStatusResponse = null;
 
-        private void NotifyStatusListeners()
+        private void CalculateStatusAndNotifyListeners()
         {
             var status = new StatusNotification(Position.X, Position.Y, IsInvicible);
             if (status.Equals(lastStatusResponse)) return;
 
-            beacon.Tell(new BeaconActor.ShipStatus(status.PositionX, status.PositionY));
+            foreach (var listener in listeners)
+                listener.Tell(new BeaconActor.ShipStatus(status.PositionX, status.PositionY));
+
         }
 
         private bool OnStatusRequest(StatusRequest req)
@@ -137,11 +147,9 @@ namespace Danmaku
 
             Position = new Vector2(x, y);
 
-            return true;
-        }
+            CalculateStatusAndNotifyListeners();
 
-        private class FindBeacon
-        {
+            return true;
         }
     }
 }

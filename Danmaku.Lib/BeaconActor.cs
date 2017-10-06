@@ -7,6 +7,9 @@ using System.Linq;
 namespace Danmaku
 {
     /// <summary>
+    /// Important: Beacon instance needs to be created before any ShipActor instance
+    /// because currently ShipActor assumes that request send to BeaconActor will be handled.
+    /// 
     /// Purpose of the actor is to act as a clash resolver for nearest ships.
     /// Every ship needs to be connected with only one beacon.
     /// 
@@ -28,9 +31,7 @@ namespace Danmaku
             }
         }
 
-        public sealed class ShipRegistered
-        {
-        }
+        public sealed class ShipRegistered { }
 
         public sealed class ShipStatus
         {
@@ -48,7 +49,6 @@ namespace Danmaku
         {
             base.PreStart();
             Context.System.EventStream.Subscribe(Self, typeof(RegisterShip));
-
         }
 
         protected override void PostStop()
@@ -60,10 +60,10 @@ namespace Danmaku
         public BeaconActor()
         {
             Receive<RegisterShip>(OnRegisterShip);
-            Receive<ShipActor.StatusNotification>(OnShipStatusNotification);
+            Receive<BeaconActor.ShipStatus>(OnShipStatusNotification);
         }
 
-        private bool OnShipStatusNotification(ShipActor.StatusNotification msg)
+        private bool OnShipStatusNotification(BeaconActor.ShipStatus msg)
         {
             var victims = new List<IActorRef>();
 
@@ -72,12 +72,21 @@ namespace Danmaku
             {
                 if (item.Ship.Equals(Sender)) continue;
 
-                var distanceX = item.Status.positionX - msg.PositionX;
-                var distanceY = item.Status.positionY - msg.PositionY;
+                var distanceX = item.Status.positionX - msg.positionX;
+                var distanceY = item.Status.positionY - msg.positionY;
                 var distance = Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
-                if ((distance) > 1) continue;
+
+                // 1000 is not safe distance betwen ships.
+                // need to be replaced with real collistion checking
+                if ((distance) > 1000) continue;
 
                 victims.Add(item.Ship);
+            }
+
+            if (victims.Any()) victims.Add(Sender);
+            foreach (var victim in victims)
+            {
+                victim.Tell(new ShipActor.CollisionDetected());
             }
 
             return true;

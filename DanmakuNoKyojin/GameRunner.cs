@@ -85,7 +85,7 @@ namespace DanmakuNoKyojin
 
         protected override void Initialize()
         {
-            StaticClassSerializer.Load(typeof(PlayerData), "data.bin");
+            //StaticClassSerializer.Load(typeof(PlayerData), "data.bin");
 
             // Display FPS at the top left screen's corner
             Components.Add(new FrameRateCounter(this));
