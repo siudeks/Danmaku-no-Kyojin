@@ -123,6 +123,8 @@ namespace Danmaku
             var status = new StatusNotification(Position.X, Position.Y, Rotation, IsInvicible);
             if (status.Equals(lastStatusResponse)) return;
 
+            lastStatusResponse = status;
+
             foreach (var listener in listeners)
                 listener.Tell(new BeaconActor.ShipStatus(status.PositionX, status.PositionY));
 

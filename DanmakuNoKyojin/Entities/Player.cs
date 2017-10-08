@@ -122,7 +122,7 @@ namespace DanmakuNoKyojin.Entities
             Ship.LoadContent(contentLoader);
         }
 
-        public void Update(GameTime gameTime, IViewportProvider viewport, SpriteBatch spriteBatch)
+        public void Update(GameTime gameTime, IViewportProvider viewport, SpriteBatch spriteBatch, ParticleManager<ParticleState> particleManager)
         {
             if (_lives <= 0)
                 IsAlive = false;
@@ -135,7 +135,7 @@ namespace DanmakuNoKyojin.Entities
 
             if (inputState.Fire)
             {
-                Fire(gameTime);
+                Fire(gameTime, particleManager);
             }
 
             if (inputState.Fire)
@@ -329,7 +329,7 @@ namespace DanmakuNoKyojin.Entities
 
         }
 
-        private void Fire(GameTime gameTime)
+        private void Fire(GameTime gameTime, ParticleManager<ParticleState> particleManager)
         {
             if (BulletFrequence.TotalMilliseconds > 0)
                 BulletFrequence -= gameTime.ElapsedGameTime;
@@ -418,7 +418,7 @@ namespace DanmakuNoKyojin.Entities
 
                 _shootSound.Play();
 
-                //FireParticles(gameTime);
+                FireParticles(gameTime, particleManager);
             }
         }
 

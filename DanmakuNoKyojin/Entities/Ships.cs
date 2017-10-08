@@ -16,7 +16,7 @@ namespace DanmakuNoKyojin.Entities
         {
             enemy = new ShipView(Program.system);
             enemy.LoadContent(provider);
-            enemy.ChangeDirection(new Vector2(1, 1), 0);
+            enemy.ChangeDirection(new Vector2(100, 100), 0);
         }
 
         public void Update(GameTime gameTime)

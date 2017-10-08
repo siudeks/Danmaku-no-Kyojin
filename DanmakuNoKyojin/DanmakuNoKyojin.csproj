@@ -130,7 +130,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screens\BaseGameState.cs" />
-    <Compile Include="Screens\DebugScreen.cs" />
     <Compile Include="Screens\GameConfigurationScreen.cs" />
     <Compile Include="Screens\GameoverScreen.cs" />
     <Compile Include="Screens\GamepadInputsScreen.cs" />

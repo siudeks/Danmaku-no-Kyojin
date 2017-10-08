@@ -189,13 +189,13 @@ namespace DanmakuNoKyojin.Screens
                         }
                     }
 
-                    //foreach (Mover m in _enemy.MoverManager.movers)
-                    //{
-                    //    if (p.Intersects(m))
-                    //        p.Hit();
-                    //}
+                    foreach (Mover m in _enemy.MoverManager.movers)
+                    {
+                        if (p.Intersects(m))
+                            p.Hit(GameRef.ParticleManager);
+                    }
 
-                    p.Update(gameTime, GameRef, GameRef.SpriteBatch);
+                    p.Update(gameTime, GameRef, GameRef.SpriteBatch, GameRef.ParticleManager);
                 }
             }
 

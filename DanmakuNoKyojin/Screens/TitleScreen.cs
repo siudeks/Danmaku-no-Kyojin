@@ -178,13 +178,6 @@ namespace DanmakuNoKyojin.Screens
                 Config.Debug = !Config.Debug;
             }
             
-#if DEBUG
-            if (InputHandler.KeyDown(Keys.F10))
-            {
-                StateManager.ChangeState(GameRef.DebugScreen);
-            }
-#endif
-
             if (Config.Cheat)
             {
                 if (InputHandler.KeyDown(Keys.A) || InputHandler.ButtonDown(Buttons.Y, PlayerIndex.One))

@@ -27,7 +27,6 @@ namespace DanmakuNoKyojin
 
         // Screens
         public TitleScreen TitleScreen;
-        public DebugScreen DebugScreen;
         public ImprovementScreen ImprovementScreen;
         public LeaderboardScreen LeaderboardScreen;
         public OptionsScreen OptionsScreen;
@@ -98,7 +97,6 @@ namespace DanmakuNoKyojin
 
             // Screens
             TitleScreen = new TitleScreen(this, _stateManager).DisposeWith(instanceDisposer);
-            DebugScreen = new DebugScreen(this, _stateManager).DisposeWith(instanceDisposer);
             GameConfigurationScreen = new GameConfigurationScreen(this, _stateManager).DisposeWith(instanceDisposer);
             GameplayScreen = new GameplayScreen(this, _stateManager).DisposeWith(instanceDisposer);
             LeaderboardScreen = new LeaderboardScreen(this, _stateManager).DisposeWith(instanceDisposer);
