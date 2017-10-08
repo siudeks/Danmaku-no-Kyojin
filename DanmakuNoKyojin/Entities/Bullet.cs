@@ -8,7 +8,7 @@ namespace DanmakuNoKyojin.Entities
     /// <summary>
     /// Represent a bullet visualization
     /// </summary>
-    public sealed class Bullet : IEntity
+    public sealed class BulletView : IEntity
     {
         public bool WaveMode { get; set; }
         public Vector2 Velocity;
@@ -22,13 +22,13 @@ namespace DanmakuNoKyojin.Entities
         public Texture2D Sprite { get; set; }
 
         float IEntity.Rotation => Rotation;
-
         Vector2 IEntity.Position => Position;
 
         Vector2 IEntity.Origin => Origin;
 
-        public Bullet(Texture2D sprite, Vector2 position, Vector2 direction, Vector2 velocity)
+        public BulletView(Texture2D sprite, Vector2 position, Vector2 direction, Vector2 velocity)
         {
+            Position = position;
             Sprite = sprite;
             Velocity = velocity;
             Direction = direction;

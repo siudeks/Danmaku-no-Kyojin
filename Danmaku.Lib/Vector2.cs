@@ -1,8 +1,11 @@
-﻿namespace Danmaku
+﻿using System.Diagnostics;
+
+namespace Danmaku
 {
     /// <summary>
     /// Simple copy of MonoGame Vector2 definition;
     /// </summary>
+    [DebuggerDisplay("X:{X},Y:{Y}")]
     public struct Vector2
     {
 

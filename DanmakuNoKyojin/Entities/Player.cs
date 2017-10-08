@@ -98,10 +98,10 @@ namespace DanmakuNoKyojin.Entities
             _timeBeforeRespawn = TimeSpan.Zero;
         }
 
-        private readonly List<Bullet> Bullets = new List<Bullet>();
+        private readonly List<BulletView> Bullets = new List<BulletView>();
         private TimeSpan BulletFrequence;
 
-        public List<Bullet> GetBullets()
+        public List<BulletView> GetBullets()
         {
             return Bullets;
         }
@@ -423,7 +423,7 @@ namespace DanmakuNoKyojin.Entities
 
                     Vector2 offset = Vector2.Transform(new Vector2(0, 0), aimQuat);
 
-                    var bullet = new Bullet(_bulletSprite, Position + offset, direction, Config.PlayerBulletVelocity)
+                    var bullet = new BulletView(_bulletSprite, Position + offset, direction, Config.PlayerBulletVelocity)
                     {
                         WaveMode = false
                     };
@@ -441,9 +441,9 @@ namespace DanmakuNoKyojin.Entities
                     directionLeft = new Vector2((float)Math.Sin(Rotation - Math.PI / 4), (float)Math.Cos(Rotation - Math.PI / 4) * -1);
                     directionRight = new Vector2((float)Math.Sin(Rotation + Math.PI / 4), (float)Math.Cos(Rotation + Math.PI / 4) * -1);
 
-                    var bulletLeft = new Bullet(_bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
+                    var bulletLeft = new BulletView(_bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
 
-                    var bulletRight = new Bullet(_bulletSprite, positionRight, directionRight, Config.PlayerBulletVelocity);
+                    var bulletRight = new BulletView(_bulletSprite, positionRight, directionRight, Config.PlayerBulletVelocity);
 
                     Bullets.Add(bulletLeft);
                     Bullets.Add(bulletRight);
@@ -460,10 +460,10 @@ namespace DanmakuNoKyojin.Entities
                     directionLeft = new Vector2((float)Math.Sin(Rotation - Math.PI / 8), (float)Math.Cos(Rotation - Math.PI / 8) * -1);
                     directionRight = new Vector2((float)Math.Sin(Rotation + Math.PI / 8), (float)Math.Cos(Rotation + Math.PI / 8) * -1);
 
-                    var bulletLeft = new Bullet(_bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
+                    var bulletLeft = new BulletView(_bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
                     bulletLeft.Power = 0.5f;
 
-                    var bulletRight = new Bullet(_bulletSprite, positionRight, directionRight, Config.PlayerBulletVelocity);
+                    var bulletRight = new BulletView(_bulletSprite, positionRight, directionRight, Config.PlayerBulletVelocity);
                     bulletRight.Power = 0.5f;
 
                     Bullets.Add(bulletLeft);
@@ -475,7 +475,7 @@ namespace DanmakuNoKyojin.Entities
                 {
                     var directionBehind = new Vector2((float)Math.Sin(Rotation) * -1, (float)Math.Cos(Rotation));
 
-                    var bullet = new Bullet(_bulletSprite, Position, directionBehind, Config.PlayerBulletVelocity);
+                    var bullet = new BulletView(_bulletSprite, Position, directionBehind, Config.PlayerBulletVelocity);
                     bullet.Power = Improvements.ShootPowerData[PlayerData.ShootPowerIndex].Key;
                     bullet.WaveMode = false;
 

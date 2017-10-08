@@ -2,6 +2,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace DanmakuNoKyojin.Entities
 {
@@ -36,9 +37,13 @@ namespace DanmakuNoKyojin.Entities
 
         public Danmaku.ShipActor.StatusNotification GetStatus()
         {
-            return ship
+            var result = ship
                 .Ask<Danmaku.ShipActor.StatusNotification>(new Danmaku.ShipActor.StatusRequest())
                 .Result;
+
+            Debug.WriteLine($"Position: X:Y={result.PositionX}:{result.PositionY}");
+            return result;
+
 
         }
     }
