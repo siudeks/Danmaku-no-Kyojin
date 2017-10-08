@@ -339,7 +339,7 @@ namespace DanmakuNoKyojin.Screens
         {
             GameRef.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, p.Camera.GetTransformation());
 
-            if (p.IsInvincible)
+            if (p.Ship.IsInvincible)
                 GraphicsDevice.Clear(Color.Red);
             else
             {

@@ -23,7 +23,7 @@ namespace DanmakuNoKyojin.Entities
         private Vector2 _shieldOrigin;
         private Vector2 origin;
         private float rotation;
-        private bool isInvincible;
+        public bool IsInvincible;
         private float _hitboxRadius = (float)Math.PI * 1.5f * 2;
 
         public CollisionElements CollisionBoxes { get; } = new CollisionElements();
@@ -92,7 +92,7 @@ namespace DanmakuNoKyojin.Entities
 
             spriteBatch.Draw(sprite, position, null, Color.White, rotation, _shieldOrigin, 1f, SpriteEffects.None, 0f);
 
-            if (isInvincible)
+            if (IsInvincible)
                 spriteBatch.Draw(_shieldSprite, position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
 
             Debug.WriteLine($"Position {position.X}:{position.Y}");

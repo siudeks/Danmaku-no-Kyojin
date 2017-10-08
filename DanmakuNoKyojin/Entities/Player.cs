@@ -41,7 +41,6 @@ namespace DanmakuNoKyojin.Entities
         private bool _bulletTimeReloading;
 
         private int _lives;
-        public bool IsInvincible { get; set; }
         private TimeSpan _invincibleTime;
         private TimeSpan _timeBeforeRespawn;
 
@@ -94,7 +93,6 @@ namespace DanmakuNoKyojin.Entities
         {
             _lives = 10;//Improvements.LivesNumberData[PlayerData.LivesNumberIndex].Key;
 
-            IsInvincible = false;
             _invincibleTime = Config.PlayerInvicibleTime;
 
             BulletTime = false;
@@ -129,7 +127,7 @@ namespace DanmakuNoKyojin.Entities
             if (_lives <= 0)
                 IsAlive = false;
 
-            if (IsInvincible)
+            if (Ship.IsInvincible)
             {
                 if (_timeBeforeRespawn.TotalMilliseconds > 0)
                 {
@@ -147,7 +145,7 @@ namespace DanmakuNoKyojin.Entities
                     if (_invincibleTime.TotalMilliseconds <= 0)
                     {
                         _invincibleTime = Config.PlayerInvicibleTime;
-                        IsInvincible = false;
+                        Ship.IsInvincible = false;
                         Ship.RemoveShield();
                     }
                 }
@@ -452,7 +450,7 @@ namespace DanmakuNoKyojin.Entities
 
         public void Hit(ParticleManager<ParticleState> particleManager)
         {
-            if (!IsInvincible)
+            if (!Ship.IsInvincible)
             {
                 _lives--;
                 _deadSound.Play();
@@ -474,7 +472,7 @@ namespace DanmakuNoKyojin.Entities
                 }
 
                 _timeBeforeRespawn = Config.PlayerTimeBeforeRespawn;
-                IsInvincible = true;
+                Ship.IsInvincible = true;
                 Ship.CollisionBoxes.Add(Ship._shieldCollisionCircle);
             }
         }
