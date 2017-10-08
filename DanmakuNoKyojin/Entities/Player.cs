@@ -7,7 +7,6 @@ using System;
 using Microsoft.Xna.Framework;
 using DanmakuNoKyojin.Controls;
 using Microsoft.Xna.Framework.Input;
-using DanmakuNoKyojin.Collisions;
 
 using DanmakuNoKyojin.Camera;
 

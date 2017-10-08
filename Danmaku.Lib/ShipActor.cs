@@ -10,6 +10,7 @@ namespace Danmaku
 
         public float Velocity = 0;
         public Vector2 Direction = Vector2.Zero;
+        public float Rotation;
         public Vector2 Position;
         public bool IsInvicible;
         public (int Width, int Height) SpriteSize;
@@ -20,11 +21,13 @@ namespace Danmaku
         {
             public readonly float X;
             public readonly float Y;
+            public readonly float Rotation;
 
-            public ChangeDirection(float x, float y)
+            public ChangeDirection(float x, float y, float rotation)
             {
                 X = x;
                 Y = y;
+                Rotation = rotation;
             }
         }
 
@@ -36,12 +39,14 @@ namespace Danmaku
         {
             public readonly float PositionX;
             public readonly float PositionY;
+            public readonly float Rotation;
             public readonly bool IsInvicible;
 
-            public StatusNotification(float positionX, float positionY, bool isInvicible)
+            public StatusNotification(float positionX, float positionY, float rotation,  bool isInvicible)
             {
                 PositionX = positionX;
                 PositionY = positionY;
+                Rotation = rotation;
                 IsInvicible = isInvicible;
             }
 
@@ -50,6 +55,7 @@ namespace Danmaku
                 if (other == null) return false;
                 if (PositionX != other.PositionX) return false;
                 if (PositionY != other.PositionY) return false;
+                if (Rotation != other.Rotation) return false;
                 if (IsInvicible != other.IsInvicible) return false;
 
                 return true;
@@ -114,7 +120,7 @@ namespace Danmaku
 
         private void CalculateStatusAndNotifyListeners()
         {
-            var status = new StatusNotification(Position.X, Position.Y, IsInvicible);
+            var status = new StatusNotification(Position.X, Position.Y, Rotation, IsInvicible);
             if (status.Equals(lastStatusResponse)) return;
 
             foreach (var listener in listeners)
@@ -124,7 +130,7 @@ namespace Danmaku
 
         private bool OnStatusRequest(StatusRequest req)
         {
-            Sender.Tell(new StatusNotification(Position.X, Position.Y, IsInvicible));
+            Sender.Tell(new StatusNotification(Position.X, Position.Y, Rotation, IsInvicible));
 
             return true;
         }
@@ -132,6 +138,7 @@ namespace Danmaku
         private bool OnChangeDirection(ChangeDirection cmd)
         {
             Direction = new Vector2(cmd.X, cmd.Y);
+            Rotation = cmd.Rotation;
             return true;
         }
 

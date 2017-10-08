@@ -121,7 +121,7 @@ namespace DanmakuNoKyojin.Entities.Boss
 
             _parts.Add(_mainPart);
 
-            _core = new BossCore(_gameRef, _mainPart, () => player.Position, MoverManager, _completeBulletPatterns);
+            _core = new BossCore(_gameRef, _mainPart, () => player.Ship.Position, MoverManager, _completeBulletPatterns);
             _core.Initialize();
         }
 

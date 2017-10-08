@@ -63,7 +63,7 @@ namespace DanmakuNoKyojin.Entities
 
         public void ChangeDirection(Vector2 direction, float rotation)
         {
-            ship.Tell(new Danmaku.ShipActor.ChangeDirection(direction.X, direction.Y));
+            ship.Tell(new Danmaku.ShipActor.ChangeDirection(direction.X, direction.Y, rotation));
         }
 
         public void Update(GameTime gameTime)
@@ -90,6 +90,7 @@ namespace DanmakuNoKyojin.Entities
                 .Result;
 
             Position = new Vector2(status.PositionX, status.PositionY);
+            Rotation = status.Rotation;
 
             //if (_timeBeforeRespawn.TotalMilliseconds <= 0)
             //{
