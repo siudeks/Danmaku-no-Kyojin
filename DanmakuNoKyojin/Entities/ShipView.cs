@@ -18,7 +18,7 @@ namespace DanmakuNoKyojin.Entities
         // Shield
         private Texture2D _shieldSprite;
         private Vector2 _shieldOrigin;
-        public Vector2 Origin { get; set; }
+        private Vector2 origin;
         public float Rotation { get; set; }
         public bool IsAlive { get; set; }
         public bool IsInvincible { get; set; }
@@ -30,7 +30,6 @@ namespace DanmakuNoKyojin.Entities
 
         private float rotation;
         private Vector2 position;
-        private Vector2 origin;
         public Vector2 Position { get; set; }
 
 
@@ -94,7 +93,7 @@ namespace DanmakuNoKyojin.Entities
 
             //if (_timeBeforeRespawn.TotalMilliseconds <= 0)
             //{
-                spriteBatch.Draw(sprite, Position, null, Color.White, Rotation, Origin, 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(sprite, Position, null, Color.White, Rotation, origin, 1f, SpriteEffects.None, 0f);
 
                 if (IsInvincible)
                     spriteBatch.Draw(_shieldSprite, Position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
