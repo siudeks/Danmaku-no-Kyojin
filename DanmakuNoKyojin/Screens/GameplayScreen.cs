@@ -335,35 +335,6 @@ namespace DanmakuNoKyojin.Screens
             GameRef.SpriteBatch.End();
         }
 
-        private void DrawPlayerCamera(GameTime gameTime, Player p)
-        {
-            GameRef.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, p.Camera.GetTransformation());
-
-            if (p.Ship.IsInvincible)
-                GraphicsDevice.Clear(Color.Red);
-            else
-            {
-                Color randomColor = Color.White;//new Color(Rand.Next(255), Rand.Next(255), Rand.Next(255));
-                GameRef.SpriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, randomColor);
-
-                foreach (var bullet in p.GetBullets())
-                {
-                    bullet.Draw(gameTime, GameRef.SpriteBatch);
-                }
-
-                Player.Draw(gameTime, GameRef.SpriteBatch);
-
-                /*
-                if (_enemy.IsAlive)
-                {
-                    _enemy.Draw(gameTime);
-                }
-                */
-            }
-
-            GameRef.SpriteBatch.End();
-        }
-
         /// <summary>
         /// Handles input for quitting or changing the bloom settings.
         /// </summary>

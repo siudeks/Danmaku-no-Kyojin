@@ -23,10 +23,10 @@ namespace DanmakuNoKyojin.Entities
         private Vector2 _shieldOrigin;
         private Vector2 origin;
         private float rotation;
-        public bool IsInvincible;
+        private bool isInvincible;
         private float _hitboxRadius = (float)Math.PI * 1.5f * 2;
 
-        public CollisionElements CollisionBoxes { get; } = new CollisionElements();
+        private CollisionElements CollisionBoxes { get; } = new CollisionElements();
 
         private Texture2D sprite;
         private Vector2 position;
@@ -38,7 +38,7 @@ namespace DanmakuNoKyojin.Entities
         Vector2 IEntity.Position => position;
         Vector2 IEntity.Origin => origin;
 
-        public CollisionCircle _shieldCollisionCircle;
+        private CollisionCircle _shieldCollisionCircle;
 
         private readonly ActorSystem system;
         public ShipView(ActorSystem system)
@@ -77,6 +77,7 @@ namespace DanmakuNoKyojin.Entities
         internal void RemoveShield()
         {
             CollisionBoxes.Remove(_shieldCollisionCircle);
+            isInvincible = false;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -92,10 +93,21 @@ namespace DanmakuNoKyojin.Entities
 
             spriteBatch.Draw(sprite, position, null, Color.White, rotation, _shieldOrigin, 1f, SpriteEffects.None, 0f);
 
-            if (IsInvincible)
+            if (isInvincible)
                 spriteBatch.Draw(_shieldSprite, position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
 
             Debug.WriteLine($"Position {position.X}:{position.Y}");
+        }
+
+        internal void EnableShield()
+        {
+            isInvincible = true;
+            CollisionBoxes.Add(_shieldCollisionCircle);
+        }
+
+        internal bool Intersects(CollisionElements collisionBoxes)
+        {
+            return CollisionBoxes.Intersects(collisionBoxes);
         }
     }
 }

@@ -127,75 +127,49 @@ namespace DanmakuNoKyojin.Entities
             if (_lives <= 0)
                 IsAlive = false;
 
-            if (Ship.IsInvincible)
+            var inputState = ReadInput(_controller, _viewport, spriteBatch);
+
+            Ship.ChangeDirection(inputState.Direction, inputState.Rotation);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
+
+            BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
+
+            if (inputState.Fire)
             {
-                if (_timeBeforeRespawn.TotalMilliseconds > 0)
-                {
-                    _timeBeforeRespawn -= gameTime.ElapsedGameTime;
+                Fire(gameTime);
+            }
 
-                    if (_timeBeforeRespawn.TotalMilliseconds <= 0)
-                    {
-                        // Position = _originPosition;
-                    }
-                }
-                else
-                {
-                    _invincibleTime -= gameTime.ElapsedGameTime;
+            if (inputState.Fire)
+            {
+                _focusMode = true;
+            }
+            else if (_focusMode)
+            {
+                _focusMode = false;
+            }
 
-                    if (_invincibleTime.TotalMilliseconds <= 0)
-                    {
-                        _invincibleTime = Config.PlayerInvicibleTime;
-                        Ship.IsInvincible = false;
-                        Ship.RemoveShield();
-                    }
+            if (BulletTime)
+            {
+                _bulletTimeTimer -= gameTime.ElapsedGameTime;
+
+                if (_bulletTimeTimer <= TimeSpan.Zero)
+                {
+                    _bulletTimeReloading = true;
+                    _bulletTimeTimer = TimeSpan.Zero;
                 }
             }
-            //else
+
+            if (_bulletTimeReloading)
             {
-                var inputState = ReadInput(_controller, _viewport, spriteBatch);
+                _bulletTimeTimer += gameTime.ElapsedGameTime;
 
-                Ship.ChangeDirection(inputState.Direction, inputState.Rotation);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
-
-                BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
-
-                if (inputState.Fire)
+                if (_bulletTimeTimer >= Config.DefaultBulletTimeTimer)
                 {
-                    Fire(gameTime);
+                    _bulletTimeReloading = false;
+                    _bulletTimeTimer = Config.DefaultBulletTimeTimer;
                 }
-
-                if (inputState.Fire)
-                {
-                    _focusMode = true;
-                }
-                else if (_focusMode)
-                {
-                    _focusMode = false;
-                }
-
-                if (BulletTime)
-                {
-                    _bulletTimeTimer -= gameTime.ElapsedGameTime;
-
-                    if (_bulletTimeTimer <= TimeSpan.Zero)
-                    {
-                        _bulletTimeReloading = true;
-                        _bulletTimeTimer = TimeSpan.Zero;
-                    }
-                }
-
-                if (_bulletTimeReloading)
-                {
-                    _bulletTimeTimer += gameTime.ElapsedGameTime;
-
-                    if (_bulletTimeTimer >= Config.DefaultBulletTimeTimer)
-                    {
-                        _bulletTimeReloading = false;
-                        _bulletTimeTimer = Config.DefaultBulletTimeTimer;
-                    }
-                }
-
-                Ship.Update(gameTime);
             }
+
+            Ship.Update(gameTime);
 
             // Update camera position
             _cameraPosition.X = MathHelper.Lerp(
@@ -450,31 +424,27 @@ namespace DanmakuNoKyojin.Entities
 
         public void Hit(ParticleManager<ParticleState> particleManager)
         {
-            if (!Ship.IsInvincible)
+            _lives--;
+            _deadSound.Play();
+
+            var yellow = new Color(0.8f, 0.8f, 0.4f);
+
+            for (int i = 0; i < 1200; i++)
             {
-                _lives--;
-                _deadSound.Play();
-
-                var yellow = new Color(0.8f, 0.8f, 0.4f);
-
-                for (int i = 0; i < 1200; i++)
+                float speed = 18f * (1f - 1 / random.NextFloat(1f, 10f));
+                Color color = Color.Lerp(Color.White, yellow, random.NextFloat(0, 1));
+                var state = new ParticleState()
                 {
-                    float speed = 18f * (1f - 1 / random.NextFloat(1f, 10f));
-                    Color color = Color.Lerp(Color.White, yellow, random.NextFloat(0, 1));
-                    var state = new ParticleState()
-                    {
-                        Velocity = random.NextVector2(speed, speed),
-                        Type = ParticleType.None,
-                        LengthMultiplier = 1
-                    };
+                    Velocity = random.NextVector2(speed, speed),
+                    Type = ParticleType.None,
+                    LengthMultiplier = 1
+                };
 
-                    particleManager.CreateLineParticle(Ship.Position, color, 190, 1.5f, state);
-                }
-
-                _timeBeforeRespawn = Config.PlayerTimeBeforeRespawn;
-                Ship.IsInvincible = true;
-                Ship.CollisionBoxes.Add(Ship._shieldCollisionCircle);
+                particleManager.CreateLineParticle(Ship.Position, color, 190, 1.5f, state);
             }
+
+            _timeBeforeRespawn = Config.PlayerTimeBeforeRespawn;
+            Ship.EnableShield();
         }
 
         public void AddScore(int value)
@@ -530,7 +500,7 @@ namespace DanmakuNoKyojin.Entities
 
         public bool Intersects(Entity entity)
         {
-            return Ship.CollisionBoxes.Intersects(entity.CollisionBoxes);
+            return Ship.Intersects(entity.CollisionBoxes);
         }
 
         public void Dispose()
