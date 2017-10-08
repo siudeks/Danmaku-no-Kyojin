@@ -7,7 +7,7 @@ namespace DanmakuNoKyojin.Collisions
 {
     public abstract class CollisionElement
     {
-        protected Entity Parent { get; set; }
+        protected IEntity Parent { get; set; }
 
         public Vector2 RelativePosition { get; set; }
 
@@ -17,7 +17,7 @@ namespace DanmakuNoKyojin.Collisions
 
         public abstract Vector2 GetCenter();
 
-        protected CollisionElement(Entity parent, Vector2 relativePosition)
+        protected CollisionElement(IEntity parent, Vector2 relativePosition)
         {
             Parent = parent;
             RelativePosition = relativePosition;

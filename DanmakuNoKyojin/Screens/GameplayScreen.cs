@@ -82,10 +82,11 @@ namespace DanmakuNoKyojin.Screens
             defaultView = GraphicsDevice.Viewport;
 
             // First player
-            var player1 = new Player(GameRef, defaultView, Config.PlayersController[0],
+            var player1 = new Player(defaultView, Config.PlayersController[0],
                                         new Vector2(NewConfig.GameAreaX / 2f,
                                                     NewConfig.GameAreaY - 150));
             player1.Initialize();
+            player1.LoadContent(GameRef);
             Player = player1;
 
             _enemy = new Boss(GameRef, Player);
@@ -184,17 +185,17 @@ namespace DanmakuNoKyojin.Screens
                     {
                         if (p.Intersects(part))
                         {
-                            p.Hit();
+                            p.Hit(GameRef.ParticleManager);
                         }
                     }
 
-                    foreach (Mover m in _enemy.MoverManager.movers)
-                    {
-                        if (p.Intersects(m))
-                            p.Hit();
-                    }
+                    //foreach (Mover m in _enemy.MoverManager.movers)
+                    //{
+                    //    if (p.Intersects(m))
+                    //        p.Hit();
+                    //}
 
-                    p.Update(gameTime);
+                    p.Update(gameTime, GameRef, GameRef.SpriteBatch);
                 }
             }
 
@@ -263,10 +264,10 @@ namespace DanmakuNoKyojin.Screens
 
             foreach (var bullet in Player.GetBullets())
             {
-                bullet.Draw(gameTime);
+                bullet.Draw(gameTime, GameRef.SpriteBatch);
             }
 
-            Player.Draw(gameTime);
+            Player.Draw(gameTime, GameRef.SpriteBatch);
 
             //if (_enemy.IsAlive)
             //{
@@ -286,7 +287,7 @@ namespace DanmakuNoKyojin.Screens
                 var p = Player;
                 if (p.IsAlive)
                 {
-                    p.DrawString(gameTime);
+                    p.DrawString(gameTime, GameRef.SpriteBatch);
                 }
             }
 
@@ -347,10 +348,10 @@ namespace DanmakuNoKyojin.Screens
 
                 foreach (var bullet in p.GetBullets())
                 {
-                    bullet.Draw(gameTime);
+                    bullet.Draw(gameTime, GameRef.SpriteBatch);
                 }
 
-                Player.Draw(gameTime);
+                Player.Draw(gameTime, GameRef.SpriteBatch);
 
                 /*
                 if (_enemy.IsAlive)

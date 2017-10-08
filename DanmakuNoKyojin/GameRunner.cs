@@ -13,7 +13,7 @@ using Ninject;
 
 namespace DanmakuNoKyojin
 {
-    public class GameRunner : Game, IContentLoader
+    public class GameRunner : Game, IContentLoader, IViewportProvider
     {
         public GraphicsDeviceManager Graphics;
         public SpriteBatch SpriteBatch;
@@ -48,8 +48,11 @@ namespace DanmakuNoKyojin
 
         // Particles
         public ParticleManager<ParticleState> ParticleManager { get; private set; }
-        public Texture2D LineParticle;
-        public Texture2D Glow;
+
+        int IViewportProvider.Width => Graphics.GraphicsDevice.Viewport.Width;
+
+        int IViewportProvider.Height => Graphics.GraphicsDevice.Viewport.Height;
+
 
         // Audio
         public SoundEffect Select;
@@ -132,8 +135,7 @@ namespace DanmakuNoKyojin
             Select = Content.Load<SoundEffect>(@"Audio/SE/select");
             Choose = Content.Load<SoundEffect>(@"Audio/SE/choose");
 
-            LineParticle = Content.Load<Texture2D>("Graphics/Pictures/laser");
-            Glow = Content.Load<Texture2D>("Graphics/Pictures/glow");
+            ParticleManager.LoadContent(this);
         }
 
 

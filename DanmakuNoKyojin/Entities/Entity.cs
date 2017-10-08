@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DanmakuNoKyojin.Entities
 {
-    public abstract class Entity : ICollidable
+    public abstract class Entity : ICollidable, IEntity
     {
         protected readonly GameRunner GameRef;
         private Vector2 _position;

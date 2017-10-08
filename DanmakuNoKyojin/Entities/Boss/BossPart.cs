@@ -37,7 +37,7 @@ namespace DanmakuNoKyojin.Entities.Boss
         private float _accelerationDecreaseFactor;
         private Vector2 _targetPosition;
         private float _targetAngle;
-        private Dictionary<CollisionConvexPolygon, float> _collisionBoxesHp; 
+        private Dictionary<CollisionConvexPolygon, float> _collisionBoxesHp;
 
         // Turrets
         private List<Turret> _turrets;
@@ -71,18 +71,18 @@ namespace DanmakuNoKyojin.Entities.Boss
         public List<Turret> GetTurrets()
         {
             return _turrets;
-        } 
-        
+        }
+
 
         public BossPart(
             GameRunner gameRef,
             Boss bossRef,
             Player player,
-            MoverManager moverManager, 
-            List<BulletPattern> bulletPatterns, 
-            Color color, 
+            MoverManager moverManager,
+            List<BulletPattern> bulletPatterns,
+            Color color,
             float initialHealth,
-            int iteration = 50, 
+            int iteration = 50,
             float step = 25,
             List<Turret> turrets = null,
             PolygonShape polygonShape = null,
@@ -107,7 +107,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             _turrets = turrets ?? new List<Turret>();
             _polygonShape = polygonShape;
             _collisionBoxesHp = new Dictionary<CollisionConvexPolygon, float>();
-			_targetPosition = Vector2.Zero;
+            _targetPosition = Vector2.Zero;
             _targetAngle = 0f;
         }
 
@@ -208,7 +208,7 @@ namespace DanmakuNoKyojin.Entities.Boss
         public override void Update(GameTime gameTime)
         {
             var dt = (float)gameTime.ElapsedGameTime.TotalSeconds * 100;
-            
+
             // Part motion
             if (Direction == Vector2.Zero)
             {
@@ -269,7 +269,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             if (AngularVelocity > 0f)
                 AngularVelocity = AngularVelocity - (_accelerationDecreaseFactor * dt);
             else if (AngularVelocity < 0f)
-                AngularVelocity = AngularVelocity + (_accelerationDecreaseFactor*dt);
+                AngularVelocity = AngularVelocity + (_accelerationDecreaseFactor * dt);
 
             if (AngularVelocity < 0.01f && AngularVelocity > -0.01f)
                 AngularVelocity = 0f;
@@ -339,8 +339,7 @@ namespace DanmakuNoKyojin.Entities.Boss
 
                                     Color color = Color.Lerp(color1, color2, random.NextFloat(0, 1));
 
-                                    GameRef.ParticleManager.CreateParticle(GameRef.LineParticle, bullet.Position,
-                                        color, 190, 1.5f, state);
+                                    GameRef.ParticleManager.CreateLineParticle(bullet.Position, color, 190, 1.5f, state);
                                 }
 
                                 Split(collisionConvexPolygon);
@@ -373,10 +372,10 @@ namespace DanmakuNoKyojin.Entities.Boss
             else
             {
                 var boxLocalPosition = box.GetLocalPosition();
-                
+
                 // Left (1) or right (-1) part?
                 var factor = (boxLocalPosition.X > Origin.X) ? 1 : -1;
-                
+
                 // If the break out part is not large enough => we don't create another part
                 if (newPolygonShape.Vertices != null && newPolygonShape.GetArea() > Config.MinBossPartArea)
                 {
@@ -393,7 +392,7 @@ namespace DanmakuNoKyojin.Entities.Boss
                     // Compute new boss part's world position
                     var worldPosition = Vector2.Zero;
                     worldPosition.Y = boxWorldPosition.Y - boxLocalPosition.Y;
-                
+
                     // Left part
                     if (factor == 1)
                         worldPosition.X = boxWorldPosition.X - bossPartSize.X;
@@ -446,7 +445,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             if (_bulletPatterns.Count > 0)
             {
                 // Add a new bullet in the center of the screen
-                _mover = (Mover) _moverManager.CreateBullet();
+                _mover = (Mover)_moverManager.CreateBullet();
                 _mover.X = Position.X;
                 _mover.Y = Position.Y - 5;
                 _mover.SetBullet(_bulletPatterns[_currentPatternIndex].RootNode);
@@ -476,7 +475,7 @@ namespace DanmakuNoKyojin.Entities.Boss
 
                     Color color = Color.Lerp(color1, color2, random.NextFloat(0, 1));
 
-                    GameRef.ParticleManager.CreateParticle(GameRef.LineParticle, new Vector2(Position.X, Position.Y - Size.Y / 2f),
+                    GameRef.ParticleManager.CreateLineParticle(new Vector2(Position.X, Position.Y - Size.Y / 2f),
                         color, 190, 1.5f, state);
                 }
 
@@ -596,7 +595,7 @@ namespace DanmakuNoKyojin.Entities.Boss
                 topVertices.Reverse();
 
             if (bottomVertices.Count != topVertices.Count)
-                    return;
+                return;
 
             for (var i = 1; i < bottomVertices.Count; i += 2)
             {
@@ -663,8 +662,7 @@ namespace DanmakuNoKyojin.Entities.Boss
 
                 Color color = Color.Lerp(color1, color2, random.NextFloat(0, 1));
 
-                GameRef.ParticleManager.CreateParticle(GameRef.LineParticle, position,
-                    color, 190, 1.5f, state);
+                GameRef.ParticleManager.CreateLineParticle(position, color, 190, 1.5f, state);
             }
         }
 

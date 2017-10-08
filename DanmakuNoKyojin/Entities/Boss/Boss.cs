@@ -69,7 +69,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             _parts = new List<BossPart>();
             _currentPartIndex = 0;
 
-            MoverManager.Initialize(player.GetPosition);
+            //MoverManager.Initialize(player.Position);
         }
 
         public void Initialize()
@@ -121,7 +121,7 @@ namespace DanmakuNoKyojin.Entities.Boss
 
             _parts.Add(_mainPart);
 
-            _core = new BossCore(_gameRef, _mainPart, player.GetPosition, MoverManager, _completeBulletPatterns);
+            _core = new BossCore(_gameRef, _mainPart, () => player.Position, MoverManager, _completeBulletPatterns);
             _core.Initialize();
         }
 
@@ -144,7 +144,7 @@ namespace DanmakuNoKyojin.Entities.Boss
 
                 Color color = Color.Lerp(color1, color2, random.NextFloat(0, 1));
 
-                _gameRef.ParticleManager.CreateParticle(_gameRef.LineParticle, position,
+                _gameRef.ParticleManager.CreateLineParticle(position,
                     color, 190, 1.5f, state);
             }
         }
@@ -191,17 +191,17 @@ namespace DanmakuNoKyojin.Entities.Boss
             for (int i = 0; i < MoverManager.movers.Count; i++)
             {
                 {
-                    if (MoverManager.movers[i].Intersects(player))
-                    {
-                        // Destroyed by shield?
-                        if (player.IsInvincible)
-                        {
-                            ParticleExplosion(MoverManager.movers[i].Position);
-                            MoverManager.RemoveBullet(MoverManager.movers[i]);
-                        }
-                        else
-                            player.Hit();
-                    }
+                    //if (MoverManager.movers[i].Intersects(player))
+                    //{
+                    //    // Destroyed by shield?
+                    //    if (player.IsInvincible)
+                    //    {
+                    //        ParticleExplosion(MoverManager.movers[i].Position);
+                    //        MoverManager.RemoveBullet(MoverManager.movers[i]);
+                    //    }
+                    //    else
+                    //        player.Hit();
+                    //}
                 }
             }
 

@@ -59,8 +59,9 @@ namespace DanmakuNoKyojin.Screens
             Players.Clear();
 
             // First player
-            var player1 = new Player(GameRef, _defaultView, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - NewConfig.GameAreaY / 4f));
+            var player1 = new Player(_defaultView, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - NewConfig.GameAreaY / 4f));
             player1.Initialize();
+            player1.LoadContent(GameRef);
             Players.Add(player1);
 
             _boss = new Boss(GameRef, player1, Config.MinBossIteration);
@@ -115,32 +116,32 @@ namespace DanmakuNoKyojin.Screens
                         var currentPlayerBullet = p.GetBullets()[i];
                         currentPlayerBullet.Update(gameTime);
 
-                        if (_boss.Intersects(currentPlayerBullet))
-                        {
-                            //_boss.TakeDamage(currentPlayerBullet.Power);
+                        //if (_boss.Intersects(currentPlayerBullet))
+                        //{
+                        //    //_boss.TakeDamage(currentPlayerBullet.Power);
 
+                        //    for (var j = 0; j < 30; j++)
+                        //    {
+                        //        GameRef.ParticleManager.CreateParticle(GameRef.LineParticle,
+                        //            currentPlayerBullet.Position, Color.LightBlue, 50, 1,
+                        //            new ParticleState()
+                        //            {
+                        //                Velocity = random.NextVector2(0, 9),
+                        //                Type = ParticleType.Bullet,
+                        //                LengthMultiplier = 1
+                        //            });
+                        //    }
+
+                        //    p.GetBullets().Remove(currentPlayerBullet);
+                        //    continue;
+                        //}
+
+                        if (currentPlayerBullet.Position.X < 0 || currentPlayerBullet.Position.X > NewConfig.GameAreaX ||
+                            currentPlayerBullet.Position.Y < 0 || currentPlayerBullet.Position.Y > NewConfig.GameAreaY)
+                        {
                             for (var j = 0; j < 30; j++)
                             {
-                                GameRef.ParticleManager.CreateParticle(GameRef.LineParticle,
-                                    currentPlayerBullet.Position, Color.LightBlue, 50, 1,
-                                    new ParticleState()
-                                    {
-                                        Velocity = random.NextVector2(0, 9),
-                                        Type = ParticleType.Bullet,
-                                        LengthMultiplier = 1
-                                    });
-                            }
-
-                            p.GetBullets().Remove(currentPlayerBullet);
-                            continue;
-                        }
-
-                        if (currentPlayerBullet.X < 0 || currentPlayerBullet.X > NewConfig.GameAreaX ||
-                            currentPlayerBullet.Y < 0 || currentPlayerBullet.Y > NewConfig.GameAreaY)
-                        {
-                            for (var j = 0; j < 30; j++)
-                            {
-                                GameRef.ParticleManager.CreateParticle(GameRef.LineParticle,
+                                GameRef.ParticleManager.CreateLineParticle(
                                     currentPlayerBullet.Position, Color.LightBlue, 50, 1,
                                     new ParticleState()
                                     {
@@ -168,7 +169,7 @@ namespace DanmakuNoKyojin.Screens
                         */
                     }
 
-                    p.Update(gameTime);
+                    p.Update(gameTime, GameRef, GameRef.SpriteBatch);
                 }
             }
 
@@ -195,12 +196,12 @@ namespace DanmakuNoKyojin.Screens
 
             GameRef.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, null, null, null, Players[0].Camera.GetTransformation());
 
-            Players[0].Draw(gameTime);
+            Players[0].Draw(gameTime, GameRef.SpriteBatch);
 
             _boss.Draw(gameTime, Players[0].Camera.GetTransformation());
 
             foreach (var bullet in Players[0].GetBullets())
-                bullet.Draw(gameTime);
+                bullet.Draw(gameTime, GameRef.SpriteBatch);
 
             GameRef.ParticleManager.Draw(GameRef.SpriteBatch);
 

@@ -63,10 +63,13 @@ namespace DanmakuNoKyojin.Screens
             Program.system.ActorOf(Props.Create(() => new Danmaku.BeaconActor()));
 
             // First player
-            _player = new Player(GameRef, _defaultView, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - 150));
+            _player = new Player(_defaultView, Config.PlayersController[0], new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - 150));
             _player.Initialize();
+            // add method to remember about loading content
+            // is not working now - more as a reminder to fix or remove.
+            _player.LoadContent(null);
 
-            _moverManager.Initialize(_player.GetPosition);
+            _moverManager.Initialize(() => _player.Position);
             _moverManager.movers.Clear();
 
             AddBullet(true);
@@ -163,7 +166,7 @@ namespace DanmakuNoKyojin.Screens
 
             HandleInput();
 
-            _player.Update(gameTime);
+            _player.Update(gameTime, GameRef, GameRef.SpriteBatch);
 
             _moverManager.Update(gameTime);
             _moverManager.FreeMovers();
@@ -180,7 +183,7 @@ namespace DanmakuNoKyojin.Screens
             
             GameRef.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, _player.Camera.GetTransformation());
 
-            _player.Draw(gameTime);
+            _player.Draw(gameTime, GameRef.SpriteBatch);
 
             _moverManager.Draw(gameTime);
 

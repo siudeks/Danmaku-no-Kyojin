@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using DanmakuNoKyojin.Collisions;
+﻿using DanmakuNoKyojin.Collisions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -9,14 +8,30 @@ namespace DanmakuNoKyojin.Entities
     /// <summary>
     /// Represent a bullet visualization
     /// </summary>
-    sealed class Bullet : BaseBullet
+    public sealed class Bullet : IEntity
     {
         public bool WaveMode { get; set; }
+        public Vector2 Velocity;
+        public Vector2 Origin;
+        public Vector2 Position;
+        public Vector2 Direction;
+        public float Rotation;
+        public CollisionElements CollisionBoxes { get; } = new CollisionElements();
         private float _distance;
+        public float Power;
+        public Texture2D Sprite { get; set; }
 
-        public Bullet(GameRunner gameRef, Texture2D sprite, Vector2 position, Vector2 direction, Vector2 velocity)
-            : base(gameRef, sprite, position, direction, velocity)
+        float IEntity.Rotation => Rotation;
+
+        Vector2 IEntity.Position => Position;
+
+        Vector2 IEntity.Origin => Origin;
+
+        public Bullet(Texture2D sprite, Vector2 position, Vector2 direction, Vector2 velocity)
         {
+            Sprite = sprite;
+            Velocity = velocity;
+            Direction = direction;
             Rotation = (float)Math.Atan2(direction.Y, direction.X) - MathHelper.PiOver2;
             _distance = 0;
             WaveMode = false;
@@ -24,10 +39,8 @@ namespace DanmakuNoKyojin.Entities
             Power = Improvements.ShootPowerData[PlayerData.ShootPowerIndex].Key;
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
             if (WaveMode)
             {
                 _distance += 0.75f;
@@ -39,11 +52,9 @@ namespace DanmakuNoKyojin.Entities
             Position += Direction * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            GameRef.SpriteBatch.Draw(Sprite, Position, null, Color.White, Rotation, Origin, 1f, SpriteEffects.None, 0f);
-
-            base.Draw(gameTime);
+            spriteBatch.Draw(Sprite, Position, null, Color.White, Rotation, Origin, 1f, SpriteEffects.None, 0f);
         }
     }
 }

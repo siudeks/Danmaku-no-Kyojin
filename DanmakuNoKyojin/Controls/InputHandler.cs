@@ -48,7 +48,7 @@ namespace DanmakuNoKyojin.Controls
             get { return lastGamePadStates; }
         }
 
-        public InputHandler()
+        static InputHandler()
         {
             gamePadStates = new GamePadState[Enum.GetValues(typeof(PlayerIndex)).Length];
 

@@ -1,9 +1,9 @@
 ﻿using System;
-using DanmakuNoKyojin.Entities;
 using Microsoft.Xna.Framework.Graphics;
 using DanmakuNoKyojin.Utils;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using DanmakuNoKyojin.Entities;
 
 namespace DanmakuNoKyojin.Collisions
 {
@@ -17,7 +17,8 @@ namespace DanmakuNoKyojin.Collisions
 
         #endregion
 
-        public CollisionCircle(Entity parent, Vector2 relativePosition, float radius) : base(parent, relativePosition)
+        public CollisionCircle(IEntity parent, Vector2 relativePosition, float radius) : 
+            base(parent, relativePosition)
         {
             Radius = radius;
 

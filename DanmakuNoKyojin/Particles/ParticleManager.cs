@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DanmakuNoKyojin.Framework;
 
 namespace DanmakuNoKyojin.Particles
 {
@@ -9,6 +10,9 @@ namespace DanmakuNoKyojin.Particles
         // This delegate will be called for each particle.
         private Action<Particle> updateParticle;
         private CircularParticleArray particleList;
+
+        public Texture2D LineParticle;
+        public Texture2D Glow;
 
         /// <summary>
         /// Allows creation of particles.
@@ -23,6 +27,12 @@ namespace DanmakuNoKyojin.Particles
             // Populate the list with empty particle objects, for reuse.
             for (int i = 0; i < capacity; i++)
                 particleList[i] = new Particle();
+        }
+
+        public void LoadContent(IContentLoader contentLoader)
+        {
+            LineParticle = contentLoader.Load<Texture2D>("Graphics/Pictures/laser");
+            Glow = contentLoader.Load<Texture2D>("Graphics/Pictures/glow");
         }
 
         /// <summary>
@@ -68,10 +78,17 @@ namespace DanmakuNoKyojin.Particles
             }
         }
 
-        public void CreateParticle(Texture2D texture, Vector2 position, Color tint, float duration, float scale, T state, float theta = 0)
-        {
-            CreateParticle(texture, position, tint, duration, new Vector2(scale), state, theta);
-        }
+        public void CreateLineParticle(Vector2 position, Color tint, float duration, float scale, T state, float theta = 0) 
+            => CreateParticle(LineParticle, position, tint, duration, new Vector2(scale), state, theta);
+
+        public void CreateLineParticle(Vector2 pos, Color color, float v, Vector2 vector2, T particleState)
+            => CreateParticle(LineParticle, pos, color, v, vector2, particleState, 0);
+
+        public void CreateGlowParticle(Vector2 position, Color tint, float duration, float scale, T state, float theta = 0)
+            => CreateParticle(Glow, position, tint, duration, new Vector2(scale), state, theta);
+
+        public void CreateGlowParticle(Vector2 position, Color tint, float duration, Vector2 scale, T state, float theta = 0)
+            => CreateParticle(Glow, position, tint, duration, scale, state, theta);
 
         public void CreateParticle(Texture2D texture, Vector2 position, Color tint, float duration, Vector2 scale, T state, float theta = 0)
         {

@@ -10,15 +10,23 @@ using Microsoft.Xna.Framework.Input;
 using DanmakuNoKyojin.Collisions;
 
 using DanmakuNoKyojin.Camera;
-using Akka.Actor;
 
-using ShipActor = Danmaku.ShipActor;
+using System.Collections.Generic;
+using DanmakuNoKyojin.Framework;
 
 namespace DanmakuNoKyojin.Entities
 {
-    public sealed class Player : BulletLauncherEntity, IDisposable
+    public sealed class Player : IDisposable, IEntity
     {
+        public float Rotation { get; set; }
+        public bool IsAlive { get; set; }
+        public Vector2 Position { get; set; }
+        public Vector2 Origin { get; set; }
+        public Texture2D Sprite { get; set; }
+
         private ShipView ship;
+
+        public CollisionElements CollisionBoxes { get; } = new CollisionElements();
 
         private static Random random = new Random();
 
@@ -77,8 +85,7 @@ namespace DanmakuNoKyojin.Entities
             get { return _camera; }
         }
 
-        public Player(GameRunner gameRef, Viewport viewport, Config.Controller controller, Vector2 position)
-            : base(gameRef)
+        public Player(Viewport viewport, Config.Controller controller, Vector2 position)
         {
             _viewport = viewport;
             _controller = controller;
@@ -91,7 +98,15 @@ namespace DanmakuNoKyojin.Entities
             _timeBeforeRespawn = TimeSpan.Zero;
         }
 
-        public override void Initialize()
+        private readonly List<Bullet> Bullets = new List<Bullet>();
+        private TimeSpan BulletFrequence;
+
+        public List<Bullet> GetBullets()
+        {
+            return Bullets;
+        }
+
+        public void Initialize()
         {
             Rotation = 0f;
             //_distance = Vector2.Zero;
@@ -109,41 +124,33 @@ namespace DanmakuNoKyojin.Entities
             _bulletTimeTimer = Config.DefaultBulletTimeTimer;
             _hitboxRadius = (float)Math.PI * 1.5f * 2;
             _camera = new Camera2D(_viewport, 1f);
-
-            base.Initialize();
         }
 
-        protected override void LoadContent()
+        public void LoadContent(IContentLoader contentLoader)
         {
-            base.LoadContent();
-
-            Sprite = GameRef.Content.Load<Texture2D>("Graphics/Entities/player");
-            _bulletSprite = GameRef.Content.Load<Texture2D>("Graphics/Entities/player_bullet");
-            _hitboxSprite = GameRef.Content.Load<Texture2D>("Graphics/Pictures/player_hitbox");
+            Sprite = contentLoader.Load<Texture2D>("Graphics/Entities/player");
+            _bulletSprite = contentLoader.Load<Texture2D>("Graphics/Entities/player_bullet");
+            _hitboxSprite = contentLoader.Load<Texture2D>("Graphics/Pictures/player_hitbox");
             CollisionBoxes.Add(new CollisionCircle(this, new Vector2(Sprite.Height / 6f, Sprite.Height / 6f), _hitboxRadius / 2f));
 
-            _shieldSprite = GameRef.Content.Load<Texture2D>("Graphics/Entities/shield");
+            _shieldSprite = contentLoader.Load<Texture2D>("Graphics/Entities/shield");
             _shieldOrigin = new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f);
             _shieldCollisionCircle = new CollisionCircle(this, Vector2.Zero, _shieldSprite.Width / 2f);
 
-            _lifeIcon = GameRef.Content.Load<Texture2D>("Graphics/Pictures/life_icon");
+            _lifeIcon = contentLoader.Load<Texture2D>("Graphics/Pictures/life_icon");
 
-            _bulletTimeBarLeft = GameRef.Content.Load<Texture2D>("Graphics/Pictures/gauge_left");
-            _bulletTimeBarContent = GameRef.Content.Load<Texture2D>("Graphics/Pictures/gauge_middle");
-            _bulletTimeBarRight = GameRef.Content.Load<Texture2D>("Graphics/Pictures/gauge_right");
+            _bulletTimeBarLeft = contentLoader.Load<Texture2D>("Graphics/Pictures/gauge_left");
+            _bulletTimeBarContent = contentLoader.Load<Texture2D>("Graphics/Pictures/gauge_middle");
+            _bulletTimeBarRight = contentLoader.Load<Texture2D>("Graphics/Pictures/gauge_right");
 
-            if (_shootSound == null)
-                _shootSound = GameRef.Content.Load<SoundEffect>(@"Audio/SE/hit");
-            if (_deadSound == null)
-                _deadSound = GameRef.Content.Load<SoundEffect>(@"Audio/SE/dead");
+            _shootSound = contentLoader.Load<SoundEffect>(@"Audio/SE/hit");
+            _deadSound = contentLoader.Load<SoundEffect>(@"Audio/SE/dead");
 
             ship = new ShipView(Program.system, Sprite);
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, IViewportProvider viewport, SpriteBatch spriteBatch)
         {
-            base.Update(gameTime);
-
             if (_lives <= 0)
                 IsAlive = false;
 
@@ -172,7 +179,7 @@ namespace DanmakuNoKyojin.Entities
             }
             //else
             {
-                var inputState = ReadInput(_controller, _viewport);
+                var inputState = ReadInput(_controller, _viewport, spriteBatch);
 
                 Rotation = inputState.Rotation;
                 ship.ChangeDirection(inputState.Direction);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
@@ -237,8 +244,8 @@ namespace DanmakuNoKyojin.Entities
             {
                 // Update camera zoom according to mouse distance from player
                 var mouseWorldPosition = new Vector2(
-                    _cameraPosition.X - GameRef.Graphics.GraphicsDevice.Viewport.Width / 2f + InputHandler.MouseState.X,
-                    _cameraPosition.Y - GameRef.Graphics.GraphicsDevice.Viewport.Height / 2f + InputHandler.MouseState.Y
+                    _cameraPosition.X - viewport.Width / 2f + InputHandler.MouseState.X,
+                    _cameraPosition.Y - viewport.Height / 2f + InputHandler.MouseState.Y
                     );
 
                 var mouseDistanceFromPlayer =
@@ -246,7 +253,7 @@ namespace DanmakuNoKyojin.Entities
                         Math.Sqrt(Math.Pow(Position.X - mouseWorldPosition.X, 2) +
                                   Math.Pow(Position.Y - mouseWorldPosition.Y, 2));
 
-                var cameraZoom = GameRef.Graphics.GraphicsDevice.Viewport.Width / mouseDistanceFromPlayer;
+                var cameraZoom = viewport.Width / mouseDistanceFromPlayer;
 
                 if (_focusMode)
                     cameraZoom = 1f;
@@ -264,7 +271,7 @@ namespace DanmakuNoKyojin.Entities
             }
         }
 
-        private static InputData ReadInputFromKeyboard(Viewport _viewport)
+        private static InputData ReadInputFromKeyboard(Viewport _viewport, SpriteBatch spriteBatch)
         {
             var bulletTime = InputHandler.MouseState.RightButton == ButtonState.Pressed;
 
@@ -304,10 +311,10 @@ namespace DanmakuNoKyojin.Entities
             return new InputData(bulletTime, fire, direction, rotation);
         }
 
-        private static InputData ReadInput(Config.Controller controller, Viewport viewport)
+        private static InputData ReadInput(Config.Controller controller, Viewport viewport, SpriteBatch spriteBatch)
         {
             if (controller == Config.Controller.Keyboard)
-                return ReadInputFromKeyboard(viewport);
+                return ReadInputFromKeyboard(viewport, spriteBatch);
 
             if (controller == Config.Controller.GamePad)
                 return ReadInputFromPad();
@@ -315,7 +322,7 @@ namespace DanmakuNoKyojin.Entities
             throw new ArgumentException(nameof(controller));
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             // for testing purposes let ask synchronously about ship position
             // later we need to improve it in async way.
@@ -325,16 +332,14 @@ namespace DanmakuNoKyojin.Entities
 
             if (_timeBeforeRespawn.TotalMilliseconds <= 0)
             {
-                GameRef.SpriteBatch.Draw(Sprite, Position, null, Color.White, Rotation, Origin, 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(Sprite, Position, null, Color.White, Rotation, Origin, 1f, SpriteEffects.None, 0f);
 
                 if (IsInvincible)
-                    GameRef.SpriteBatch.Draw(_shieldSprite, Position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(_shieldSprite, Position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
             }
-
-            base.Draw(gameTime);
         }
 
-        public void DrawString(GameTime gameTime)
+        public void DrawString(GameTime gameTime, SpriteBatch spriteBatch)
         {
             // Text
             string lives = "P1";
@@ -347,12 +352,12 @@ namespace DanmakuNoKyojin.Entities
             if (PlayerData.BulletTimeEnabled)
                 hudY = 80;
 
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, lives, new Vector2(1, Config.Resolution.Y - hudY + 1), Color.Black);
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, lives, new Vector2(0, Config.Resolution.Y - hudY), Color.White);
+            spriteBatch.DrawString(ControlManager.SpriteFont, lives, new Vector2(1, Config.Resolution.Y - hudY + 1), Color.Black);
+            spriteBatch.DrawString(ControlManager.SpriteFont, lives, new Vector2(0, Config.Resolution.Y - hudY), Color.White);
 
             for (int i = 0; i < _lives; i++)
             {
-                GameRef.SpriteBatch.Draw(_lifeIcon, new Vector2(
+                spriteBatch.Draw(_lifeIcon, new Vector2(
                     ControlManager.SpriteFont.MeasureString(lives).X + i * _lifeIcon.Width + 10, Config.Resolution.Y - (hudY - 7)), Color.White);
             }
 
@@ -364,29 +369,29 @@ namespace DanmakuNoKyojin.Entities
                     (100 * (float)(_bulletTimeTimer.TotalMilliseconds / Config.DefaultBulletTimeTimer.TotalMilliseconds));
 
                 // Text
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont,
+                spriteBatch.DrawString(ControlManager.SpriteFont,
                                             bulletTimeBarWidth.ToString(CultureInfo.InvariantCulture),
                                             new Vector2(1, Config.Resolution.Y - 39), Color.Black);
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont,
+                spriteBatch.DrawString(ControlManager.SpriteFont,
                                             bulletTimeBarWidth.ToString(CultureInfo.InvariantCulture),
                                             new Vector2(0, Config.Resolution.Y - 40), Color.White);
 
                 // Bar
-                GameRef.SpriteBatch.Draw(_bulletTimeBarLeft,
+                spriteBatch.Draw(_bulletTimeBarLeft,
                                       new Rectangle(0, Config.Resolution.Y - 50, _bulletTimeBarLeft.Width, _bulletTimeBarLeft.Height),
                                       Color.White);
-                GameRef.SpriteBatch.Draw(_bulletTimeBarContent,
+                spriteBatch.Draw(_bulletTimeBarContent,
                                       new Rectangle(_bulletTimeBarLeft.Width, Config.Resolution.Y - 50, bulletTimeBarWidth,
                                                     _bulletTimeBarContent.Height), Color.White);
-                GameRef.SpriteBatch.Draw(_bulletTimeBarRight,
+                spriteBatch.Draw(_bulletTimeBarRight,
                                       new Rectangle(_bulletTimeBarLeft.Width + bulletTimeBarWidth, Config.Resolution.Y - 50,
                                                     _bulletTimeBarRight.Width, _bulletTimeBarRight.Height),
                                       Color.White);
             }
 
             // Score
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, score, new Vector2(1, Config.Resolution.Y - 20), Color.Black);
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, score, new Vector2(0, Config.Resolution.Y - 21), Color.White);
+            spriteBatch.DrawString(ControlManager.SpriteFont, score, new Vector2(1, Config.Resolution.Y - 20), Color.Black);
+            spriteBatch.DrawString(ControlManager.SpriteFont, score, new Vector2(0, Config.Resolution.Y - 21), Color.White);
 
         }
 
@@ -418,11 +423,11 @@ namespace DanmakuNoKyojin.Entities
 
                     Vector2 offset = Vector2.Transform(new Vector2(0, 0), aimQuat);
 
-                    var bullet = new Bullet(GameRef, _bulletSprite, Position + offset, direction, Config.PlayerBulletVelocity)
+                    var bullet = new Bullet(_bulletSprite, Position + offset, direction, Config.PlayerBulletVelocity)
                     {
                         WaveMode = false
                     };
-                    AddBullet(bullet);
+                    Bullets.Add(bullet);
                 }
 
                 // Front sides 1/2 diagonal
@@ -436,12 +441,12 @@ namespace DanmakuNoKyojin.Entities
                     directionLeft = new Vector2((float)Math.Sin(Rotation - Math.PI / 4), (float)Math.Cos(Rotation - Math.PI / 4) * -1);
                     directionRight = new Vector2((float)Math.Sin(Rotation + Math.PI / 4), (float)Math.Cos(Rotation + Math.PI / 4) * -1);
 
-                    var bulletLeft = new Bullet(GameRef, _bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
+                    var bulletLeft = new Bullet(_bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
 
-                    var bulletRight = new Bullet(GameRef, _bulletSprite, positionRight, directionRight, Config.PlayerBulletVelocity);
+                    var bulletRight = new Bullet(_bulletSprite, positionRight, directionRight, Config.PlayerBulletVelocity);
 
-                    AddBullet(bulletLeft);
-                    AddBullet(bulletRight);
+                    Bullets.Add(bulletLeft);
+                    Bullets.Add(bulletRight);
                 }
 
                 // Front sides 1/4 diagonal
@@ -455,14 +460,14 @@ namespace DanmakuNoKyojin.Entities
                     directionLeft = new Vector2((float)Math.Sin(Rotation - Math.PI / 8), (float)Math.Cos(Rotation - Math.PI / 8) * -1);
                     directionRight = new Vector2((float)Math.Sin(Rotation + Math.PI / 8), (float)Math.Cos(Rotation + Math.PI / 8) * -1);
 
-                    var bulletLeft = new Bullet(GameRef, _bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
+                    var bulletLeft = new Bullet(_bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
                     bulletLeft.Power = 0.5f;
 
-                    var bulletRight = new Bullet(GameRef, _bulletSprite, positionRight, directionRight, Config.PlayerBulletVelocity);
+                    var bulletRight = new Bullet(_bulletSprite, positionRight, directionRight, Config.PlayerBulletVelocity);
                     bulletRight.Power = 0.5f;
 
-                    AddBullet(bulletLeft);
-                    AddBullet(bulletRight);
+                    Bullets.Add(bulletLeft);
+                    Bullets.Add(bulletRight);
                 }
 
                 // Behind
@@ -470,11 +475,11 @@ namespace DanmakuNoKyojin.Entities
                 {
                     var directionBehind = new Vector2((float)Math.Sin(Rotation) * -1, (float)Math.Cos(Rotation));
 
-                    var bullet = new Bullet(GameRef, _bulletSprite, Position, directionBehind, Config.PlayerBulletVelocity);
+                    var bullet = new Bullet(_bulletSprite, Position, directionBehind, Config.PlayerBulletVelocity);
                     bullet.Power = Improvements.ShootPowerData[PlayerData.ShootPowerIndex].Key;
                     bullet.WaveMode = false;
 
-                    AddBullet(bullet);
+                    Bullets.Add(bullet);
                 }
 
                 _shootSound.Play();
@@ -483,7 +488,7 @@ namespace DanmakuNoKyojin.Entities
             }
         }
 
-        public void Hit()
+        public void Hit(ParticleManager<ParticleState> particleManager)
         {
             if (!IsInvincible)
             {
@@ -503,7 +508,7 @@ namespace DanmakuNoKyojin.Entities
                         LengthMultiplier = 1
                     };
 
-                    GameRef.ParticleManager.CreateParticle(GameRef.LineParticle, Position, color, 190, 1.5f, state);
+                    particleManager.CreateLineParticle(Position, color, 190, 1.5f, state);
                 }
 
                 _timeBeforeRespawn = Config.PlayerTimeBeforeRespawn;
@@ -517,7 +522,7 @@ namespace DanmakuNoKyojin.Entities
             _score += value;
         }
 
-        private void FireParticles(GameTime gameTime)
+        private void FireParticles(GameTime gameTime, ParticleManager<ParticleState> particleManager)
         {
             double t = gameTime.TotalGameTime.TotalSeconds;
 
@@ -539,28 +544,33 @@ namespace DanmakuNoKyojin.Entities
             // middle particle stream
             Vector2 velMid = baseVel + random.NextVector2(0, 1);
 
-            GameRef.ParticleManager.CreateParticle(GameRef.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
+            particleManager.CreateLineParticle(pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
                 new ParticleState(velMid, ParticleType.Enemy));
-            GameRef.ParticleManager.CreateParticle(GameRef.Glow, pos, midColor * alpha, 60f, new Vector2(0.5f, 1),
+            particleManager.CreateGlowParticle(pos, midColor * alpha, 60f, new Vector2(0.5f, 1),
                 new ParticleState(velMid, ParticleType.Enemy));
 
             // side particle streams
             Vector2 vel1 = baseVel + perpVel + random.NextVector2(0, 0.3f);
             Vector2 vel2 = baseVel - perpVel + random.NextVector2(0, 0.3f);
 
-            GameRef.ParticleManager.CreateParticle(GameRef.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
+            particleManager.CreateLineParticle(pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
                 new ParticleState(vel1, ParticleType.Enemy));
-            GameRef.ParticleManager.CreateParticle(GameRef.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
+            particleManager.CreateLineParticle(pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
                 new ParticleState(vel2, ParticleType.Enemy));
 
-            GameRef.ParticleManager.CreateParticle(
-                GameRef.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
+            particleManager.CreateGlowParticle(
+                pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
                 new ParticleState(vel1, ParticleType.Enemy)
             );
-            GameRef.ParticleManager.CreateParticle(
-                GameRef.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
+            particleManager.CreateGlowParticle(
+                pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
                 new ParticleState(vel2, ParticleType.Enemy)
             );
+        }
+
+        public bool Intersects(Entity entity)
+        {
+            return CollisionBoxes.Intersects(entity.CollisionBoxes);
         }
 
         public void Dispose()
