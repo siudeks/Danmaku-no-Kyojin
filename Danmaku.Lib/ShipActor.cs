@@ -10,11 +10,24 @@ namespace Danmaku
 
         public float Velocity = 0;
         public Vector2 Direction = Vector2.Zero;
+        public bool Forward;
         public float Rotation;
         public Vector2 Position;
         public bool IsInvicible;
         public (int Width, int Height) SpriteSize;
         public List<IActorRef> listeners = new List<IActorRef>();
+
+        public sealed class MoveCommand
+        {
+            public readonly bool Forward;
+            public readonly float Rotation;
+
+            public MoveCommand(bool forward, float rotation)
+            {
+                Forward = forward;
+                Rotation = rotation;
+            }
+        }
 
         [DebuggerDisplay("X:{X},Y:{Y}")]
         public sealed class ChangeDirection
@@ -67,11 +80,10 @@ namespace Danmaku
 
         }
 
-        public ShipActor(Vector2 position, (int Width, int Height) spriteSize, float velocity)
+        public ShipActor(Vector2 position, (int Width, int Height) spriteSize)
         {
             Position = position;
             SpriteSize = spriteSize;
-            Velocity = velocity;
 
             Initialize();
         }
@@ -80,9 +92,17 @@ namespace Danmaku
         {
             Receive<BeaconActor.ShipRegistered>(OnShipRegistered);
             Receive<ChangeDirection>(OnChangeDirection);
+            Receive<MoveCommand>(OnMoveCommand);
             Receive<UpdateMessage>(OnUpdateMessage);
             Receive<StatusRequest>(OnStatusRequest);
             Receive<CollisionDetected>(OnCollisionDetected);
+        }
+
+        private bool OnMoveCommand(MoveCommand cmd)
+        {
+            Forward = cmd.Forward;            
+            Rotation = cmd.Rotation;
+            return true;
         }
 
         private bool OnShipRegistered(BeaconActor.ShipRegistered obj)
@@ -146,11 +166,19 @@ namespace Danmaku
 
         private bool OnUpdateMessage(UpdateMessage cmd)
         {
-            var dt = (float)cmd.ElapsedGameTime.TotalSeconds;
-            var x = Position.X + Direction.X * Velocity * dt;
-            var y = Position.Y + Direction.Y * Velocity * dt;
+            if (Forward) Velocity = Velocity + 3;
+            if (!Forward) Velocity = Velocity -1;
+            //if (Velocity > 10) Velocity = 100;
+            if (Velocity < 0) Velocity = 0;
 
-            // do not allow to go outdside of game area
+            var dt = (float)cmd.ElapsedGameTime.TotalSeconds;
+
+            //var x = Position.X + Direction.X * Velocity * dt;
+            //var y = Position.Y + Direction.Y * Velocity * dt;
+            var x = Position.X + Velocity * dt;
+            var y = Position.Y + Velocity * dt;
+
+            // do not allow to go outside of game area
             //x = MathHelper.Clamp(x, SpriteSize.Width / 2f, Config.GameAreaX - SpriteSize.Width / 2f);
             //y = MathHelper.Clamp(y, SpriteSize.Height / 2f, Config.GameAreaY - SpriteSize.Height / 2f);
 

@@ -23,23 +23,21 @@ namespace Danmaku
         public async Task Move()
         {
             var size = (1, 1);
-            var velocity = 1000;
-            var actor = ActorOfAsTestActorRef<ShipActor>(Props.Create(() => new ShipActor(new Vector2(1, 2), size, velocity)));
+            var actor = ActorOfAsTestActorRef<ShipActor>(Props.Create(() => new ShipActor(new Vector2(1, 2), size)));
 
             actor.Tell(new ShipActor.ChangeDirection(3, 4, 0));
             Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(2)));
 
             var status = await actor.Ask<ShipActor.StatusNotification>(new ShipActor.StatusRequest(), new CancellationTokenSource(100).Token);
-            Assert.That(status.PositionX, Is.EqualTo(1 + 3 * 2 * velocity));
-            Assert.That(status.PositionY, Is.EqualTo(2 + 4 * 2 * velocity));
+            Assert.That(status.PositionX, Is.EqualTo(1 + 3 * 2));
+            Assert.That(status.PositionY, Is.EqualTo(2 + 4 * 2));
         }
 
         [Test]
         public void Rotate()
         {
             var size = (1, 1);
-            var velocity = 1000;
-            var actor = ActorOfAsTestActorRef<ShipActor>(Props.Create(() => new ShipActor(new Vector2(1, 2), size, velocity)));
+            var actor = ActorOfAsTestActorRef<ShipActor>(Props.Create(() => new ShipActor(new Vector2(1, 2), size)));
 
             Assume.That(
                 actor
@@ -57,7 +55,7 @@ namespace Danmaku
         public void IntersectWithOtherShip()
         {
             var size = (1, 1);
-            var actorProps = Props.Create(() => new ShipActor(Vector2.Zero, size, 1000));
+            var actorProps = Props.Create(() => new ShipActor(Vector2.Zero, size));
 
             var actor1 = Sys.ActorOf(actorProps);
 

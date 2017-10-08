@@ -129,7 +129,8 @@ namespace DanmakuNoKyojin.Entities
 
             var inputState = ReadInput(_controller, _viewport, spriteBatch);
 
-            Ship.ChangeDirection(inputState.Direction, inputState.Rotation);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
+            Ship.Command(gameTime.ElapsedGameTime, inputState.Forward, inputState.Rotation);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
+            // Ship.ChangeDirection(inputState.Direction, inputState.Rotation);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
 
             BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
 
@@ -232,12 +233,13 @@ namespace DanmakuNoKyojin.Entities
                 direction.Y = 1;
             if (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Left"]))
                 direction.X = -1;
+            var forward = InputHandler.KeyDown(Config.PlayerKeyboardInputs["Forward"]);
 
             var distanceX = (_viewport.Width / 2f) - InputHandler.MouseState.X;
             var distanceY = (_viewport.Height / 2f) - InputHandler.MouseState.Y;
             var rotation = (float)Math.Atan2(distanceY, distanceX) - MathHelper.PiOver2;
 
-            return new InputData(bulletTime, fire, direction, rotation);
+            return new InputData(bulletTime, fire, direction, rotation, forward);
         }
 
         private static InputData ReadInputFromPad()
@@ -254,7 +256,7 @@ namespace DanmakuNoKyojin.Entities
                 Math.Atan2(InputHandler.GamePadStates[0].ThumbSticks.Right.Y * (-1),
                InputHandler.GamePadStates[0].ThumbSticks.Right.X) + MathHelper.PiOver2;
 
-            return new InputData(bulletTime, fire, direction, rotation);
+            return new InputData(bulletTime, fire, direction, rotation, false);
         }
 
         private static InputData ReadInput(Config.Controller controller, Viewport viewport, SpriteBatch spriteBatch)
@@ -515,13 +517,15 @@ namespace DanmakuNoKyojin.Entities
         public bool Fire;
         public Vector2 Direction;
         public float Rotation;
+        public bool Forward;
 
-        public InputData(bool bulletTime, bool fire, Vector2 direction, float rotation)
+        public InputData(bool bulletTime, bool fire, Vector2 direction, float rotation, bool forward)
         {
             BulletTime = bulletTime;
             Fire = fire;
             Direction = direction;
             Rotation = rotation;
+            Forward = forward;
         }
     }
 

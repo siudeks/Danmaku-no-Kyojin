@@ -50,18 +50,13 @@ namespace DanmakuNoKyojin.Entities
         {
             sprite = contentLoader.Load<Texture2D>("Graphics/Entities/player");
             var size = (sprite.Width, sprite.Height);
-            ship = system.ActorOf(Props.Create(() => new Danmaku.ShipActor(new Danmaku.Vector2(position.X, position.Y), size, 1000)));
+            ship = system.ActorOf(Props.Create(() => new Danmaku.ShipActor(new Danmaku.Vector2(position.X, position.Y), size)));
 
             _shieldSprite = contentLoader.Load<Texture2D>("Graphics/Entities/shield");
             _shieldOrigin = new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f);
 
             CollisionBoxes.Add(new CollisionCircle(this, new Vector2(sprite.Height / 6f, sprite.Height / 6f), _hitboxRadius / 2f));
             _shieldCollisionCircle = new CollisionCircle(this, Vector2.Zero, _shieldSprite.Width / 2f);
-        }
-
-        public void ChangeDirection(Vector2 direction, float rotation)
-        {
-            ship.Tell(new Danmaku.ShipActor.ChangeDirection(direction.X, direction.Y, rotation));
         }
 
         public void Update(GameTime gameTime)
@@ -108,6 +103,16 @@ namespace DanmakuNoKyojin.Entities
         internal bool Intersects(CollisionElements collisionBoxes)
         {
             return CollisionBoxes.Intersects(collisionBoxes);
+        }
+
+        public void ChangeDirection(Vector2 direction, float rotation)
+        {
+            ship.Tell(new Danmaku.ShipActor.ChangeDirection(direction.X, direction.Y, rotation));
+        }
+
+        internal void Command(TimeSpan elapsedGameTime, bool forward, float rotation)
+        {
+            ship.Tell(new Danmaku.ShipActor.MoveCommand(forward, rotation));
         }
     }
 }

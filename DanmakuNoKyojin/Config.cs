@@ -33,6 +33,7 @@ namespace DanmakuNoKyojin
             {"Right", Keys.D },
             {"Down", Keys.S },
             {"Left", Keys.Q },
+            {"Forward", Keys.A },
         };
 
         public static readonly Buttons[] PlayerGamepadInput =
