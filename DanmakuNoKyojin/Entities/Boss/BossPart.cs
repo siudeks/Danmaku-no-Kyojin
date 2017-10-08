@@ -235,8 +235,6 @@ namespace DanmakuNoKyojin.Entities.Boss
             var distance = playerPosition - Position;
             _targetAngle = (float)Math.Atan2(distance.Y, distance.X) - MathHelper.PiOver2;
 
-            Console.WriteLine("Target angle: " + _targetAngle);
-
             if (Math.Abs(Rotation - _targetAngle) > 0.01f)
             {
                 float amount = MathHelper.Clamp(dt / 10, 0, 1);

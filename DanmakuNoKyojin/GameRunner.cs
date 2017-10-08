@@ -130,6 +130,8 @@ namespace DanmakuNoKyojin
 
         protected override void LoadContent()
         {
+            GameProcessor.LoadContent(this);
+
             SpriteBatch = new SpriteBatch(GraphicsDevice).DisposeWith(instanceDisposer);
 
             Select = Content.Load<SoundEffect>(@"Audio/SE/select");
@@ -156,6 +158,8 @@ namespace DanmakuNoKyojin
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            GameProcessor.Draw(gameTime, SpriteBatch);
 
             base.Draw(gameTime);
         }

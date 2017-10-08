@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DanmakuNoKyojin.Framework;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Ninject;
 
 namespace DanmakuNoKyojin
@@ -11,13 +13,31 @@ namespace DanmakuNoKyojin
     /// </summary>
     public sealed class GameProcessor
     {
-        [Inject]
-        public IUpdatablePart[] UpdatableParts { private get; set; }
+
+        [Inject] public IUpdatablePart[] UpdatableParts { private get; set; }
+        [Inject] public IDrawablePart[] DrawableParts { private get; set; }
+        [Inject] public IContentBasedPart[] ContentBasedParts { private get; set; }
+
+        public void LoadContent(IContentLoader provider)
+        {
+            foreach (var item in ContentBasedParts)
+                item.LoadContent(provider);
+        }
 
         public void Update(GameTime gameTime)
         {
             foreach (var item in UpdatableParts)
                 item.Update(gameTime);
+        }
+
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin();
+
+            foreach (var item in DrawableParts)
+                item.Draw(gameTime, spriteBatch);
+
+            spriteBatch.End();
         }
     }
 }

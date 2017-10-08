@@ -91,6 +91,8 @@
     <Compile Include="Controls\InputHandler.cs" />
     <Compile Include="Controls\IocRegistration.cs" />
     <Compile Include="DisposableExtensions.cs" />
+    <Compile Include="Entities\IocRegistration.cs" />
+    <Compile Include="Entities\Ships.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\ShipView.cs" />
     <Compile Include="Framework\ContentLoaderExtensions.cs" />
@@ -98,7 +100,9 @@
     <Compile Include="Framework\GameComponentCollectionExtensions.cs" />
     <Compile Include="Framework\IContentLoader.cs" />
     <Compile Include="Framework\IocRegistration.cs" />
-    <Compile Include="Framework\IUpdatableComponent.cs" />
+    <Compile Include="Framework\IDrawablePart.cs" />
+    <Compile Include="Framework\IContentBasedPart.cs" />
+    <Compile Include="Framework\IUpdatablePart.cs" />
     <Compile Include="Framework\IViewProvider.cs" />
     <Compile Include="GameProcessor.cs" />
     <Compile Include="GameRunner.cs" />

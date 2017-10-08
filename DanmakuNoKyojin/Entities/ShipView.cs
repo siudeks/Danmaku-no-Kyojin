@@ -2,9 +2,9 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Diagnostics;
 using DanmakuNoKyojin.Collisions;
 using DanmakuNoKyojin.Framework;
+using System.Diagnostics;
 
 namespace DanmakuNoKyojin.Entities
 {
@@ -23,8 +23,7 @@ namespace DanmakuNoKyojin.Entities
         private Vector2 _shieldOrigin;
         private Vector2 origin;
         private float rotation;
-        public bool IsAlive { get; set; }
-        public bool IsInvincible { get; set; }
+        private bool isInvincible;
         private float _hitboxRadius = (float)Math.PI * 1.5f * 2;
 
         public CollisionElements CollisionBoxes { get; } = new CollisionElements();
@@ -91,14 +90,12 @@ namespace DanmakuNoKyojin.Entities
             position = new Vector2(status.PositionX, status.PositionY);
             rotation = status.Rotation;
 
-            //if (_timeBeforeRespawn.TotalMilliseconds <= 0)
-            //{
-                spriteBatch.Draw(sprite, position, null, Color.White, rotation, _shieldOrigin, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(sprite, position, null, Color.White, rotation, _shieldOrigin, 1f, SpriteEffects.None, 0f);
 
-                if (IsInvincible)
-                    spriteBatch.Draw(_shieldSprite, position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
-            //}
+            if (isInvincible)
+                spriteBatch.Draw(_shieldSprite, position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
 
+            Debug.WriteLine($"Position {position.X}:{position.Y}");
         }
     }
 }
