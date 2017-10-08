@@ -219,7 +219,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             Y += Direction.Y * (Velocity * Acceleration.Y) * dt;
 
 
-            _targetPosition = player.Position;
+            _targetPosition = player.Ship.Position;
 
             /*
             if (_targetPosition != Position)
@@ -231,7 +231,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             }
             */
 
-            var playerPosition = player.Position;
+            var playerPosition = player.Ship.Position;
             var distance = playerPosition - Position;
             _targetAngle = (float)Math.Atan2(distance.Y, distance.X) - MathHelper.PiOver2;
 

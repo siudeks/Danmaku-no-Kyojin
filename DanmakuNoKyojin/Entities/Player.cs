@@ -16,17 +16,11 @@ using DanmakuNoKyojin.Framework;
 
 namespace DanmakuNoKyojin.Entities
 {
-    public sealed class Player : IDisposable, IEntity
+    public sealed class Player : IDisposable
     {
-        public float Rotation { get; set; }
         public bool IsAlive { get; set; }
-        public Vector2 Position { get; set; }
-        public Vector2 Origin { get; set; }
-        public Texture2D Sprite { get; set; }
 
-        private ShipView ship;
-
-        public CollisionElements CollisionBoxes { get; } = new CollisionElements();
+        public ShipView Ship { get; private set; }
 
         private static Random random = new Random();
 
@@ -36,8 +30,6 @@ namespace DanmakuNoKyojin.Entities
 
         private Texture2D _bulletSprite;
         private Texture2D _hitboxSprite;
-
-        private float _hitboxRadius;
 
         private Vector2 _originPosition;
 
@@ -53,11 +45,6 @@ namespace DanmakuNoKyojin.Entities
         public bool IsInvincible { get; set; }
         private TimeSpan _invincibleTime;
         private TimeSpan _timeBeforeRespawn;
-
-        // Shield
-        private Texture2D _shieldSprite;
-        private Vector2 _shieldOrigin;
-        private CollisionCircle _shieldCollisionCircle;
 
         // HUD
         private int _score;
@@ -90,8 +77,6 @@ namespace DanmakuNoKyojin.Entities
             _viewport = viewport;
             _controller = controller;
             _originPosition = position;
-            Position = _originPosition;
-            Origin = Vector2.Zero;
             _random = new Random();
             _cameraPosition = new Vector2(_viewport.Width / 2f, _viewport.Height / 2f);
             _focusMode = false;
@@ -108,9 +93,6 @@ namespace DanmakuNoKyojin.Entities
 
         public void Initialize()
         {
-            Rotation = 0f;
-            //_distance = Vector2.Zero;
-
             _lives = 10;//Improvements.LivesNumberData[PlayerData.LivesNumberIndex].Key;
 
             IsInvincible = false;
@@ -122,20 +104,13 @@ namespace DanmakuNoKyojin.Entities
 
             _score = 0;
             _bulletTimeTimer = Config.DefaultBulletTimeTimer;
-            _hitboxRadius = (float)Math.PI * 1.5f * 2;
             _camera = new Camera2D(_viewport, 1f);
         }
 
         public void LoadContent(IContentLoader contentLoader)
         {
-            Sprite = contentLoader.Load<Texture2D>("Graphics/Entities/player");
             _bulletSprite = contentLoader.Load<Texture2D>("Graphics/Entities/player_bullet");
             _hitboxSprite = contentLoader.Load<Texture2D>("Graphics/Pictures/player_hitbox");
-            CollisionBoxes.Add(new CollisionCircle(this, new Vector2(Sprite.Height / 6f, Sprite.Height / 6f), _hitboxRadius / 2f));
-
-            _shieldSprite = contentLoader.Load<Texture2D>("Graphics/Entities/shield");
-            _shieldOrigin = new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f);
-            _shieldCollisionCircle = new CollisionCircle(this, Vector2.Zero, _shieldSprite.Width / 2f);
 
             _lifeIcon = contentLoader.Load<Texture2D>("Graphics/Pictures/life_icon");
 
@@ -146,7 +121,8 @@ namespace DanmakuNoKyojin.Entities
             _shootSound = contentLoader.Load<SoundEffect>(@"Audio/SE/hit");
             _deadSound = contentLoader.Load<SoundEffect>(@"Audio/SE/dead");
 
-            ship = new ShipView(Program.system, Sprite);
+            Ship = new ShipView(Program.system);
+            Ship.LoadContent(contentLoader);
         }
 
         public void Update(GameTime gameTime, IViewportProvider viewport, SpriteBatch spriteBatch)
@@ -162,7 +138,7 @@ namespace DanmakuNoKyojin.Entities
 
                     if (_timeBeforeRespawn.TotalMilliseconds <= 0)
                     {
-                        Position = _originPosition;
+                        // Position = _originPosition;
                     }
                 }
                 else
@@ -173,7 +149,7 @@ namespace DanmakuNoKyojin.Entities
                     {
                         _invincibleTime = Config.PlayerInvicibleTime;
                         IsInvincible = false;
-                        CollisionBoxes.Remove(_shieldCollisionCircle);
+                        Ship.RemoveShield();
                     }
                 }
             }
@@ -181,8 +157,7 @@ namespace DanmakuNoKyojin.Entities
             {
                 var inputState = ReadInput(_controller, _viewport, spriteBatch);
 
-                Rotation = inputState.Rotation;
-                ship.ChangeDirection(inputState.Direction);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
+                Ship.ChangeDirection(inputState.Direction, inputState.Rotation);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
 
                 BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
 
@@ -222,19 +197,19 @@ namespace DanmakuNoKyojin.Entities
                     }
                 }
 
-                ship.Update(gameTime);
+                Ship.Update(gameTime);
             }
 
             // Update camera position
             _cameraPosition.X = MathHelper.Lerp(
                 _cameraPosition.X,
-                Position.X - Config.CameraDistanceFromPlayer.X * (float)Math.Cos(Rotation + MathHelper.PiOver2),
+                Ship.Position.X - Config.CameraDistanceFromPlayer.X * (float)Math.Cos(Ship.Rotation + MathHelper.PiOver2),
                 Config.CameraMotionInterpolationAmount
             );
 
             _cameraPosition.Y = MathHelper.Lerp(
                 _cameraPosition.Y,
-                Position.Y - Config.CameraDistanceFromPlayer.Y * (float)Math.Sin(Rotation + MathHelper.PiOver2),
+                Ship.Position.Y - Config.CameraDistanceFromPlayer.Y * (float)Math.Sin(Ship.Rotation + MathHelper.PiOver2),
                 Config.CameraMotionInterpolationAmount
             );
 
@@ -250,8 +225,8 @@ namespace DanmakuNoKyojin.Entities
 
                 var mouseDistanceFromPlayer =
                     (float)
-                        Math.Sqrt(Math.Pow(Position.X - mouseWorldPosition.X, 2) +
-                                  Math.Pow(Position.Y - mouseWorldPosition.Y, 2));
+                        Math.Sqrt(Math.Pow(Ship.Position.X - mouseWorldPosition.X, 2) +
+                                  Math.Pow(Ship.Position.Y - mouseWorldPosition.Y, 2));
 
                 var cameraZoom = viewport.Width / mouseDistanceFromPlayer;
 
@@ -324,19 +299,7 @@ namespace DanmakuNoKyojin.Entities
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            // for testing purposes let ask synchronously about ship position
-            // later we need to improve it in async way.
-            var status = ship.GetStatus();
-
-            Position = new Vector2(status.PositionX, status.PositionY);
-
-            if (_timeBeforeRespawn.TotalMilliseconds <= 0)
-            {
-                spriteBatch.Draw(Sprite, Position, null, Color.White, Rotation, Origin, 1f, SpriteEffects.None, 0f);
-
-                if (IsInvincible)
-                    spriteBatch.Draw(_shieldSprite, Position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
-            }
+            Ship.Draw(gameTime, spriteBatch);
         }
 
         public void DrawString(GameTime gameTime, SpriteBatch spriteBatch)
@@ -403,7 +366,7 @@ namespace DanmakuNoKyojin.Entities
             {
                 BulletFrequence = TimeSpan.FromTicks((long)(Improvements.ShootFrequencyData[Improvements.ShootFrequencyData.Count - 3].Key * Config.PlayerShootFrequency.Ticks));
 
-                var direction = new Vector2((float)Math.Sin(Rotation), (float)Math.Cos(Rotation) * -1);
+                var direction = new Vector2((float)Math.Sin(Ship.Rotation), (float)Math.Cos(Ship.Rotation) * -1);
 
                 // Straight
                 if (PlayerData.ShootTypeIndex != 1)
@@ -423,7 +386,7 @@ namespace DanmakuNoKyojin.Entities
 
                     Vector2 offset = Vector2.Transform(new Vector2(0, 0), aimQuat);
 
-                    var bullet = new BulletView(_bulletSprite, Position + offset, direction, Config.PlayerBulletVelocity)
+                    var bullet = new BulletView(_bulletSprite, Ship.Position + offset, direction, Config.PlayerBulletVelocity)
                     {
                         WaveMode = false
                     };
@@ -434,12 +397,12 @@ namespace DanmakuNoKyojin.Entities
                 if (PlayerData.ShootTypeIndex > 0)
                 {
                     Vector2 directionLeft = direction;
-                    Vector2 positionLeft = new Vector2(Position.X - 25f * (float)Math.Cos(Rotation), Position.Y - 25f * (float)Math.Sin(Rotation));
+                    Vector2 positionLeft = new Vector2(Ship.Position.X - 25f * (float)Math.Cos(Ship.Rotation), Ship.Position.Y - 25f * (float)Math.Sin(Ship.Rotation));
                     Vector2 directionRight = direction;
-                    Vector2 positionRight = new Vector2(Position.X + 25f * (float)Math.Cos(Rotation), Position.Y + 25f * (float)Math.Sin(Rotation));
+                    Vector2 positionRight = new Vector2(Ship.Position.X + 25f * (float)Math.Cos(Ship.Rotation), Ship.Position.Y + 25f * (float)Math.Sin(Ship.Rotation));
 
-                    directionLeft = new Vector2((float)Math.Sin(Rotation - Math.PI / 4), (float)Math.Cos(Rotation - Math.PI / 4) * -1);
-                    directionRight = new Vector2((float)Math.Sin(Rotation + Math.PI / 4), (float)Math.Cos(Rotation + Math.PI / 4) * -1);
+                    directionLeft = new Vector2((float)Math.Sin(Ship.Rotation - Math.PI / 4), (float)Math.Cos(Ship.Rotation - Math.PI / 4) * -1);
+                    directionRight = new Vector2((float)Math.Sin(Ship.Rotation + Math.PI / 4), (float)Math.Cos(Ship.Rotation + Math.PI / 4) * -1);
 
                     var bulletLeft = new BulletView(_bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
 
@@ -453,12 +416,12 @@ namespace DanmakuNoKyojin.Entities
                 if (PlayerData.ShootTypeIndex >= 3)
                 {
                     Vector2 directionLeft = direction;
-                    Vector2 positionLeft = new Vector2(Position.X - 10f * (float)Math.Cos(Rotation), Position.Y - 10f * (float)Math.Sin(Rotation));
+                    Vector2 positionLeft = new Vector2(Ship.Position.X - 10f * (float)Math.Cos(Ship.Rotation), Ship.Position.Y - 10f * (float)Math.Sin(Ship.Rotation));
                     Vector2 directionRight = direction;
-                    Vector2 positionRight = new Vector2(Position.X + 10f * (float)Math.Cos(Rotation), Position.Y + 10f * (float)Math.Sin(Rotation));
+                    Vector2 positionRight = new Vector2(Ship.Position.X + 10f * (float)Math.Cos(Ship.Rotation), Ship.Position.Y + 10f * (float)Math.Sin(Ship.Rotation));
 
-                    directionLeft = new Vector2((float)Math.Sin(Rotation - Math.PI / 8), (float)Math.Cos(Rotation - Math.PI / 8) * -1);
-                    directionRight = new Vector2((float)Math.Sin(Rotation + Math.PI / 8), (float)Math.Cos(Rotation + Math.PI / 8) * -1);
+                    directionLeft = new Vector2((float)Math.Sin(Ship.Rotation - Math.PI / 8), (float)Math.Cos(Ship.Rotation - Math.PI / 8) * -1);
+                    directionRight = new Vector2((float)Math.Sin(Ship.Rotation + Math.PI / 8), (float)Math.Cos(Ship.Rotation + Math.PI / 8) * -1);
 
                     var bulletLeft = new BulletView(_bulletSprite, positionLeft, directionLeft, Config.PlayerBulletVelocity);
                     bulletLeft.Power = 0.5f;
@@ -473,9 +436,9 @@ namespace DanmakuNoKyojin.Entities
                 // Behind
                 if (PlayerData.ShootTypeIndex >= 2)
                 {
-                    var directionBehind = new Vector2((float)Math.Sin(Rotation) * -1, (float)Math.Cos(Rotation));
+                    var directionBehind = new Vector2((float)Math.Sin(Ship.Rotation) * -1, (float)Math.Cos(Ship.Rotation));
 
-                    var bullet = new BulletView(_bulletSprite, Position, directionBehind, Config.PlayerBulletVelocity);
+                    var bullet = new BulletView(_bulletSprite, Ship.Position, directionBehind, Config.PlayerBulletVelocity);
                     bullet.Power = Improvements.ShootPowerData[PlayerData.ShootPowerIndex].Key;
                     bullet.WaveMode = false;
 
@@ -508,12 +471,12 @@ namespace DanmakuNoKyojin.Entities
                         LengthMultiplier = 1
                     };
 
-                    particleManager.CreateLineParticle(Position, color, 190, 1.5f, state);
+                    particleManager.CreateLineParticle(Ship.Position, color, 190, 1.5f, state);
                 }
 
                 _timeBeforeRespawn = Config.PlayerTimeBeforeRespawn;
                 IsInvincible = true;
-                CollisionBoxes.Add(_shieldCollisionCircle);
+                Ship.CollisionBoxes.Add(Ship._shieldCollisionCircle);
             }
         }
 
@@ -526,7 +489,7 @@ namespace DanmakuNoKyojin.Entities
         {
             double t = gameTime.TotalGameTime.TotalSeconds;
 
-            var direction = new Vector2((float)Math.Sin(Rotation), (float)Math.Cos(Rotation) * -1);
+            var direction = new Vector2((float)Math.Sin(Ship.Rotation), (float)Math.Cos(Ship.Rotation) * -1);
             float aimAngle = direction.ToAngle();
             Quaternion rot = Quaternion.CreateFromYawPitchRoll(0, 0, aimAngle);
 
@@ -538,7 +501,7 @@ namespace DanmakuNoKyojin.Entities
             var perpVel = new Vector2(baseVel.Y, -baseVel.X) * (0.6f * (float)Math.Sin(t * 10));
             var sideColor = new Color(200, 38, 9);    // deep red
             var midColor = new Color(255, 187, 30);   // orange-yellow
-            var pos = Position;   // position of the ship's exhaust pipe.
+            var pos = Ship.Position;   // position of the ship's exhaust pipe.
             const float alpha = 0.7f;
 
             // middle particle stream
@@ -570,12 +533,12 @@ namespace DanmakuNoKyojin.Entities
 
         public bool Intersects(Entity entity)
         {
-            return CollisionBoxes.Intersects(entity.CollisionBoxes);
+            return Ship.CollisionBoxes.Intersects(entity.CollisionBoxes);
         }
 
         public void Dispose()
         {
-            ship.Dispose();
+            Ship.Dispose();
         }
     }
 

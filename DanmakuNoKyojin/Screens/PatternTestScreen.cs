@@ -69,7 +69,7 @@ namespace DanmakuNoKyojin.Screens
             // is not working now - more as a reminder to fix or remove.
             _player.LoadContent(null);
 
-            _moverManager.Initialize(() => _player.Position);
+            _moverManager.Initialize(() => _player.Ship.Position);
             _moverManager.movers.Clear();
 
             AddBullet(true);
