@@ -13,30 +13,30 @@ namespace DanmakuNoKyojin.Entities
     /// </summary>
     public sealed class ShipView : IDisposable, IUpdatablePart, IEntity
     {
+        // remote reference to ship actor.
+        // ship actor is the remote part of loginc, where in the cloud is able
+        // to watch and resolve interaction between objects in the game.
         private IActorRef ship;
 
         // Shield
         private Texture2D _shieldSprite;
         private Vector2 _shieldOrigin;
         private Vector2 origin;
-        public float Rotation { get; set; }
+        private float rotation;
         public bool IsAlive { get; set; }
         public bool IsInvincible { get; set; }
         private float _hitboxRadius = (float)Math.PI * 1.5f * 2;
 
         public CollisionElements CollisionBoxes { get; } = new CollisionElements();
 
-        private Texture2D sprite { get; set; }
-
-        private float rotation;
+        private Texture2D sprite;
         private Vector2 position;
-        public Vector2 Position { get; set; }
 
 
+        public Vector2 Position => position;
+        public float Rotation => rotation;
         float IEntity.Rotation => rotation;
-
         Vector2 IEntity.Position => position;
-
         Vector2 IEntity.Origin => origin;
 
         public CollisionCircle _shieldCollisionCircle;
@@ -88,15 +88,15 @@ namespace DanmakuNoKyojin.Entities
                 .Ask<Danmaku.ShipActor.StatusNotification>(new Danmaku.ShipActor.StatusRequest())
                 .Result;
 
-            Position = new Vector2(status.PositionX, status.PositionY);
-            Rotation = status.Rotation;
+            position = new Vector2(status.PositionX, status.PositionY);
+            rotation = status.Rotation;
 
             //if (_timeBeforeRespawn.TotalMilliseconds <= 0)
             //{
-                spriteBatch.Draw(sprite, Position, null, Color.White, Rotation, origin, 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(sprite, position, null, Color.White, rotation, _shieldOrigin, 1f, SpriteEffects.None, 0f);
 
                 if (IsInvincible)
-                    spriteBatch.Draw(_shieldSprite, Position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(_shieldSprite, position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
             //}
 
         }

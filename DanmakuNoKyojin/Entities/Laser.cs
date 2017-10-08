@@ -30,8 +30,8 @@ namespace DanmakuNoKyojin.Entities
 
         protected override void LoadContent()
         {
-            //_borderTexture = this.GameRef.Content.Load<Texture2D>("Graphics/Sprites/laserBorder");
-            //_middleTexture = this.GameRef.Content.Load<Texture2D>("Graphics/Sprites/laserMiddle");
+            _borderTexture = this.GameRef.Content.Load<Texture2D>("Graphics/Sprites/laserBorder");
+            _middleTexture = this.GameRef.Content.Load<Texture2D>("Graphics/Sprites/laserMiddle");
 
             Origin = new Vector2(_borderTexture.Width, _borderTexture.Height / 2f);
 
