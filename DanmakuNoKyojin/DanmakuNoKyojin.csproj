@@ -139,7 +139,6 @@
     <Compile Include="Screens\KeyboardInputsScreen.cs" />
     <Compile Include="Screens\LeaderboardScreen.cs" />
     <Compile Include="Screens\OptionsScreen.cs" />
-    <Compile Include="Screens\PatternTestScreen.cs" />
     <Compile Include="Screens\TitleScreen.cs" />
     <Compile Include="Shaders\BloomComponent.cs" />
     <Compile Include="Shaders\BloomSettings.cs" />

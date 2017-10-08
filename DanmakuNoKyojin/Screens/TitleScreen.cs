@@ -183,10 +183,6 @@ namespace DanmakuNoKyojin.Screens
             {
                 StateManager.ChangeState(GameRef.DebugScreen);
             }
-            else if (InputHandler.KeyDown(Keys.F12))
-            {
-                StateManager.ChangeState(GameRef.PatternTestScreen);
-            }
 #endif
 
             if (Config.Cheat)
