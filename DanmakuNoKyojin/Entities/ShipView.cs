@@ -107,12 +107,12 @@ namespace DanmakuNoKyojin.Entities
 
         public void ChangeDirection(Vector2 direction, float rotation)
         {
-            ship.Tell(new Danmaku.ShipActor.ChangeDirection(direction.X, direction.Y, rotation));
+            // ship.Tell(new Danmaku.ShipActor.ChangeDirection(direction.X, direction.Y, rotation));
         }
 
-        internal void Command(TimeSpan elapsedGameTime, bool forward, float rotation)
+        internal void MoveCommand(bool forward, Vector2 rotation)
         {
-            ship.Tell(new Danmaku.ShipActor.MoveCommand(forward, rotation));
+            ship.Tell(new Danmaku.ShipActor.MoveCommand(forward, new Danmaku.Vector2(rotation.X, rotation.Y)));
         }
     }
 }

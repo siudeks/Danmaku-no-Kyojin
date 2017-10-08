@@ -118,7 +118,6 @@ namespace DanmakuNoKyojin.Camera
 
             this.Pos = position;
             this._center = new Vector2(position.X, position.Y);
-            //this.Pos += movement * 20;
         }
 
         public Matrix GetTransformation()

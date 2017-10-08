@@ -11,7 +11,7 @@ namespace Danmaku
         public float Velocity = 0;
         public Vector2 Direction = Vector2.Zero;
         public bool Forward;
-        public float Rotation;
+        public Vector2 Rotation;
         public Vector2 Position;
         public bool IsInvicible;
         public (int Width, int Height) SpriteSize;
@@ -20,9 +20,9 @@ namespace Danmaku
         public sealed class MoveCommand
         {
             public readonly bool Forward;
-            public readonly float Rotation;
+            public readonly Vector2 Rotation;
 
-            public MoveCommand(bool forward, float rotation)
+            public MoveCommand(bool forward, Vector2 rotation)
             {
                 Forward = forward;
                 Rotation = rotation;
@@ -34,9 +34,9 @@ namespace Danmaku
         {
             public readonly float X;
             public readonly float Y;
-            public readonly float Rotation;
+            public readonly Vector2 Rotation;
 
-            public ChangeDirection(float x, float y, float rotation)
+            public ChangeDirection(float x, float y, Vector2 rotation)
             {
                 X = x;
                 Y = y;
@@ -140,7 +140,8 @@ namespace Danmaku
 
         private void CalculateStatusAndNotifyListeners()
         {
-            var status = new StatusNotification(Position.X, Position.Y, Rotation, IsInvicible);
+            var rotation = (float)Math.Atan2(Rotation.Y, Rotation.X) - MathHelper.PiOver2;
+            var status = new StatusNotification(Position.X, Position.Y, rotation, IsInvicible);
             if (status.Equals(lastStatusResponse)) return;
 
             lastStatusResponse = status;
@@ -152,7 +153,8 @@ namespace Danmaku
 
         private bool OnStatusRequest(StatusRequest req)
         {
-            Sender.Tell(new StatusNotification(Position.X, Position.Y, Rotation, IsInvicible));
+            var rotation = (float)Math.Atan2(Rotation.Y, Rotation.X) - MathHelper.PiOver2;
+            Sender.Tell(new StatusNotification(Position.X, Position.Y, rotation, IsInvicible));
 
             return true;
         }
@@ -166,17 +168,22 @@ namespace Danmaku
 
         private bool OnUpdateMessage(UpdateMessage cmd)
         {
+
+            var distance2 = Rotation.X * Rotation.X + Rotation.Y * Rotation.Y;
+            Forward = distance2 > 100;
+
             if (Forward) Velocity = Velocity + 3;
-            if (!Forward) Velocity = Velocity -1;
-            //if (Velocity > 10) Velocity = 100;
+            if (!Forward) Velocity = Velocity - 1;
+
+            if (Velocity > 100) Velocity = 100;
             if (Velocity < 0) Velocity = 0;
 
             var dt = (float)cmd.ElapsedGameTime.TotalSeconds;
 
             //var x = Position.X + Direction.X * Velocity * dt;
             //var y = Position.Y + Direction.Y * Velocity * dt;
-            var x = Position.X + Velocity * dt;
-            var y = Position.Y + Velocity * dt;
+            var x = Position.X + -Rotation.X * Velocity * dt / 100;
+            var y = Position.Y + -Rotation.Y * Velocity * dt / 100;
 
             // do not allow to go outside of game area
             //x = MathHelper.Clamp(x, SpriteSize.Width / 2f, Config.GameAreaX - SpriteSize.Width / 2f);

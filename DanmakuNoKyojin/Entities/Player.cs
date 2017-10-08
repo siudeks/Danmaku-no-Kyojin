@@ -129,7 +129,7 @@ namespace DanmakuNoKyojin.Entities
 
             var inputState = ReadInput(_controller, _viewport, spriteBatch);
 
-            Ship.Command(gameTime.ElapsedGameTime, inputState.Forward, inputState.Rotation);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
+            Ship.MoveCommand(inputState.Forward, inputState.RotationXY);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
             // Ship.ChangeDirection(inputState.Direction, inputState.Rotation);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
 
             BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
@@ -239,7 +239,7 @@ namespace DanmakuNoKyojin.Entities
             var distanceY = (_viewport.Height / 2f) - InputHandler.MouseState.Y;
             var rotation = (float)Math.Atan2(distanceY, distanceX) - MathHelper.PiOver2;
 
-            return new InputData(bulletTime, fire, direction, rotation, forward);
+            return new InputData(bulletTime, fire, direction, rotation, new Vector2(distanceX, distanceY), forward);
         }
 
         private static InputData ReadInputFromPad()
@@ -256,7 +256,7 @@ namespace DanmakuNoKyojin.Entities
                 Math.Atan2(InputHandler.GamePadStates[0].ThumbSticks.Right.Y * (-1),
                InputHandler.GamePadStates[0].ThumbSticks.Right.X) + MathHelper.PiOver2;
 
-            return new InputData(bulletTime, fire, direction, rotation, false);
+            return new InputData(bulletTime, fire, direction, rotation, Vector2.Zero, false);
         }
 
         private static InputData ReadInput(Config.Controller controller, Viewport viewport, SpriteBatch spriteBatch)
@@ -517,14 +517,16 @@ namespace DanmakuNoKyojin.Entities
         public bool Fire;
         public Vector2 Direction;
         public float Rotation;
+        public Vector2 RotationXY;
         public bool Forward;
 
-        public InputData(bool bulletTime, bool fire, Vector2 direction, float rotation, bool forward)
+        public InputData(bool bulletTime, bool fire, Vector2 direction, float rotation, Vector2 rotationXY, bool forward)
         {
             BulletTime = bulletTime;
             Fire = fire;
             Direction = direction;
             Rotation = rotation;
+            RotationXY = rotationXY;
             Forward = forward;
         }
     }
