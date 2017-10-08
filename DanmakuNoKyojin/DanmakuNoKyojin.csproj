@@ -91,6 +91,7 @@
     <Compile Include="Controls\InputHandler.cs" />
     <Compile Include="Controls\IocRegistration.cs" />
     <Compile Include="DisposableExtensions.cs" />
+    <Compile Include="Entities\ShipView.cs" />
     <Compile Include="Framework\ContentLoaderExtensions.cs" />
     <Compile Include="Framework\FrameworkInitialized.cs" />
     <Compile Include="Framework\GameComponentCollectionExtensions.cs" />

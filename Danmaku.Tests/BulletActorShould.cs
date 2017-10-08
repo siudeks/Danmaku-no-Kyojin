@@ -8,7 +8,7 @@ namespace Danmaku
 {
     public class BulletActorShould : TestKit
     {
-        [Test, Ignore("will fix)")]
+        [Test]
         public async Task Move()
         {
             var props = Props.Create(() => new BulletActor(new Vector2(1, 2), new Vector2(3, 4), new Vector2(5, 6), 0, 0));

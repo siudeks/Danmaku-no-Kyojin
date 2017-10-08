@@ -12,7 +12,7 @@ namespace DanmakuNoKyojin
     public sealed class GameProcessor
     {
         [Inject]
-        public IUpdatablePart[] UpdatableParts { private get; set; }
+        public IUpdateable[] UpdatableParts { private get; set; }
 
         public void Update(GameTime gameTime)
         {

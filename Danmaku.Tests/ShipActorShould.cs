@@ -28,8 +28,6 @@ namespace Danmaku
             Assert.That(status.PositionY, Is.EqualTo(2 + 4 * 2 * velocity));
         }
 
-
-
         [Test]
         public void IntersectWithOtherShip()
         {

@@ -18,7 +18,7 @@ namespace DanmakuNoKyojin.Entities
 {
     public sealed class Player : BulletLauncherEntity, IDisposable
     {
-        private IActorRef ship;
+        private ShipView ship;
 
         private static Random random = new Random();
 
@@ -137,8 +137,7 @@ namespace DanmakuNoKyojin.Entities
             if (_deadSound == null)
                 _deadSound = GameRef.Content.Load<SoundEffect>(@"Audio/SE/dead");
 
-            var size = (Sprite.Width, Sprite.Height);
-            ship = Program.system.ActorOf(Props.Create(() => new ShipActor(new Danmaku.Vector2(Position.X, Position.Y), size, 1000)));
+            ship = new ShipView(Program.system, Sprite);
         }
 
         public override void Update(GameTime gameTime)
@@ -176,7 +175,7 @@ namespace DanmakuNoKyojin.Entities
                 var inputState = ReadInput(_controller, _viewport);
 
                 Rotation = inputState.Rotation;
-                ship.Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
+                ship.ChangeDirection(inputState.Direction);  // .Tell(new ShipActor.ChangeDirection(inputState.Direction.X, inputState.Direction.Y));
 
                 BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
 
@@ -216,7 +215,7 @@ namespace DanmakuNoKyojin.Entities
                     }
                 }
 
-                UpdatePosition(gameTime.ElapsedGameTime);
+                ship.Update(gameTime);
             }
 
             // Update camera position
@@ -316,18 +315,11 @@ namespace DanmakuNoKyojin.Entities
             throw new ArgumentException(nameof(controller));
         }
 
-        private void UpdatePosition(TimeSpan elapsedGameTime)
-        {
-            ship.Tell(new Danmaku.UpdateMessage(elapsedGameTime));
-        }
-
         public override void Draw(GameTime gameTime)
         {
-            // for testing purposes let asyk synchronously about ship position
+            // for testing purposes let ask synchronously about ship position
             // later we need to improve it in async way.
-            var status = ship
-                .Ask<ShipActor.StatusNotification>(new ShipActor.StatusRequest())
-                .Result;
+            var status = ship.GetStatus();
 
             Position = new Vector2(status.PositionX, status.PositionY);
 
@@ -573,7 +565,7 @@ namespace DanmakuNoKyojin.Entities
 
         public void Dispose()
         {
-            ship.GracefulStop(TimeSpan.FromMilliseconds(100));
+            ship.Dispose();
         }
     }
 
