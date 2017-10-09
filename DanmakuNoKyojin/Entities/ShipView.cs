@@ -50,7 +50,8 @@ namespace DanmakuNoKyojin.Entities
         {
             sprite = contentLoader.Load<Texture2D>("Graphics/Entities/player");
             var size = (sprite.Width, sprite.Height);
-            ship = system.ActorOf(Props.Create(() => new Danmaku.ShipActor(new Danmaku.Vector2(position.X, position.Y), size)));
+            var pos = (position.X, position.Y);
+            ship = system.ActorOf(Props.Create(() => new Danmaku.ShipActor(pos, size)));
 
             _shieldSprite = contentLoader.Load<Texture2D>("Graphics/Entities/shield");
             _shieldOrigin = new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f);
@@ -105,9 +106,9 @@ namespace DanmakuNoKyojin.Entities
             return CollisionBoxes.Intersects(collisionBoxes);
         }
 
-        internal void MoveCommand(bool forward, Vector2 rotation)
+        internal void MoveCommand(bool forward, float rotation)
         {
-            ship.Tell(new Danmaku.ShipActor.MoveCommand(forward, new Danmaku.Vector2(rotation.X, rotation.Y)));
+            ship.Tell(new Danmaku.ShipActor.MoveCommand(forward, rotation));
         }
     }
 }

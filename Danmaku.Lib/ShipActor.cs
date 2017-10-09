@@ -7,22 +7,26 @@ namespace Danmaku
 {
     public sealed class ShipActor : ReceiveActor
     {
+        // ship acceleration.
+        // allows to calculate ship velocity when acceleration is enabled. 
+        public float Acceleration = 100;
 
         public float Velocity = 0;
         public Vector2 Direction = Vector2.Zero;
         public bool Forward;
-        public Vector2 Rotation;
-        public Vector2 Position;
+        public float Rotation;
         public bool IsInvicible;
         public (int Width, int Height) SpriteSize;
         public List<IActorRef> listeners = new List<IActorRef>();
 
+        private (float X, float Y) Position;
+
         public sealed class MoveCommand
         {
             public readonly bool Forward;
-            public readonly Vector2 Rotation;
+            public readonly float Rotation;
 
-            public MoveCommand(bool forward, Vector2 rotation)
+            public MoveCommand(bool forward, float rotation)
             {
                 Forward = forward;
                 Rotation = rotation;
@@ -65,7 +69,7 @@ namespace Danmaku
 
         }
 
-        public ShipActor(Vector2 position, (int Width, int Height) spriteSize)
+        public ShipActor((float x, float y) position, (int Width, int Height) spriteSize)
         {
             Position = position;
             SpriteSize = spriteSize;
@@ -84,7 +88,7 @@ namespace Danmaku
 
         private bool OnMoveCommand(MoveCommand cmd)
         {
-            Forward = cmd.Forward;            
+            Forward = cmd.Forward;
             Rotation = cmd.Rotation;
             return true;
         }
@@ -124,8 +128,7 @@ namespace Danmaku
 
         private void CalculateStatusAndNotifyListeners()
         {
-            var rotation = (float)Math.Atan2(Rotation.Y, Rotation.X) - MathHelper.PiOver2;
-            var status = new StatusNotification(Position.X, Position.Y, rotation, IsInvicible);
+            var status = new StatusNotification(Position.X, Position.Y, Rotation, IsInvicible);
             if (status.Equals(lastStatusResponse)) return;
 
             lastStatusResponse = status;
@@ -137,36 +140,34 @@ namespace Danmaku
 
         private bool OnStatusRequest(StatusRequest req)
         {
-            var rotation = (float)Math.Atan2(Rotation.Y, Rotation.X) - MathHelper.PiOver2;
-            Sender.Tell(new StatusNotification(Position.X, Position.Y, rotation, IsInvicible));
+            Sender.Tell(new StatusNotification(Position.X, Position.Y, Rotation, IsInvicible));
 
             return true;
         }
 
         private bool OnUpdateMessage(UpdateMessage cmd)
         {
+            // temporar trick to accelerate th ship
+            Forward = true;
 
-            var distance2 = Rotation.X * Rotation.X + Rotation.Y * Rotation.Y;
-            Forward = distance2 > 100;
+            if (Forward) Velocity = Velocity + (float) (Acceleration * cmd.ElapsedGameTime.TotalMilliseconds / 1000);
 
-            if (Forward) Velocity = Velocity + 3;
+            // temporarly we would liek to stop the ship if it is not accelerated.
             if (!Forward) Velocity = Velocity - 1;
 
-            if (Velocity > 100) Velocity = 100;
+            if (Velocity > 1000) Velocity = 1000;
             if (Velocity < 0) Velocity = 0;
 
-            var dt = (float)cmd.ElapsedGameTime.TotalSeconds;
+            var ms = (float)cmd.ElapsedGameTime.TotalMilliseconds;
 
-            //var x = Position.X + Direction.X * Velocity * dt;
-            //var y = Position.Y + Direction.Y * Velocity * dt;
-            var x = Position.X + -Rotation.X * Velocity * dt / 100;
-            var y = Position.Y + -Rotation.Y * Velocity * dt / 100;
+            var x = (float) (Position.X + (Math.Sin(Rotation) * Velocity * ms) / 1000f);
+            var y = (float) (Position.Y + (-Math.Cos(Rotation) * Velocity * ms) / 1000f);
 
             // do not allow to go outside of game area
             //x = MathHelper.Clamp(x, SpriteSize.Width / 2f, Config.GameAreaX - SpriteSize.Width / 2f);
             //y = MathHelper.Clamp(y, SpriteSize.Height / 2f, Config.GameAreaY - SpriteSize.Height / 2f);
 
-            Position = new Vector2(x, y);
+            Position = (x, y);
 
             CalculateStatusAndNotifyListeners();
 

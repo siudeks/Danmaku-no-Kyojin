@@ -129,7 +129,7 @@ namespace DanmakuNoKyojin.Entities
 
             var inputState = ReadInput(_controller, _viewport, spriteBatch);
 
-            Ship.MoveCommand(inputState.Forward, inputState.RotationXY);
+            Ship.MoveCommand(inputState.Forward, inputState.Rotation);
 
             BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
 
