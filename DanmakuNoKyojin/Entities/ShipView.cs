@@ -105,11 +105,6 @@ namespace DanmakuNoKyojin.Entities
             return CollisionBoxes.Intersects(collisionBoxes);
         }
 
-        public void ChangeDirection(Vector2 direction, float rotation)
-        {
-            // ship.Tell(new Danmaku.ShipActor.ChangeDirection(direction.X, direction.Y, rotation));
-        }
-
         internal void MoveCommand(bool forward, Vector2 rotation)
         {
             ship.Tell(new Danmaku.ShipActor.MoveCommand(forward, new Danmaku.Vector2(rotation.X, rotation.Y)));

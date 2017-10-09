@@ -25,7 +25,6 @@ namespace Danmaku
             var size = (1, 1);
             var actor = ActorOfAsTestActorRef<ShipActor>(Props.Create(() => new ShipActor(new Vector2(1, 2), size)));
 
-            actor.Tell(new ShipActor.ChangeDirection(3, 4, new Vector2(1,1)));
             Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(2)));
 
             var status = await actor.Ask<ShipActor.StatusNotification>(new ShipActor.StatusRequest(), new CancellationTokenSource(100).Token);
@@ -44,8 +43,6 @@ namespace Danmaku
                 .Ask<ShipActor.StatusNotification>(new ShipActor.StatusRequest(), CancellationToken.None)
                 .Result.Rotation, Is.EqualTo(0));
 
-            actor.Tell(new ShipActor.ChangeDirection(1, 1, new Vector2(1, 1)));
-
             Assert.That(actor
                 .Ask<ShipActor.StatusNotification>(new ShipActor.StatusRequest(), CancellationToken.None)
                 .Result.Rotation, Is.EqualTo(1));
@@ -60,7 +57,6 @@ namespace Danmaku
             var actor1 = Sys.ActorOf(actorProps);
 
             // order moving and pass time enough to move actor1 from (0, 0) to (1, 1)
-            actor1.Tell(new ShipActor.ChangeDirection(1, 1, new Vector2(1, 1)));
             Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(1)));
 
 
@@ -74,7 +70,6 @@ namespace Danmaku
 
             // let's decrease distance between ships less then 1
             // SQRT(2)-0.5 < 1
-            actor2.Tell(new ShipActor.ChangeDirection(0.5f, 0.5f, new Vector2(1, 1)));
             Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(1)));
 
             Within(TimeSpan.FromSeconds(1), () =>

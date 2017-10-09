@@ -29,21 +29,6 @@ namespace Danmaku
             }
         }
 
-        [DebuggerDisplay("X:{X},Y:{Y}")]
-        public sealed class ChangeDirection
-        {
-            public readonly float X;
-            public readonly float Y;
-            public readonly Vector2 Rotation;
-
-            public ChangeDirection(float x, float y, Vector2 rotation)
-            {
-                X = x;
-                Y = y;
-                Rotation = rotation;
-            }
-        }
-
         public sealed class StatusRequest
         {
         }
@@ -91,7 +76,6 @@ namespace Danmaku
         private void Initialize()
         {
             Receive<BeaconActor.ShipRegistered>(OnShipRegistered);
-            Receive<ChangeDirection>(OnChangeDirection);
             Receive<MoveCommand>(OnMoveCommand);
             Receive<UpdateMessage>(OnUpdateMessage);
             Receive<StatusRequest>(OnStatusRequest);
@@ -156,13 +140,6 @@ namespace Danmaku
             var rotation = (float)Math.Atan2(Rotation.Y, Rotation.X) - MathHelper.PiOver2;
             Sender.Tell(new StatusNotification(Position.X, Position.Y, rotation, IsInvicible));
 
-            return true;
-        }
-
-        private bool OnChangeDirection(ChangeDirection cmd)
-        {
-            Direction = new Vector2(cmd.X, cmd.Y);
-            Rotation = cmd.Rotation;
             return true;
         }
 
