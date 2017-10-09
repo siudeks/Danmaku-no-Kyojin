@@ -33,8 +33,8 @@ namespace DanmakuNoKyojin.Entities
 
 
         public Vector2 Position => position;
-        public float Rotation => rotation;
-        float IEntity.Rotation => rotation;
+        public float Rotation => (float) rotation;
+        float IEntity.Rotation => (float) rotation;
         Vector2 IEntity.Position => position;
         Vector2 IEntity.Origin => origin;
 
@@ -85,14 +85,12 @@ namespace DanmakuNoKyojin.Entities
                 .Result;
 
             position = new Vector2(status.PositionX, status.PositionY);
-            rotation = status.Rotation;
+            rotation = (float) status.Rotation;
 
             spriteBatch.Draw(sprite, position, null, Color.White, rotation, _shieldOrigin, 1f, SpriteEffects.None, 0f);
 
             if (isInvincible)
                 spriteBatch.Draw(_shieldSprite, position, null, Color.White, 0f, new Vector2(_shieldSprite.Width / 2f, _shieldSprite.Height / 2f), 1f, SpriteEffects.None, 0f);
-
-            Debug.WriteLine($"Position {position.X}:{position.Y}");
         }
 
         internal void EnableShield()

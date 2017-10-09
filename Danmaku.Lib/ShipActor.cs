@@ -1,7 +1,6 @@
 ﻿using Akka.Actor;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Danmaku
 {
@@ -14,7 +13,7 @@ namespace Danmaku
         public float Velocity = 0;
         public Vector2 Direction = Vector2.Zero;
         public bool Forward;
-        public float Rotation;
+        public double Rotation;
         public bool IsInvicible;
         public (int Width, int Height) SpriteSize;
         public List<IActorRef> listeners = new List<IActorRef>();
@@ -24,9 +23,9 @@ namespace Danmaku
         public sealed class MoveCommand
         {
             public readonly bool Forward;
-            public readonly float Rotation;
+            public readonly double Rotation;
 
-            public MoveCommand(bool forward, float rotation)
+            public MoveCommand(bool forward, double rotation)
             {
                 Forward = forward;
                 Rotation = rotation;
@@ -41,10 +40,10 @@ namespace Danmaku
         {
             public readonly float PositionX;
             public readonly float PositionY;
-            public readonly float Rotation;
+            public readonly double Rotation;
             public readonly bool IsInvicible;
 
-            public StatusNotification(float positionX, float positionY, float rotation,  bool isInvicible)
+            public StatusNotification(float positionX, float positionY, double rotation,  bool isInvicible)
             {
                 PositionX = positionX;
                 PositionY = positionY;
@@ -152,7 +151,7 @@ namespace Danmaku
 
             if (Forward) Velocity = Velocity + (float) (Acceleration * cmd.ElapsedGameTime.TotalMilliseconds / 1000);
 
-            // temporarly we would liek to stop the ship if it is not accelerated.
+            // temporarly we would like to stop the ship if it is not accelerated.
             if (!Forward) Velocity = Velocity - 1;
 
             if (Velocity > 1000) Velocity = 1000;
@@ -160,8 +159,8 @@ namespace Danmaku
 
             var ms = (float)cmd.ElapsedGameTime.TotalMilliseconds;
 
-            var x = (float) (Position.X + (Math.Sin(Rotation) * Velocity * ms) / 1000f);
-            var y = (float) (Position.Y + (-Math.Cos(Rotation) * Velocity * ms) / 1000f);
+            var x = (float) (Position.X + (Math.Sin(Rotation) * Velocity * ms) / 1000f / 2);
+            var y = (float) (Position.Y + (-Math.Cos(Rotation) * Velocity * ms) / 1000f / 2);
 
             // do not allow to go outside of game area
             //x = MathHelper.Clamp(x, SpriteSize.Width / 2f, Config.GameAreaX - SpriteSize.Width / 2f);

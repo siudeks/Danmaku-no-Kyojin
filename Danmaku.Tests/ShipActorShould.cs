@@ -26,12 +26,18 @@ namespace Danmaku
             var position = (1f, 2f);
             var actor = ActorOfAsTestActorRef<ShipActor>(Props.Create(() => new ShipActor(position, size)));
 
-            actor.Tell(new ShipActor.MoveCommand(true, 0));
-            Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(2)));
+            actor.Tell(new ShipActor.MoveCommand(true, rotation : Math.PI / 2));
+            var time = TimeSpan.FromSeconds(2);
+            Sys.EventStream.Publish(new UpdateMessage(time));
 
             var status = await actor.Ask<ShipActor.StatusNotification>(new ShipActor.StatusRequest(), new CancellationTokenSource(100).Token);
-            Assert.That(status.PositionX, Is.EqualTo(1 + 3 * 2));
-            Assert.That(status.PositionY, Is.EqualTo(2 + 4 * 2));
+
+
+            var a = 100f; // wellKnownShipAcceleration
+            var t = time.TotalSeconds;
+
+            Assert.That(status.PositionX, Is.EqualTo(1 + a * t * t / 2));
+            Assert.That(status.PositionY, Is.EqualTo(2));
         }
 
         [Test]
