@@ -52,6 +52,8 @@ namespace Danmaku
                 .Ask<ShipActor.StatusNotification>(new ShipActor.StatusRequest(), CancellationToken.None)
                 .Result.Rotation, Is.EqualTo(0));
 
+            actor.Tell(new ShipActor.MoveCommand(false, 1));
+
             Assert.That(actor
                 .Ask<ShipActor.StatusNotification>(new ShipActor.StatusRequest(), CancellationToken.None)
                 .Result.Rotation, Is.EqualTo(1));
