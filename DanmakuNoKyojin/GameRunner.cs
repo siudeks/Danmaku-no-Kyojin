@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Reactive.Disposables;
 using DanmakuNoKyojin.Framework;
 using Ninject;
+using DanmakuNoKyojin.Camera;
 
 namespace DanmakuNoKyojin
 {
@@ -84,6 +85,8 @@ namespace DanmakuNoKyojin
             Pixel.SetData(new[] { Color.White });
         }
 
+        Camera2D camera;
+
         protected override void Initialize()
         {
             //StaticClassSerializer.Load(typeof(PlayerData), "data.bin");
@@ -95,10 +98,12 @@ namespace DanmakuNoKyojin
             _stateManager.ComponentAdded += (s, arg) => Components.Add(arg);
             _stateManager.ComponentRemoved += (s, arg) => Components.Remove(arg);
 
+            camera = new Camera2D(GraphicsDevice.Viewport, 1);
+
             // Screens
             TitleScreen = new TitleScreen(this, _stateManager).DisposeWith(instanceDisposer);
             GameConfigurationScreen = new GameConfigurationScreen(this, _stateManager).DisposeWith(instanceDisposer);
-            GameplayScreen = new GameplayScreen(this, _stateManager).DisposeWith(instanceDisposer);
+            GameplayScreen = new GameplayScreen(this, _stateManager, camera).DisposeWith(instanceDisposer);
             LeaderboardScreen = new LeaderboardScreen(this, _stateManager).DisposeWith(instanceDisposer);
             ImprovementScreen = new ImprovementScreen(this, _stateManager).DisposeWith(instanceDisposer);
             GameOverScreen = new GameOverScreen(this, _stateManager).DisposeWith(instanceDisposer);

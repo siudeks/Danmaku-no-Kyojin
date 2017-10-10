@@ -11,6 +11,7 @@ using System;
 using NewConfig = Danmaku.Config;
 using DanmakuNoKyojin.Entities.Boss;
 using Microsoft.Xna.Framework.Media;
+using DanmakuNoKyojin.Camera;
 
 namespace DanmakuNoKyojin.Screens
 {
@@ -44,9 +45,13 @@ namespace DanmakuNoKyojin.Screens
         private Rectangle _backgroundMainRectangle;
         private Rectangle _backgroundTopRectangle;
 
-        public GameplayScreen(Game game, GameStateManager manager)
+        private Camera2D camera;
+
+        public GameplayScreen(Game game, GameStateManager manager, Camera2D camera)
             : base(game, manager)
         {
+
+            this.camera = camera;
 
             // Timer
             _timer = new Timer(Game);
@@ -82,9 +87,10 @@ namespace DanmakuNoKyojin.Screens
             defaultView = GraphicsDevice.Viewport;
 
             // First player
-            var player1 = new Player(defaultView, Config.PlayersController[0],
-                                        new Vector2(NewConfig.GameAreaX / 2f,
-                                                    NewConfig.GameAreaY - 150));
+            var player1 = new Player(defaultView, 
+                Config.PlayersController[0],
+                new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - 150),
+                camera);
             player1.Initialize();
             player1.LoadContent(GameRef);
             Player = player1;
@@ -241,6 +247,8 @@ namespace DanmakuNoKyojin.Screens
             if (Config.Debug && InputHandler.KeyPressed(Keys.C))
                 Config.DisplayCollisionBoxes = !Config.DisplayCollisionBoxes;
 
+            camera.Update(InputHandler.MouseState.X, InputHandler.MouseState.Y, Player.Ship.Position, Player.Ship.Rotation);
+
             _enemy.Update(gameTime);
         }
 
@@ -257,7 +265,7 @@ namespace DanmakuNoKyojin.Screens
             Color backgroundColor = new Color(5, 5, 5);
             GraphicsDevice.Clear(backgroundColor);
 
-            GameRef.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Player.Camera.GetTransformation());
+            GameRef.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.GetTransformation());
 
             Color randomColor = Color.White;//new Color(Rand.Next(255), Rand.Next(255), Rand.Next(255));
             GameRef.SpriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, randomColor);
@@ -271,7 +279,7 @@ namespace DanmakuNoKyojin.Screens
 
             //if (_enemy.IsAlive)
             //{
-               _enemy.Draw(gameTime, Player.Camera.GetTransformation());
+               _enemy.Draw(gameTime, camera.GetTransformation());
             //}
 
             GameRef.SpriteBatch.End();

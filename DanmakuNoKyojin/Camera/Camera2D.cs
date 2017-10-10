@@ -1,12 +1,14 @@
 ﻿using DanmakuNoKyojin.Controls;
+using DanmakuNoKyojin.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using NewConfig = Danmaku.Config;
 
 namespace DanmakuNoKyojin.Camera
 {
-    public class Camera2D
+    public sealed class Camera2D
     {
         private const float zoomUpperLimit = 5.0f;
         private const float zoomLowerLimit = .01f;
@@ -33,7 +35,49 @@ namespace DanmakuNoKyojin.Camera
             _worldHeight = NewConfig.GameAreaY;
         }
 
-        #region Properties
+        private Vector2 _cameraPosition;
+        public void Update(int mouseX, int mouseY, Vector2 tracedShipPosition, float tracedShipRotation)
+        {
+            // Update camera position
+            _cameraPosition.X = MathHelper.Lerp(
+                _cameraPosition.X,
+                tracedShipPosition.X - Config.CameraDistanceFromPlayer.X * (float)Math.Cos(tracedShipRotation + MathHelper.PiOver2),
+                Config.CameraMotionInterpolationAmount
+            );
+
+            _cameraPosition.Y = MathHelper.Lerp(
+                _cameraPosition.Y,
+                tracedShipPosition.Y - Config.CameraDistanceFromPlayer.Y * (float)Math.Sin(tracedShipRotation + MathHelper.PiOver2),
+                Config.CameraMotionInterpolationAmount
+            );
+
+            Update(_cameraPosition);
+
+            //if (!Config.DisableCameraZoom)
+            //{
+            //    // Update camera zoom according to mouse distance from player
+            //    var mouseWorldPosition = new Vector2(
+            //        _cameraPosition.X - viewport.Width / 2f + InputHandler.MouseState.X,
+            //        _cameraPosition.Y - viewport.Height / 2f + InputHandler.MouseState.Y
+            //        );
+
+            //    var mouseDistanceFromPlayer =
+            //        (float)
+            //            Math.Sqrt(Math.Pow(Ship.Position.X - mouseWorldPosition.X, 2) +
+            //                      Math.Pow(Ship.Position.Y - mouseWorldPosition.Y, 2));
+
+            //    var cameraZoom = viewport.Width / mouseDistanceFromPlayer;
+
+            //    if (_focusMode)
+            //        cameraZoom = 1f;
+            //    else
+            //        cameraZoom = cameraZoom > Config.CameraZoomLimit
+            //            ? 1f
+            //            : MathHelper.Clamp(cameraZoom / Config.CameraZoomLimit, Config.CameraZoomMin, Config.CameraZoomMax);
+
+            //    _camera.Zoom = MathHelper.Lerp(_camera.Zoom, cameraZoom, Config.CameraZoomInterpolationAmount);
+            //}
+        }
 
         public float Zoom
         {
@@ -83,8 +127,6 @@ namespace DanmakuNoKyojin.Camera
                     _pos.Y = bottomBarrier;
             }
         }
-
-        #endregion
 
         public void Update(Vector2 position)
         {

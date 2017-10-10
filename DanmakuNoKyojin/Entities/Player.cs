@@ -54,7 +54,6 @@ namespace DanmakuNoKyojin.Entities
 
         // Camera
         private Camera2D _camera;
-        private Vector2 _cameraPosition;
         private bool _focusMode;
 
         // Random
@@ -65,18 +64,13 @@ namespace DanmakuNoKyojin.Entities
             get { return _score; }
         }
 
-        public Camera2D Camera
-        {
-            get { return _camera; }
-        }
-
-        public Player(Viewport viewport, Config.Controller controller, Vector2 position)
+        public Player(Viewport viewport, Config.Controller controller, Vector2 position, Camera2D camera)
         {
             _viewport = viewport;
             _controller = controller;
             _originPosition = position;
             _random = new Random();
-            _cameraPosition = new Vector2(_viewport.Width / 2f, _viewport.Height / 2f);
+            this._camera = camera;
             _focusMode = false;
             _timeBeforeRespawn = TimeSpan.Zero;
         }
@@ -171,45 +165,6 @@ namespace DanmakuNoKyojin.Entities
 
             Ship.Update(gameTime);
 
-            // Update camera position
-            _cameraPosition.X = MathHelper.Lerp(
-                _cameraPosition.X,
-                Ship.Position.X - Config.CameraDistanceFromPlayer.X * (float)Math.Cos(Ship.Rotation + MathHelper.PiOver2),
-                Config.CameraMotionInterpolationAmount
-            );
-
-            _cameraPosition.Y = MathHelper.Lerp(
-                _cameraPosition.Y,
-                Ship.Position.Y - Config.CameraDistanceFromPlayer.Y * (float)Math.Sin(Ship.Rotation + MathHelper.PiOver2),
-                Config.CameraMotionInterpolationAmount
-            );
-
-            _camera.Update(_cameraPosition);
-
-            if (!Config.DisableCameraZoom)
-            {
-                // Update camera zoom according to mouse distance from player
-                var mouseWorldPosition = new Vector2(
-                    _cameraPosition.X - viewport.Width / 2f + InputHandler.MouseState.X,
-                    _cameraPosition.Y - viewport.Height / 2f + InputHandler.MouseState.Y
-                    );
-
-                var mouseDistanceFromPlayer =
-                    (float)
-                        Math.Sqrt(Math.Pow(Ship.Position.X - mouseWorldPosition.X, 2) +
-                                  Math.Pow(Ship.Position.Y - mouseWorldPosition.Y, 2));
-
-                var cameraZoom = viewport.Width / mouseDistanceFromPlayer;
-
-                if (_focusMode)
-                    cameraZoom = 1f;
-                else
-                    cameraZoom = cameraZoom > Config.CameraZoomLimit
-                        ? 1f
-                        : MathHelper.Clamp(cameraZoom / Config.CameraZoomLimit, Config.CameraZoomMin, Config.CameraZoomMax);
-
-                _camera.Zoom = MathHelper.Lerp(_camera.Zoom, cameraZoom, Config.CameraZoomInterpolationAmount);
-            }
 
             foreach (var bullet in Bullets)
             {
