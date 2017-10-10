@@ -1,7 +1,6 @@
 ﻿using DanmakuNoKyojin.Controls;
-using DanmakuNoKyojin.Entities;
+using DanmakuNoKyojin.Framework;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using NewConfig = Danmaku.Config;
@@ -24,9 +23,9 @@ namespace DanmakuNoKyojin.Camera
 
         private Vector2 _center;
 
-        public Camera2D(Viewport viewport, float initialZoom)
+        public Camera2D(IViewportProvider viewport)
         {
-            _zoom = initialZoom;
+            _zoom = 1;
             _rotation = 0.0f;
             _pos = Vector2.Zero;
             _viewportWidth = viewport.Width;

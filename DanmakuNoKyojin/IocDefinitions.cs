@@ -1,4 +1,5 @@
-﻿using Ninject.Modules;
+﻿using DanmakuNoKyojin.Framework;
+using Ninject.Modules;
 
 namespace DanmakuNoKyojin
 {
@@ -7,7 +8,7 @@ namespace DanmakuNoKyojin
         public override void Load()
         {
             Bind<GameProcessor>().ToSelf();
-            Bind<GameRunner>().ToSelf();
+            Bind<GameRunner, IContentLoader, IViewportProvider>().To<GameRunner>();
         }
     }
 }

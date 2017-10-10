@@ -23,8 +23,7 @@ namespace DanmakuNoKyojin
         // single instance to dispose all disposable resources owned by GameProcessor
         private CompositeDisposable instanceDisposer = new CompositeDisposable();
 
-        [Inject]
-        public GameProcessor GameProcessor { private get; set; }
+        [Inject] public GameProcessor GameProcessor { private get; set; }
 
         // Screens
         public TitleScreen TitleScreen;
@@ -85,7 +84,7 @@ namespace DanmakuNoKyojin
             Pixel.SetData(new[] { Color.White });
         }
 
-        Camera2D camera;
+        public Camera2D camera { private get; set; }
 
         protected override void Initialize()
         {
@@ -98,7 +97,7 @@ namespace DanmakuNoKyojin
             _stateManager.ComponentAdded += (s, arg) => Components.Add(arg);
             _stateManager.ComponentRemoved += (s, arg) => Components.Remove(arg);
 
-            camera = new Camera2D(GraphicsDevice.Viewport, 1);
+            camera = new Camera2D(this);
 
             // Screens
             TitleScreen = new TitleScreen(this, _stateManager).DisposeWith(instanceDisposer);

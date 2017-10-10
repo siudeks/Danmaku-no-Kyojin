@@ -25,7 +25,7 @@ namespace DanmakuNoKyojin.Entities
 
         private Config.Controller _controller;
 
-        private Viewport _viewport;
+        private IViewportProvider _viewport;
 
         private Texture2D _bulletSprite;
         private Texture2D _hitboxSprite;
@@ -64,7 +64,7 @@ namespace DanmakuNoKyojin.Entities
             get { return _score; }
         }
 
-        public Player(Viewport viewport, Config.Controller controller, Vector2 position, Camera2D camera)
+        public Player(IViewportProvider viewport, Config.Controller controller, Vector2 position, Camera2D camera)
         {
             _viewport = viewport;
             _controller = controller;
@@ -95,7 +95,7 @@ namespace DanmakuNoKyojin.Entities
 
             _score = 0;
             _bulletTimeTimer = Config.DefaultBulletTimeTimer;
-            _camera = new Camera2D(_viewport, 1f);
+            _camera = new Camera2D(_viewport);
         }
 
         public void LoadContent(IContentLoader contentLoader)
@@ -172,7 +172,7 @@ namespace DanmakuNoKyojin.Entities
             }
         }
 
-        private static InputData ReadInputFromKeyboard(Viewport _viewport, SpriteBatch spriteBatch)
+        private static InputData ReadInputFromKeyboard(IViewportProvider _viewport, SpriteBatch spriteBatch)
         {
             var bulletTime = InputHandler.MouseState.RightButton == ButtonState.Pressed;
 
@@ -213,7 +213,7 @@ namespace DanmakuNoKyojin.Entities
             return new InputData(bulletTime, fire, direction, rotation, Vector2.Zero, false);
         }
 
-        private static InputData ReadInput(Config.Controller controller, Viewport viewport, SpriteBatch spriteBatch)
+        private static InputData ReadInput(Config.Controller controller, IViewportProvider viewport, SpriteBatch spriteBatch)
         {
             if (controller == Config.Controller.Keyboard)
                 return ReadInputFromKeyboard(viewport, spriteBatch);

@@ -79,6 +79,7 @@
     <Compile Include="BulletEngine\Tasks\Vanish.cs" />
     <Compile Include="BulletEngine\Tasks\Wait.cs" />
     <Compile Include="Camera\Camera2D.cs" />
+    <Compile Include="Camera\IocDefinitions.cs" />
     <Compile Include="Collisions\CollisionCircle.cs" />
     <Compile Include="Collisions\CollisionConvexPolygon.cs" />
     <Compile Include="Collisions\CollisionElement.cs" />
