@@ -385,24 +385,6 @@
 /processorParam:DebugMode=Auto
 /build:Graphics/Shaders/Bloom.fx
 
-#begin Graphics/Shaders/BloomExtract.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Graphics/Shaders/BloomExtract.fx
-
-#begin Graphics/Shaders/BloomCombine.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Graphics/Shaders/BloomCombine.fx
-
-#begin Graphics/Shaders/GaussianBlur.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Graphics/Shaders/GaussianBlur.fx
-
 #begin Graphics/Shaders/Edge.fx
 /importer:EffectImporter
 /processor:EffectProcessor

@@ -2,7 +2,6 @@
 using DanmakuNoKyojin.BulletEngine;
 using DanmakuNoKyojin.Controls;
 using DanmakuNoKyojin.Entities;
-using DanmakuNoKyojin.Shaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -36,10 +35,6 @@ namespace DanmakuNoKyojin.Screens
         // Timer for play time
         private TimeSpan _playTime;
 
-        // Bloom
-        private readonly BloomComponent _bloom;
-        private int _bloomSettingsIndex = 0;
-
         // Background
         private Texture2D _backgroundImage;
         private Rectangle _backgroundMainRectangle;
@@ -55,13 +50,6 @@ namespace DanmakuNoKyojin.Screens
 
             // Timer
             _timer = new Timer(Game);
-
-            // Bloom effect
-            _bloom = new BloomComponent(this.Game);
-            // Bloom effect doesnt' work - lets disable it and try to restore after refactor.
-            _bloom.Visible = false;
-
-            Components.Add(_bloom);
         }
 
         public override void Initialize()
@@ -76,8 +64,6 @@ namespace DanmakuNoKyojin.Screens
             _timer.Initialize();
 
             base.Initialize();
-
-            _bloom.Initialize();
 
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(GameRef.Content.Load<Song>("Audio/Musics/Background"));
@@ -126,13 +112,6 @@ namespace DanmakuNoKyojin.Screens
                 _backgroundMainRectangle.Y = _backgroundTopRectangle.Y - Config.Resolution.Y;
             if (_backgroundTopRectangle.Y >= Config.Resolution.Y)
                 _backgroundTopRectangle.Y = _backgroundMainRectangle.Y - Config.Resolution.Y;
-
-            /*
-            _backgroundMainRectangle.Y += (int)(250 * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            _backgroundTopRectangle.Y += (int)(250 * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            */
-
-            HandleInput();
 
             _timer.Update(gameTime);
 
@@ -254,8 +233,6 @@ namespace DanmakuNoKyojin.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            _bloom.BeginDraw();
-
             GameRef.SpriteBatch.Begin(0, BlendState.Opaque);
 
             GameRef.SpriteBatch.End();
@@ -341,41 +318,6 @@ namespace DanmakuNoKyojin.Screens
             }
             */
             GameRef.SpriteBatch.End();
-        }
-
-        /// <summary>
-        /// Handles input for quitting or changing the bloom settings.
-        /// </summary>
-        private void HandleInput()
-        {
-            if (Config.Debug)
-            {
-                // Switch to the next bloom settings preset?
-                if (InputHandler.KeyPressed(Keys.I))
-                {
-                    _bloomSettingsIndex = (_bloomSettingsIndex + 1) %
-                                         BloomSettings.PresetSettings.Length;
-
-                    _bloom.Settings = BloomSettings.PresetSettings[_bloomSettingsIndex];
-                    _bloom.Visible = true;
-                }
-
-                // Toggle bloom on or off?
-                if (InputHandler.KeyPressed(Keys.O))
-                {
-                    _bloom.Visible = !_bloom.Visible;
-                }
-
-                // Cycle through the intermediate buffer debug display modes?
-                if (InputHandler.KeyPressed(Keys.P))
-                {
-                    _bloom.Visible = true;
-                    _bloom.ShowBuffer++;
-
-                    if (_bloom.ShowBuffer > BloomComponent.IntermediateBuffer.FinalResult)
-                        _bloom.ShowBuffer = 0;
-                }
-            }
         }
     }
 }

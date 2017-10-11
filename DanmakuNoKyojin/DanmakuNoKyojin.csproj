@@ -140,10 +140,6 @@
     <Compile Include="Screens\LeaderboardScreen.cs" />
     <Compile Include="Screens\OptionsScreen.cs" />
     <Compile Include="Screens\TitleScreen.cs" />
-    <Compile Include="Shaders\BloomComponent.cs" />
-    <Compile Include="Shaders\BloomSettings.cs" />
-    <Compile Include="Shaders\Edge.cs" />
-    <Compile Include="Shaders\IBloomService.cs" />
     <Compile Include="Shapes\PolygonShape.cs" />
     <Compile Include="Sprites\AnimatedSprite.cs" />
     <Compile Include="Sprites\Animation.cs" />
@@ -262,10 +258,7 @@
     <Content Include="Content\Graphics\Pictures\player_hitbox.png" />
     <Content Include="Content\Graphics\Pictures\trail.png" />
     <Content Include="Content\Graphics\Shaders\Bloom.fx" />
-    <Content Include="Content\Graphics\Shaders\BloomCombine.fx" />
-    <Content Include="Content\Graphics\Shaders\BloomExtract.fx" />
     <Content Include="Content\Graphics\Shaders\Edge.fx" />
-    <Content Include="Content\Graphics\Shaders\GaussianBlur.fx" />
     <Content Include="Icon.ico" />
     <Content Include="Content\Graphics\Fonts\ControlFont.spritefont" />
     <Content Include="Content\Graphics\Fonts\TimerSeconds.spritefont" />
