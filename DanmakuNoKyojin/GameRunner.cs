@@ -23,7 +23,7 @@ namespace DanmakuNoKyojin
         // single instance to dispose all disposable resources owned by GameProcessor
         private CompositeDisposable instanceDisposer = new CompositeDisposable();
 
-        [Inject] public GameProcessor GameProcessor { private get; set; }
+        public GameProcessor GameProcessor { private get; set; }
 
         // Screens
         public TitleScreen TitleScreen;

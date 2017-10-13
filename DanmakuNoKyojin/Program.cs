@@ -16,6 +16,8 @@ namespace DanmakuNoKyojin
 
             system = ActorSystem.Create("default");
             var game = kernel.Get<GameRunner>();
+
+            game.GameProcessor = kernel.Get<GameProcessor>();
             
             game.Run();
 
