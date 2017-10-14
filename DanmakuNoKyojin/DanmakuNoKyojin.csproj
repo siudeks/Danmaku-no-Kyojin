@@ -104,6 +104,7 @@
     <Compile Include="Framework\IocRegistration.cs" />
     <Compile Include="Framework\IDrawablePart.cs" />
     <Compile Include="Framework\IContentBasedPart.cs" />
+    <Compile Include="Framework\ITextureFactory.cs" />
     <Compile Include="Framework\IUpdatablePart.cs" />
     <Compile Include="Framework\IViewProvider.cs" />
     <Compile Include="GameProcessor.cs" />

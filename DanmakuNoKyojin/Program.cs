@@ -1,4 +1,5 @@
 using Akka.Actor;
+using Microsoft.Xna.Framework.Graphics;
 using Ninject;
 using System;
 
@@ -16,6 +17,8 @@ namespace DanmakuNoKyojin
 
             system = ActorSystem.Create("default");
             var game = kernel.Get<GameRunner>();
+
+            kernel.Bind<Texture2D>().ToConstant(game.Pixel);
 
             game.GameProcessor = kernel.Get<GameProcessor>();
             

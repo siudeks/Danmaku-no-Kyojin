@@ -16,7 +16,7 @@ namespace DanmakuNoKyojin.Controls
         private readonly Stack<GameState> gameStates = new Stack<GameState>();
         private readonly Dictionary<State, GameScreen> screens = new Dictionary<State, GameScreen>();
 
-        public GameStateManager(GameOverScreen GameOverScreen,
+        public void AddScreens(GameOverScreen GameOverScreen,
             OptionsScreen OptionsScreen,
             TitleScreen TitleScreen,
             GameplayScreen GameplayScreen,
@@ -25,10 +25,9 @@ namespace DanmakuNoKyojin.Controls
             screens.Add(State.GameOverScreen, GameOverScreen);
             screens.Add(State.OptionsScreen, OptionsScreen);
             screens.Add(State.TitleScreen, TitleScreen);
-            screens.Add(State.GameOverScreen, GameOverScreen);
+            screens.Add(State.GameplayScreen, GameplayScreen);
             screens.Add(State.ImprovementScreen, ImprovementScreen);
         }
-
         public GameState CurrentState
         {
             get { return gameStates.Peek(); }
@@ -44,17 +43,15 @@ namespace DanmakuNoKyojin.Controls
 
         private void AddState(State state)
         {
-            var screen = states[state];
+            var screen = screens[state];
             gameStates.Push(screen);
 
             ComponentAdded?.Invoke(this, screen);
         }
 
-        private Dictionary<State, GameState> states = new Dictionary<State, GameState>();
-
         public void ChangeState(State expected)
         {
-            var newState = states[expected];
+            var newState = screens[expected];
             while (gameStates.Count > 0)
                 RemoveState();
 

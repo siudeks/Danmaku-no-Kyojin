@@ -14,7 +14,7 @@ using DanmakuNoKyojin.Camera;
 
 namespace DanmakuNoKyojin
 {
-    public class GameRunner : Game, IContentLoader, IViewportProvider
+    public sealed class GameRunner : Game, IContentLoader, IViewportProvider
     {
         public GraphicsDeviceManager Graphics;
         public SpriteBatch SpriteBatch;

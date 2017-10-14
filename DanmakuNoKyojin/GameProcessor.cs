@@ -30,9 +30,9 @@ namespace DanmakuNoKyojin
         public GameplayScreen GameplayScreen;
         public GameOverScreen GameOverScreen;
 
-        public List<IUpdatablePart> UpdatableParts { private get; set; }
-        public List<IDrawablePart> DrawableParts { private get; set; }
-        public IContentBasedPart[] ContentBasedParts { private get; set; }
+        private List<IUpdatablePart> updatableParts = new List<IUpdatablePart>();
+        private List<IDrawablePart> drawableParts = new List<IDrawablePart>();
+        private List<IContentBasedPart> contentBasedParts = new List<IContentBasedPart>();
 
         private GameStateManager _stateManager;
         private readonly IViewportProvider viewport;
@@ -53,13 +53,14 @@ namespace DanmakuNoKyojin
             Select = provider.Load<SoundEffect>(@"Audio/SE/select");
             Choose = provider.Load<SoundEffect>(@"Audio/SE/choose");
 
-            foreach (var item in ContentBasedParts)
-                item.LoadContent(provider);
-
             camera = new Camera2D(viewport);
+
+            _stateManager = new GameStateManager();
 
             // Screens
             TitleScreen = new TitleScreen(viewport, _stateManager, Select, Choose);
+            contentBasedParts.Add(TitleScreen);
+
             GameConfigurationScreen = new GameConfigurationScreen(viewport, _stateManager);
             GameplayScreen = new GameplayScreen(viewport, _stateManager, camera); // .DisposeWith(instanceDisposer);
             LeaderboardScreen = new LeaderboardScreen(viewport, _stateManager);
@@ -69,25 +70,29 @@ namespace DanmakuNoKyojin
             KeyboardInputsScreen = new KeyboardInputsScreen(viewport, _stateManager);
             GamepadInputsScreen = new GamepadInputsScreen(viewport, _stateManager);
 
-            _stateManager = new GameStateManager(GameOverScreen, OptionsScreen, TitleScreen, GameplayScreen, ImprovementScreen);
+            _stateManager.AddScreens(GameOverScreen, OptionsScreen, TitleScreen, GameplayScreen, ImprovementScreen);
+
             _stateManager.ComponentAdded += (s, arg) =>
             {
-                UpdatableParts.Add(arg);
-                DrawableParts.Add(arg);
+                updatableParts.Add(arg);
+                drawableParts.Add(arg);
             };
             _stateManager.ComponentRemoved += (s, arg) =>
             {
-                UpdatableParts.Remove(arg);
-                DrawableParts.Remove(arg);
+                updatableParts.Remove(arg);
+                drawableParts.Remove(arg);
             };
 
             _stateManager.ChangeState(GameStateManager.State.TitleScreen);
 
+
+            foreach (var item in contentBasedParts)
+                item.LoadContent(provider);
         }
 
         public void Update(GameTime gameTime)
         {
-            foreach (var item in UpdatableParts)
+            foreach (var item in updatableParts)
                 item.Update(gameTime);
         }
 
@@ -95,7 +100,7 @@ namespace DanmakuNoKyojin
         {
             spriteBatch.Begin();
 
-            foreach (var item in DrawableParts)
+            foreach (var item in drawableParts)
                 item.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
