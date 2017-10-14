@@ -9,7 +9,7 @@ namespace DanmakuNoKyojin.Controls
     /// <summary>
     /// Manage inputs like keyboard or gamepad
     /// </summary>
-    public sealed class InputHandler : IUpdatablePart , IInputHandler
+    public sealed class InputHandler : IUpdatablePart, IInputHandler
     {
         [Inject]
         public IObserver<MouseState> MouseStateDispatcher { private get; set; }
@@ -56,7 +56,6 @@ namespace DanmakuNoKyojin.Controls
                 gamePadStates[(int)index] = GamePad.GetState(index);
         }
 
-
         public void Update(GameTime gameTime)
         {
             lastMouseState = mouseState;
@@ -80,9 +79,9 @@ namespace DanmakuNoKyojin.Controls
 
         public static bool PressedUp()
         {
-            return 
-                (KeyPressed(Keys.Up) || 
-                ButtonPressed(Buttons.DPadUp, PlayerIndex.One) || 
+            return
+                (KeyPressed(Keys.Up) ||
+                ButtonPressed(Buttons.DPadUp, PlayerIndex.One) ||
                 ButtonPressed(Buttons.LeftThumbstickUp, PlayerIndex.One));
         }
 

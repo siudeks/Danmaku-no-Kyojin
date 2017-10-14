@@ -9,7 +9,7 @@ namespace DanmakuNoKyojin
         public override void Load()
         {
             // TODO Register all IUpdatableParts
-            Bind<IUpdatablePart>().To<InputHandler>().InSingletonScope();
+            // Bind<IUpdatablePart>().To<InputHandler>().InSingletonScope();
         }
     }
 }

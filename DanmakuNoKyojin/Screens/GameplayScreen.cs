@@ -16,8 +16,6 @@ namespace DanmakuNoKyojin.Screens
 {
     public class GameplayScreen : GameScreen, IDisposable
     {
-        private Texture2D _pixel;
-
         public Player Player { get; set; }
 
         private int _waveNumber;
@@ -68,6 +66,8 @@ namespace DanmakuNoKyojin.Screens
 
         public override void LoadContent(IContentLoader loader)
         {
+            _timer.LoadContent(loader);
+
             var player1 = new Player(viewport, Config.PlayersController[0],
                 new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - 150),
                 camera);
@@ -225,9 +225,9 @@ namespace DanmakuNoKyojin.Screens
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            //GameRef.SpriteBatch.Begin(0, BlendState.Opaque);
+            spriteBatch.Begin(0, BlendState.Opaque);
 
-            //spriteBatch.End();
+            spriteBatch.End();
 
             // siudek GameRef.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
@@ -307,7 +307,7 @@ namespace DanmakuNoKyojin.Screens
                                                Color.White);
             }
             */
-            // GameRef.SpriteBatch.End();
+            spriteBatch.End();
         }
     }
 }

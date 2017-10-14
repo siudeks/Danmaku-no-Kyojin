@@ -18,7 +18,6 @@ namespace DanmakuNoKyojin
     /// </summary>
     public sealed class GameProcessor : IInitializable
     {
-
         // Screens
         public TitleScreen TitleScreen;
         public ImprovementScreen ImprovementScreen;
@@ -29,6 +28,10 @@ namespace DanmakuNoKyojin
         public GameConfigurationScreen GameConfigurationScreen;
         public GameplayScreen GameplayScreen;
         public GameOverScreen GameOverScreen;
+
+        [Inject] public IUpdatablePart[] UpdatableParts { private get; set; }
+        [Inject] public IContentBasedPart[] ContentBasedParts { private get; set; }
+        [Inject] public InputHandler InputHandler { private get; set; }
 
         private List<IUpdatablePart> updatableParts = new List<IUpdatablePart>();
         private List<IDrawablePart> drawableParts = new List<IDrawablePart>();
@@ -58,11 +61,14 @@ namespace DanmakuNoKyojin
             _stateManager = new GameStateManager();
 
             // Screens
-            TitleScreen = new TitleScreen(viewport, _stateManager, Select, Choose);
+            TitleScreen = new TitleScreen(viewport, _stateManager, Select, Choose, InputHandler);
             contentBasedParts.Add(TitleScreen);
 
             GameConfigurationScreen = new GameConfigurationScreen(viewport, _stateManager);
             GameplayScreen = new GameplayScreen(viewport, _stateManager, camera); // .DisposeWith(instanceDisposer);
+            GameplayScreen.Initialize();
+            contentBasedParts.Add(GameplayScreen);
+
             LeaderboardScreen = new LeaderboardScreen(viewport, _stateManager);
             ImprovementScreen = new ImprovementScreen(viewport, _stateManager, Select, Choose);
             GameOverScreen = new GameOverScreen(viewport, _stateManager);
@@ -88,22 +94,26 @@ namespace DanmakuNoKyojin
 
             foreach (var item in contentBasedParts)
                 item.LoadContent(provider);
+
+            foreach (var item in ContentBasedParts)
+                item.LoadContent(provider);
         }
 
         public void Update(GameTime gameTime)
         {
-            foreach (var item in updatableParts)
+            foreach (var item in UpdatableParts)
+            {
+                item.Update(gameTime);
+            }
+
+            foreach (var item in updatableParts.ToArray())
                 item.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
-
             foreach (var item in drawableParts)
                 item.Draw(gameTime, spriteBatch);
-
-            spriteBatch.End();
         }
 
         public void Initialize()

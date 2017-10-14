@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Ninject.Modules;
 using System;
 using System.Reactive.Subjects;
@@ -12,6 +13,8 @@ namespace DanmakuNoKyojin.Controls
             var mouseStateSubject = new Subject<MouseState>();
             Bind<IObservable<MouseState>>().ToConstant(mouseStateSubject);
             Bind<IObserver<MouseState>>().ToConstant(mouseStateSubject);
+
+            Bind<InputHandler, IUpdatablePart>().To<InputHandler>().InSingletonScope();
         }
     }
 }

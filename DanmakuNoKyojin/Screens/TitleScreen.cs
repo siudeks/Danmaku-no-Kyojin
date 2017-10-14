@@ -36,13 +36,15 @@ namespace DanmakuNoKyojin.Screens
         private readonly IViewportProvider viewport;
         private readonly SoundEffect select;
         private readonly SoundEffect choose;
+        private readonly InputHandler inputHandler;
 
-        public TitleScreen(IViewportProvider viewport,  GameStateManager manager, SoundEffect select, SoundEffect choose)
+        public TitleScreen(IViewportProvider viewport,  GameStateManager manager, SoundEffect select, SoundEffect choose, InputHandler inputHandler)
             : base(manager)
         {
             this.viewport = viewport;
             this.select = select;
             this.choose = choose;
+            this.inputHandler = inputHandler;
 
             _menuText = new string[] { "Start", "Shop", "Options", "Exit" };
             _menuDescription = new string[] { 
@@ -202,7 +204,7 @@ namespace DanmakuNoKyojin.Screens
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            // GameRef.SpriteBatch.Begin();
+            spriteBatch.Begin();
 
             spriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, Color.White);
             spriteBatch.Draw(_backgroundImage, _backgroundRightRectangle, Color.White);
@@ -240,7 +242,7 @@ namespace DanmakuNoKyojin.Screens
             spriteBatch.DrawString(ControlManager.SpriteFont, credits, new Vector2(1, viewport.Height - ControlManager.SpriteFont.MeasureString(credits).Y + 1), Color.Black);
             spriteBatch.DrawString(ControlManager.SpriteFont, credits, new Vector2(0, viewport.Height - ControlManager.SpriteFont.MeasureString(credits).Y), Color.White);
 
-            //GameRef.SpriteBatch.End();
+            spriteBatch.End();
 
             base.Draw(gameTime, spriteBatch);
         }
