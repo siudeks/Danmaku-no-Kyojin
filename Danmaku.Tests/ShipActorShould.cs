@@ -11,7 +11,7 @@ namespace Danmaku
     [TestFixture]
     public sealed class ShipActorShould : TestKit
     {
-        [OneTimeSetUp]
+        [SetUp]
         public void Initialize()
         {
             // we need to create a beacon which needs to be required to support 
