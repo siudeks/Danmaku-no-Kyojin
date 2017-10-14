@@ -49,15 +49,13 @@ namespace DanmakuNoKyojin
 
         private SoundEffect Select;
         private SoundEffect Choose;
-        Camera2D camera;
 
+        [Inject] public Camera2D Camera { private get; set; }
 
         public void LoadContent(IContentLoader provider)
         {
             Select = provider.Load<SoundEffect>(@"Audio/SE/select");
             Choose = provider.Load<SoundEffect>(@"Audio/SE/choose");
-
-            camera = new Camera2D(viewport);
 
             _stateManager = new GameStateManager();
 
@@ -66,7 +64,7 @@ namespace DanmakuNoKyojin
             contentBasedParts.Add(TitleScreen);
 
             GameConfigurationScreen = new GameConfigurationScreen(viewport, _stateManager);
-            GameplayScreen = new GameplayScreen(viewport, _stateManager, camera); // .DisposeWith(instanceDisposer);
+            GameplayScreen = new GameplayScreen(viewport, _stateManager, Camera); // .DisposeWith(instanceDisposer);
             GameplayScreen.Initialize();
             contentBasedParts.Add(GameplayScreen);
 
