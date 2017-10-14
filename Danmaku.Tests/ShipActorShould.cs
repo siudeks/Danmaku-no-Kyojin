@@ -16,8 +16,8 @@ namespace Danmaku
         {
             // we need to create a beacon which needs to be required to support 
             // collision check for the nearest ships.
-            var beaconProps = Props.Create(() => new BeaconActor());
-            var beacon = Sys.ActorOf(beaconProps);
+            var naviHubProps = Props.Create(() => new NaviHubActor());
+            var naviHub = Sys.ActorOf(naviHubProps);
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace Danmaku
             var position = (1f, 2f);
             var actor = ActorOfAsTestActorRef<ShipActor>(Props.Create(() => new ShipActor(position, size)));
 
-            actor.Tell(new ShipActor.MoveCommand(true, rotation : Math.PI / 2));
+            actor.Tell(new ShipActor.MoveCommand(true, rotation: Math.PI / 2));
             var time = TimeSpan.FromSeconds(2);
             Sys.EventStream.Publish(new UpdateMessage(time));
 
@@ -112,6 +112,19 @@ namespace Danmaku
 
             player.Tell(new ShipActor.MoveCommand(false, Math.PI));
 
+            // register TestActor for DeathWatch of the enemy actor:
+            {
+                Watch(enemy);
+
+                player.Tell(new ShipActor.ShootCommand());
+
+                // if bullet's velocity is 1 and distance is smaller then 14.14 (10 * SQRT(2))
+                // hence 15 secs are enough to find the target
+                Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(15)));
+
+                var msg = ExpectMsg<Terminated>();
+                Assert.That(msg.ActorRef, Is.EqualTo(enemy));
+            }
         }
     }
 }

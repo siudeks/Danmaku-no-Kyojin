@@ -19,7 +19,7 @@ namespace Danmaku
     /// imagine more Hubs, relocated geografically between ships to handle 
     /// big number of ships.
     /// </summary>
-    public sealed class BeaconActor : ReceiveActor
+    public sealed class NaviHubActor : ReceiveActor
     {
         private List<(IActorRef Ship, ShipStatus Status)> knownShips = new List<(IActorRef, ShipStatus)>();
 
@@ -60,13 +60,13 @@ namespace Danmaku
             base.PostStop();
         }
 
-        public BeaconActor()
+        public NaviHubActor()
         {
             Receive<RegisterShip>(OnRegisterShip);
-            Receive<BeaconActor.ShipStatus>(OnShipStatusNotification);
+            Receive<NaviHubActor.ShipStatus>(OnShipStatusNotification);
         }
 
-        private bool OnShipStatusNotification(BeaconActor.ShipStatus msg)
+        private bool OnShipStatusNotification(NaviHubActor.ShipStatus msg)
         {
             var victims = new List<IActorRef>();
 

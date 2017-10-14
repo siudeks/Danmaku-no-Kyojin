@@ -78,7 +78,7 @@ namespace Danmaku
 
         private void Initialize()
         {
-            Receive<BeaconActor.ShipRegistered>(OnShipRegistered);
+            Receive<NaviHubActor.ShipRegistered>(OnShipRegistered);
             Receive<MoveCommand>(OnMoveCommand);
             Receive<UpdateMessage>(OnUpdateMessage);
             Receive<StatusRequest>(OnStatusRequest);
@@ -92,7 +92,7 @@ namespace Danmaku
             return true;
         }
 
-        private bool OnShipRegistered(BeaconActor.ShipRegistered obj)
+        private bool OnShipRegistered(NaviHubActor.ShipRegistered obj)
         {
             listeners.Add(Sender);
 
@@ -113,8 +113,8 @@ namespace Danmaku
             Context.System.EventStream.Subscribe(Self, typeof(UpdateMessage));
 
             // inform a beacon about the ship.
-            var status = new BeaconActor.ShipStatus(Position.X, Position.Y);
-            Context.System.EventStream.Publish(new BeaconActor.RegisterShip(status));
+            var status = new NaviHubActor.ShipStatus(Position.X, Position.Y);
+            Context.System.EventStream.Publish(new NaviHubActor.RegisterShip(status));
         }
 
         protected override void PostStop()
@@ -133,7 +133,7 @@ namespace Danmaku
             lastStatusResponse = status;
 
             foreach (var listener in listeners)
-                listener.Tell(new BeaconActor.ShipStatus(status.PositionX, status.PositionY));
+                listener.Tell(new NaviHubActor.ShipStatus(status.PositionX, status.PositionY));
 
         }
 
