@@ -235,6 +235,7 @@ namespace DanmakuNoKyojin.Screens
             // siudek GraphicsDevice.Clear(backgroundColor);
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.GetTransformation());
+            // spriteBatch.Begin(); // SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, camera.GetTransformation());
 
             Color randomColor = Color.White;//new Color(Rand.Next(255), Rand.Next(255), Rand.Next(255));
             spriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, randomColor);
@@ -243,8 +244,6 @@ namespace DanmakuNoKyojin.Screens
             {
                 bullet.Draw(gameTime, spriteBatch);
             }
-
-            Player.Draw(gameTime, spriteBatch);
 
             //if (_enemy.IsAlive)
             //{
@@ -307,6 +306,11 @@ namespace DanmakuNoKyojin.Screens
                                                Color.White);
             }
             */
+
+            spriteBatch.End();
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.GetTransformation());
+            Player.Draw(gameTime, spriteBatch);
             spriteBatch.End();
         }
     }
