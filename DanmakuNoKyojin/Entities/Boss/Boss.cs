@@ -106,7 +106,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             {
                 _mainPart = new BossPart(
                     _gameRef, this, player, MoverManager, _completeBulletPatterns, new Color(0f, 0.75f, 0f, 0.65f),
-                    4242f, _iteration, _step, null, null, true
+                    4242f, null, _iteration, _step, null, null, true
                 );
 
                 _mainPart.Initialize();

@@ -1,4 +1,5 @@
 ﻿using DanmakuNoKyojin.Controls;
+using DanmakuNoKyojin.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,7 +7,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace DanmakuNoKyojin.Screens
 {
-    public sealed class OptionsScreen : BaseGameState
+    public sealed class OptionsScreen : GameScreen
     {
         private string _title;
         private readonly string[] _menuText;
@@ -22,9 +23,18 @@ namespace DanmakuNoKyojin.Screens
 
         private Texture2D _volumeBar;
 
-        public OptionsScreen(Game game, GameStateManager manager)
-            : base(game, manager)
+        private readonly IViewportProvider viewport;
+        private readonly Texture2D pixel;
+        private readonly SoundEffect select;
+
+        public OptionsScreen(IViewportProvider viewport, GameStateManager manager, Texture2D pixel, SoundEffect select)
+            : base(manager)
         {
+
+            this.viewport = viewport;
+            this.pixel = pixel;
+            this.select = select;
+
             _title = "Options";
             _menuText = new string[]
                 {
@@ -35,8 +45,8 @@ namespace DanmakuNoKyojin.Screens
                 };
 
             _menuStartCoord = new Point(
-                Game.GraphicsDevice.Viewport.Width / 2,
-                Game.GraphicsDevice.Viewport.Height / 2 - 100);
+                viewport.Width / 2,
+                viewport.Height / 2 - 100);
         }
 
         public override void Initialize()
@@ -46,22 +56,22 @@ namespace DanmakuNoKyojin.Screens
             _menuIndex = 0;
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(IContentLoader loader)
         {
-            _background = GameRef.Content.Load<Texture2D>("Graphics/Pictures/background");
-            _keyboardIcon = GameRef.Content.Load<Texture2D>("Graphics/Pictures/keyboard_icon");
-            _gamepadIcon = GameRef.Content.Load<Texture2D>("Graphics/Pictures/gamepad_icon");
-            _volumeBar = GameRef.Pixel;
+            _background = loader.Load<Texture2D>("Graphics/Pictures/background");
+            _keyboardIcon = loader.Load<Texture2D>("Graphics/Pictures/keyboard_icon");
+            _gamepadIcon = loader.Load<Texture2D>("Graphics/Pictures/gamepad_icon");
+            _volumeBar = pixel;
 
-            _titleFont = Game.Content.Load<SpriteFont>("Graphics/Fonts/TitleFont");
+            _titleFont = loader.Load<SpriteFont>("Graphics/Fonts/TitleFont");
 
-            base.LoadContent();
+            base.LoadContent(loader);
         }
 
         public override void Update(GameTime gameTime)
         {
             if (InputHandler.PressedCancel())
-                StateManager.ChangeState(GameRef.TitleScreen);
+                StateManager.ChangeState(GameStateManager.State.TitleScreen);
 
             if (InputHandler.PressedUp())
             {
@@ -70,13 +80,13 @@ namespace DanmakuNoKyojin.Screens
                 if (_menuIndex < 0)
                     _menuIndex = _menuText.Length - 1;
 
-                GameRef.Select.Play();
+                select.Play();
             }
 
             if (InputHandler.PressedDown())
             {
                 _menuIndex = (_menuIndex + 1) % _menuText.Length;
-                GameRef.Select.Play();
+                select.Play();
             }
 
             if (InputHandler.PressedLeft())
@@ -112,7 +122,7 @@ namespace DanmakuNoKyojin.Screens
                     MediaPlayer.Volume = Config.MusicVolume/100f;
                 }
 
-                GameRef.Select.Play();
+                select.Play();
             }
 
             if (InputHandler.PressedRight())
@@ -147,7 +157,7 @@ namespace DanmakuNoKyojin.Screens
                     MediaPlayer.Volume = Config.MusicVolume / 100f;
                 }
 
-                GameRef.Select.Play();
+                select.Play();
             }
 
             if (InputHandler.PressedAction())
@@ -167,21 +177,21 @@ namespace DanmakuNoKyojin.Screens
             base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            GameRef.SpriteBatch.Begin();
+            // GameRef.SpriteBatch.Begin();
 
-            GameRef.SpriteBatch.Draw(_background, new Rectangle(0, 0, Config.Resolution.X, Config.Resolution.Y), Color.Yellow);
+            spriteBatch.Draw(_background, new Rectangle(0, 0, Config.Resolution.X, Config.Resolution.Y), Color.Yellow);
 
-            GameRef.SpriteBatch.DrawString(_titleFont, _title,
+            spriteBatch.DrawString(_titleFont, _title,
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2 + 5,
-                    Game.GraphicsDevice.Viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 2) + 5),
+                    viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2 + 5,
+                    viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 2) + 5),
                 Color.Black);
-            GameRef.SpriteBatch.DrawString(_titleFont, _title,
+            spriteBatch.DrawString(_titleFont, _title,
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2,
-                    Game.GraphicsDevice.Viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 2)),
+                    viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2,
+                    viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 2)),
                 Color.White);
 
             for (int i = 0; i < _menuText.Length; i++)
@@ -191,10 +201,10 @@ namespace DanmakuNoKyojin.Screens
                 if (i == _menuIndex)
                     textColor = Color.OrangeRed;
 
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(
+                spriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(
                   _menuStartCoord.X - (ControlManager.SpriteFont.MeasureString(_menuText[i]).X / 2f) + 1,
                   _menuStartCoord.Y + (100 * i) + 1), Color.Black);
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(
+                spriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(
                   _menuStartCoord.X - (ControlManager.SpriteFont.MeasureString(_menuText[i]).X / 2f),
                   _menuStartCoord.Y + (100 * i)), textColor);
 
@@ -208,10 +218,10 @@ namespace DanmakuNoKyojin.Screens
                     if (Config.PlayersController[i] == Config.Controller.GamePad)
                         gamepadColor = Color.Red;
 
-                    GameRef.SpriteBatch.Draw(_keyboardIcon, new Rectangle(
+                    spriteBatch.Draw(_keyboardIcon, new Rectangle(
                         _menuStartCoord.X - 50 - 20, _menuStartCoord.Y + 35 + (i * 100),
                         _keyboardIcon.Width, _keyboardIcon.Height), keyboardColor);
-                    GameRef.SpriteBatch.Draw(_gamepadIcon, new Rectangle(
+                    spriteBatch.Draw(_gamepadIcon, new Rectangle(
                         _menuStartCoord.X + 50 - 20, _menuStartCoord.Y + 35 + (i * 100),
                         _gamepadIcon.Width, _gamepadIcon.Height), gamepadColor);
                 }
@@ -219,44 +229,44 @@ namespace DanmakuNoKyojin.Screens
                 // Sound volume
                 if (i == 2)
                 {
-                    GameRef.SpriteBatch.Draw(_volumeBar, new Rectangle(
+                    spriteBatch.Draw(_volumeBar, new Rectangle(
                        _menuStartCoord.X - 60, _menuStartCoord.Y + (100 * i) + 35,
                         (int)(150f * (Config.SoundVolume / 100f)), 20),
                     Color.White);
 
 
                     string soundVolume = Config.SoundVolume.ToString() + "%";
-                    GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, soundVolume,
+                    spriteBatch.DrawString(ControlManager.SpriteFont, soundVolume,
                         new Vector2(_menuStartCoord.X - ControlManager.SpriteFont.MeasureString(soundVolume).X / 4 + 1, _menuStartCoord.Y + (100 * i) + 60 + 1),
                         Color.Black);
 
-                    GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, soundVolume,
+                    spriteBatch.DrawString(ControlManager.SpriteFont, soundVolume,
                         new Vector2(_menuStartCoord.X - ControlManager.SpriteFont.MeasureString(soundVolume).X / 4, _menuStartCoord.Y + (100 * i) + 60),
                         Color.White);
                 }
                 // Music volume
                 else if (i == 3)
                 {
-                    GameRef.SpriteBatch.Draw(_volumeBar, new Rectangle(
+                    spriteBatch.Draw(_volumeBar, new Rectangle(
                        _menuStartCoord.X - 60, _menuStartCoord.Y + (100 * i) + 35,
                         (int)(150f * (Config.MusicVolume/100f)), 20),
                     Color.White);
 
 
                     string musicVolume = Config.MusicVolume.ToString() + "%";
-                    GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, musicVolume,
+                    spriteBatch.DrawString(ControlManager.SpriteFont, musicVolume,
                         new Vector2(_menuStartCoord.X - ControlManager.SpriteFont.MeasureString(musicVolume).X / 4 + 1, _menuStartCoord.Y + (100 * i) + 60 + 1),
                         Color.Black);
 
-                    GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, musicVolume,
+                    spriteBatch.DrawString(ControlManager.SpriteFont, musicVolume,
                         new Vector2(_menuStartCoord.X - ControlManager.SpriteFont.MeasureString(musicVolume).X / 4, _menuStartCoord.Y + (100 * i) + 60),
                         Color.White);
                 }
             }
 
-            GameRef.SpriteBatch.End();
+            //GameRef.SpriteBatch.End();
 
-            base.Draw(gameTime);
+            base.Draw(gameTime, spriteBatch);
         }
     }
 }

@@ -18,23 +18,11 @@ namespace DanmakuNoKyojin
     {
         public GraphicsDeviceManager Graphics;
         public SpriteBatch SpriteBatch;
-        private GameStateManager _stateManager;
 
         // single instance to dispose all disposable resources owned by GameProcessor
         private CompositeDisposable instanceDisposer = new CompositeDisposable();
 
         public GameProcessor GameProcessor { private get; set; }
-
-        // Screens
-        public TitleScreen TitleScreen;
-        public ImprovementScreen ImprovementScreen;
-        public LeaderboardScreen LeaderboardScreen;
-        public OptionsScreen OptionsScreen;
-        public KeyboardInputsScreen KeyboardInputsScreen;
-        public GamepadInputsScreen GamepadInputsScreen;
-        public GameConfigurationScreen GameConfigurationScreen;
-        public GameplayScreen GameplayScreen;
-        public GameOverScreen GameOverScreen;
 
         public Rectangle ScreenRectangle;
 
@@ -84,8 +72,6 @@ namespace DanmakuNoKyojin
             Pixel.SetData(new[] { Color.White });
         }
 
-        public Camera2D camera { private get; set; }
-
         protected override void Initialize()
         {
             //StaticClassSerializer.Load(typeof(PlayerData), "data.bin");
@@ -93,24 +79,9 @@ namespace DanmakuNoKyojin
             // Display FPS at the top left screen's corner
             Components.Add(new FrameRateCounter(this));
 
-            _stateManager = new GameStateManager();
-            _stateManager.ComponentAdded += (s, arg) => Components.Add(arg);
-            _stateManager.ComponentRemoved += (s, arg) => Components.Remove(arg);
 
-            camera = new Camera2D(this);
 
-            // Screens
-            TitleScreen = new TitleScreen(this, _stateManager).DisposeWith(instanceDisposer);
-            GameConfigurationScreen = new GameConfigurationScreen(this, _stateManager).DisposeWith(instanceDisposer);
-            GameplayScreen = new GameplayScreen(this, _stateManager, camera).DisposeWith(instanceDisposer);
-            LeaderboardScreen = new LeaderboardScreen(this, _stateManager).DisposeWith(instanceDisposer);
-            ImprovementScreen = new ImprovementScreen(this, _stateManager).DisposeWith(instanceDisposer);
-            GameOverScreen = new GameOverScreen(this, _stateManager).DisposeWith(instanceDisposer);
-            OptionsScreen = new OptionsScreen(this, _stateManager).DisposeWith(instanceDisposer);
-            KeyboardInputsScreen = new KeyboardInputsScreen(this, _stateManager).DisposeWith(instanceDisposer);
-            GamepadInputsScreen = new GamepadInputsScreen(this, _stateManager).DisposeWith(instanceDisposer);
 
-            _stateManager.ChangeState(TitleScreen);
 
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
 
@@ -133,9 +104,6 @@ namespace DanmakuNoKyojin
             GameProcessor.LoadContent(this);
 
             SpriteBatch = new SpriteBatch(GraphicsDevice).DisposeWith(instanceDisposer);
-
-            Select = Content.Load<SoundEffect>(@"Audio/SE/select");
-            Choose = Content.Load<SoundEffect>(@"Audio/SE/choose");
 
             ParticleManager.LoadContent(this);
         }

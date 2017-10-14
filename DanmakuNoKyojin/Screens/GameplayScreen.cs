@@ -8,21 +8,17 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using NewConfig = Danmaku.Config;
-using DanmakuNoKyojin.Entities.Boss;
 using Microsoft.Xna.Framework.Media;
 using DanmakuNoKyojin.Camera;
+using DanmakuNoKyojin.Framework;
 
 namespace DanmakuNoKyojin.Screens
 {
-    public class GameplayScreen : BaseGameState
+    public class GameplayScreen : GameScreen, IDisposable
     {
-        // Camera
-        Viewport defaultView;
-
         private Texture2D _pixel;
 
         public Player Player { get; set; }
-        private Boss _enemy;
 
         private int _waveNumber;
 
@@ -30,7 +26,7 @@ namespace DanmakuNoKyojin.Screens
         private SoundEffect hit = null;
 
         // Timer (descending)
-        private readonly Timer _timer;
+        private Timer _timer;
 
         // Timer for play time
         private TimeSpan _playTime;
@@ -42,18 +38,20 @@ namespace DanmakuNoKyojin.Screens
 
         private Camera2D camera;
 
-        public GameplayScreen(Game game, GameStateManager manager, Camera2D camera)
-            : base(game, manager)
+        private readonly IViewportProvider viewport;
+        public GameplayScreen(IViewportProvider viewport, GameStateManager manager, Camera2D camera)
+            : base(manager)
         {
-
+            this.viewport = viewport;
             this.camera = camera;
 
-            // Timer
-            _timer = new Timer(Game);
         }
 
         public override void Initialize()
         {
+            // Timer
+            _timer = new Timer();
+
             _backgroundMainRectangle = new Rectangle(0, 0, NewConfig.GameAreaX, NewConfig.GameAreaY);
             _backgroundTopRectangle = new Rectangle(0, -NewConfig.GameAreaY, NewConfig.GameAreaX, NewConfig.GameAreaY);
 
@@ -65,40 +63,33 @@ namespace DanmakuNoKyojin.Screens
 
             base.Initialize();
 
-            MediaPlayer.IsRepeating = true;
-            MediaPlayer.Play(GameRef.Content.Load<Song>("Audio/Musics/Background"));
-
             _timer.Initialize();
+        }
 
-            defaultView = GraphicsDevice.Viewport;
-
-            // First player
-            var player1 = new Player(GameRef, 
-                Config.PlayersController[0],
+        public override void LoadContent(IContentLoader loader)
+        {
+            var player1 = new Player(viewport, Config.PlayersController[0],
                 new Vector2(NewConfig.GameAreaX / 2f, NewConfig.GameAreaY - 150),
                 camera);
             player1.Initialize();
-            player1.LoadContent(GameRef);
+            player1.LoadContent(loader);
             Player = player1;
 
-            _enemy = new Boss(GameRef, Player);
-            _enemy.Initialize();
-        }
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(loader.Load<Song>("Audio/Musics/Background"));
 
-        protected override void LoadContent()
-        {
+
             if (hit == null)
             {
-                hit = GameRef.Content.Load<SoundEffect>(@"Audio/SE/hurt");
+                hit = loader.Load<SoundEffect>(@"Audio/SE/hurt");
             }
 
-            _backgroundImage = GameRef.Content.Load<Texture2D>("Graphics/Pictures/background");
-            _pixel = GameRef.Pixel;
+            _backgroundImage = loader.Load<Texture2D>("Graphics/Pictures/background");
 
-            base.LoadContent();
+            base.LoadContent(loader);
         }
 
-        protected override void UnloadContent()
+        public void Dispose()
         {
 
             Player.Dispose();
@@ -119,8 +110,8 @@ namespace DanmakuNoKyojin.Screens
 
             if (InputHandler.PressedCancel())
             {
-                UnloadContent();
-                StateManager.ChangeState(GameRef.TitleScreen);
+                // UnloadContent();
+                StateManager.ChangeState(GameStateManager.State.TitleScreen);
             }
 
             base.Update(gameTime);
@@ -166,21 +157,21 @@ namespace DanmakuNoKyojin.Screens
                     }
                     */
 
-                    foreach (var part in _enemy.Parts)
-                    {
-                        if (p.Intersects(part))
-                        {
-                            p.Hit(GameRef.ParticleManager);
-                        }
-                    }
+                    //foreach (var part in _enemy.Parts)
+                    //{
+                    //    if (p.Intersects(part))
+                    //    {
+                    //        p.Hit(GameRef.ParticleManager);
+                    //    }
+                    //}
 
-                    foreach (Mover m in _enemy.MoverManager.movers)
-                    {
-                        if (p.Intersects(m))
-                            p.Hit(GameRef.ParticleManager);
-                    }
+                    //foreach (Mover m in _enemy.MoverManager.movers)
+                    //{
+                    //    if (p.Intersects(m))
+                    //        p.Hit(GameRef.ParticleManager);
+                    //}
 
-                    p.Update(gameTime, GameRef, GameRef.SpriteBatch, GameRef.ParticleManager);
+                    p.Update(gameTime, viewport);
                 }
             }
 
@@ -203,24 +194,25 @@ namespace DanmakuNoKyojin.Screens
             // GameRef Over
             if (!Player.IsAlive || _timer.IsFinished)
             {
-                UnloadContent();
+                // TODO 
+                // UnloadContent();
 
-                GameRef.GameOverScreen.Died = !_timer.IsFinished;
-                GameRef.GameOverScreen.Time = _playTime;
-                GameRef.GameOverScreen.WaveNumber = _waveNumber;
-                GameRef.GameOverScreen.Player1Score = Player.Score;
+                //GameRef.GameOverScreen.Died = !_timer.IsFinished;
+                //GameRef.GameOverScreen.Time = _playTime;
+                //GameRef.GameOverScreen.WaveNumber = _waveNumber;
+                //GameRef.GameOverScreen.Player1Score = Player.Score;
 
-                int totalScore =
-                    GameRef.GameOverScreen.Player1Score +
-                    GameRef.GameOverScreen.Player2Score +
-                    (Improvements.ScoreByEnemyData[PlayerData.ScoreByEnemyIndex].Key * GameRef.GameOverScreen.WaveNumber) +
-                    (int)_playTime.TotalSeconds;
+                //int totalScore =
+                //    GameRef.GameOverScreen.Player1Score +
+                //    GameRef.GameOverScreen.Player2Score +
+                //    (Improvements.ScoreByEnemyData[PlayerData.ScoreByEnemyIndex].Key * GameRef.GameOverScreen.WaveNumber) +
+                //    (int)_playTime.TotalSeconds;
 
-                GameRef.GameOverScreen.TotalScore = totalScore;
+                //GameRef.GameOverScreen.TotalScore = totalScore;
 
-                PlayerData.Credits += totalScore;
+                //PlayerData.Credits += totalScore;
 
-                StateManager.ChangeState(GameRef.GameOverScreen);
+                //StateManager.ChangeState(GameStateManager.State.GameOverScreen);
             }
 
             if (Config.Debug && InputHandler.KeyPressed(Keys.C))
@@ -228,73 +220,71 @@ namespace DanmakuNoKyojin.Screens
 
             camera.Update(InputHandler.MouseState.X, InputHandler.MouseState.Y, Player.Ship.Position, Player.Ship.Rotation);
 
-            _enemy.Update(gameTime);
+            //_enemy.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            GameRef.SpriteBatch.Begin(0, BlendState.Opaque);
+            //GameRef.SpriteBatch.Begin(0, BlendState.Opaque);
 
-            GameRef.SpriteBatch.End();
+            //spriteBatch.End();
 
-            GameRef.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            // siudek GameRef.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             Color backgroundColor = new Color(5, 5, 5);
-            GraphicsDevice.Clear(backgroundColor);
+            // siudek GraphicsDevice.Clear(backgroundColor);
 
-            GameRef.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.GetTransformation());
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.GetTransformation());
 
             Color randomColor = Color.White;//new Color(Rand.Next(255), Rand.Next(255), Rand.Next(255));
-            GameRef.SpriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, randomColor);
+            spriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, randomColor);
 
             foreach (var bullet in Player.GetBullets())
             {
-                bullet.Draw(gameTime, GameRef.SpriteBatch);
+                bullet.Draw(gameTime, spriteBatch);
             }
 
-            Player.Draw(gameTime, GameRef.SpriteBatch);
+            Player.Draw(gameTime, spriteBatch);
 
             //if (_enemy.IsAlive)
             //{
-               _enemy.Draw(gameTime, camera.GetTransformation());
+               //_enemy.Draw(gameTime, camera.GetTransformation());
             //}
 
-            GameRef.SpriteBatch.End();
+            //GameRef.SpriteBatch.End();
 
-            base.Draw(gameTime);
+            //GameRef.SpriteBatch.Begin();
 
-            GameRef.SpriteBatch.Begin();
-
-            _timer.Draw(gameTime);
+            _timer.Draw(gameTime, spriteBatch);
 
             
             {
                 var p = Player;
                 if (p.IsAlive)
                 {
-                    p.DrawString(gameTime, GameRef.SpriteBatch);
+                    p.DrawString(gameTime, spriteBatch);
                 }
             }
 
-            // Text
-            if (Config.Debug)
-            {
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont,
-                                               "Boss bullets: " +
-                                               _enemy.MoverManager.movers.Count.ToString(CultureInfo.InvariantCulture),
-                                               new Vector2(1, 21), Color.Black);
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont,
-                                               "Boss bullets: " +
-                                               _enemy.MoverManager.movers.Count.ToString(CultureInfo.InvariantCulture),
-                                               new Vector2(0, 20), Color.White);
-            }
+            //// Text
+            //if (Config.Debug)
+            //{
+            //    GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont,
+            //                                   "Boss bullets: " +
+            //                                   _enemy.MoverManager.movers.Count.ToString(CultureInfo.InvariantCulture),
+            //                                   new Vector2(1, 21), Color.Black);
+            //    GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont,
+            //                                   "Boss bullets: " +
+            //                                   _enemy.MoverManager.movers.Count.ToString(CultureInfo.InvariantCulture),
+            //                                   new Vector2(0, 20), Color.White);
+            //}
 
             // Wave number
             string waveNumber = "Wave #" + _waveNumber.ToString(CultureInfo.InvariantCulture);
 
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, waveNumber,
+            spriteBatch.DrawString(ControlManager.SpriteFont, waveNumber,
                 new Vector2(Config.Resolution.X / 2f - ControlManager.SpriteFont.MeasureString(waveNumber).X / 2f + 1, Config.Resolution.Y - 49), Color.Black);
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, waveNumber,
+            spriteBatch.DrawString(ControlManager.SpriteFont, waveNumber,
                 new Vector2(Config.Resolution.X / 2f - ControlManager.SpriteFont.MeasureString(waveNumber).X / 2f, Config.Resolution.Y - 50), Color.White);
 
             // Boss current pattern
@@ -317,7 +307,7 @@ namespace DanmakuNoKyojin.Screens
                                                Color.White);
             }
             */
-            GameRef.SpriteBatch.End();
+            // GameRef.SpriteBatch.End();
         }
     }
 }

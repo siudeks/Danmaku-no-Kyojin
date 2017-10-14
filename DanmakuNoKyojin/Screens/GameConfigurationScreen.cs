@@ -1,10 +1,12 @@
 ﻿using DanmakuNoKyojin.Controls;
+using DanmakuNoKyojin.Framework;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace DanmakuNoKyojin.Screens
 {
-    public class GameConfigurationScreen : BaseGameState
+    public class GameConfigurationScreen : GameScreen
     {
         #region Field region
 
@@ -14,49 +16,37 @@ namespace DanmakuNoKyojin.Screens
 
         #region Constructor region
 
-        public GameConfigurationScreen(Game game, GameStateManager manager)
-            : base(game, manager)
+        private IViewportProvider viewport;
+
+        public GameConfigurationScreen(IViewportProvider viewport, GameStateManager manager)
+            : base(manager)
         {
-            
+            this.viewport = viewport;    
         }
 
         #endregion
 
         #region XNA Method region
 
-        public override void Initialize()
-        {
-            _message = "This functionnality is not implemented yet !";
-
-            base.Initialize();
-        }
-
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-        }
-
         public override void Update(GameTime gameTime)
         {
             if (InputHandler.PressedCancel())
-                StateManager.ChangeState(GameRef.TitleScreen);
+                StateManager.ChangeState(GameStateManager.State.TitleScreen);
 
             base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            GameRef.SpriteBatch.Begin();
+            // spriteBatch.Begin();
 
-            base.Draw(gameTime);
-
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _message,
+            spriteBatch.DrawString(ControlManager.SpriteFont, _message,
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_message).X / 2, 
-                    Game.GraphicsDevice.Viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_message).Y / 2), 
+                    viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_message).X / 2, 
+                    viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_message).Y / 2), 
                 Color.White);
 
-            GameRef.SpriteBatch.End();
+            // spriteBatch.End();
         }
 
         #endregion

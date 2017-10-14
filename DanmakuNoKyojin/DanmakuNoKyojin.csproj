@@ -100,6 +100,7 @@
     <Compile Include="Framework\FrameworkInitialized.cs" />
     <Compile Include="Framework\GameComponentCollectionExtensions.cs" />
     <Compile Include="Framework\IContentLoader.cs" />
+    <Compile Include="Framework\IGameComponentPart.cs" />
     <Compile Include="Framework\IocRegistration.cs" />
     <Compile Include="Framework\IDrawablePart.cs" />
     <Compile Include="Framework\IContentBasedPart.cs" />

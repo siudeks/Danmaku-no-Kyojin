@@ -5,10 +5,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
+using DanmakuNoKyojin.Framework;
+using System.Diagnostics;
 
 namespace DanmakuNoKyojin.Screens
 {
-    public class TitleScreen : BaseGameState
+    public class TitleScreen : GameScreen
     {
         #region Field region
 
@@ -31,9 +33,17 @@ namespace DanmakuNoKyojin.Screens
 
         #region Constructor region
 
-        public TitleScreen(Game game, GameStateManager manager)
-            : base(game, manager)
+        private readonly IViewportProvider viewport;
+        private readonly SoundEffect select;
+        private readonly SoundEffect choose;
+
+        public TitleScreen(IViewportProvider viewport,  GameStateManager manager, SoundEffect select, SoundEffect choose)
+            : base(manager)
         {
+            this.viewport = viewport;
+            this.select = select;
+            this.choose = choose;
+
             _menuText = new string[] { "Start", "Shop", "Options", "Exit" };
             _menuDescription = new string[] { 
                 "Playing game with only one player", 
@@ -56,34 +66,35 @@ namespace DanmakuNoKyojin.Screens
             _backgroundTopRectangle = new Rectangle(0, -Config.Resolution.Y, Config.Resolution.X, Config.Resolution.Y);
             _backgroundTopRightRectangle = new Rectangle(Config.Resolution.X, -Config.Resolution.Y, Config.Resolution.X, Config.Resolution.Y);
 
-            // Music
-            if (MediaPlayer.State != MediaState.Playing)
-            {
-                MediaPlayer.Volume = Config.MusicVolume/100f;
-                MediaPlayer.IsRepeating = true;
-                MediaPlayer.Play(GameRef.Content.Load<Song>("Audio/Musics/menu"));
-            }
 
             SoundEffect.MasterVolume = Config.SoundVolume/100f;
 
             base.Initialize();
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(IContentLoader loader)
         {
-            _logo = GameRef.Content.Load<Texture2D>("Graphics/Pictures/logo");
-            _backgroundImage = GameRef.Content.Load<Texture2D>("Graphics/Pictures/background");
+            // Music
+            if (MediaPlayer.State != MediaState.Playing)
+            {
+                MediaPlayer.Volume = Config.MusicVolume / 100f;
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Play(loader.Load<Song>("Audio/Musics/menu"));
+            }
+
+            _logo = loader.Load<Texture2D>("Graphics/Pictures/logo");
+            _backgroundImage = loader.Load<Texture2D>("Graphics/Pictures/background");
 
             if (_passSound == null)
-                _passSound = GameRef.Content.Load<SoundEffect>(@"Audio/SE/pass");
+                _passSound = loader.Load<SoundEffect>(@"Audio/SE/pass");
 
-            base.LoadContent();
+            base.LoadContent(loader);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (InputHandler.PressedCancel() && _passStep != 8)
-                Game.Exit();
+            //if (InputHandler.PressedCancel() && _passStep != 8)
+            //    Game.Exit();
 
             if (InputHandler.PressedUp())
             {
@@ -92,33 +103,33 @@ namespace DanmakuNoKyojin.Screens
                 if (_menuIndex < 0)
                     _menuIndex = _menuText.Length - 1;
 
-                GameRef.Select.Play();
+                select.Play();
             }
 
             if (InputHandler.PressedDown())
             {
                 _menuIndex = (_menuIndex + 1) % _menuText.Length;
-                GameRef.Select.Play();
+                select.Play();
             }
 
             if (InputHandler.PressedAction() && _passStep != 9)
             {
-                GameRef.Choose.Play();
+                choose.Play();
 
                 // 1 Player
                 if (_menuIndex == 0)
                 {
-                    StateManager.ChangeState(GameRef.GameplayScreen);
+                    StateManager.ChangeState(GameStateManager.State.GameplayScreen);
                 }
                 // Improvements
                 else if (_menuIndex == 1)
-                    StateManager.ChangeState(GameRef.ImprovementScreen);
+                    StateManager.ChangeState(GameStateManager.State.ImprovementScreen);
                 // Options
                 else if (_menuIndex == 2)
-                    StateManager.ChangeState(GameRef.OptionsScreen);
+                    StateManager.ChangeState(GameStateManager.State.OptionsScreen);
                 // Exit
                 else if (_menuIndex == 3)
-                    Game.Exit();
+                    Process.GetCurrentProcess().Kill();
             }
 
             if (_backgroundMainRectangle.X + Config.Resolution.X <= 0)
@@ -189,17 +200,17 @@ namespace DanmakuNoKyojin.Screens
             base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            GameRef.SpriteBatch.Begin();
+            // GameRef.SpriteBatch.Begin();
 
-            GameRef.SpriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, Color.White);
-            GameRef.SpriteBatch.Draw(_backgroundImage, _backgroundRightRectangle, Color.White);
-            GameRef.SpriteBatch.Draw(_backgroundImage, _backgroundTopRectangle, Color.White);
-            GameRef.SpriteBatch.Draw(_backgroundImage, _backgroundTopRightRectangle, Color.White);
+            spriteBatch.Draw(_backgroundImage, _backgroundMainRectangle, Color.White);
+            spriteBatch.Draw(_backgroundImage, _backgroundRightRectangle, Color.White);
+            spriteBatch.Draw(_backgroundImage, _backgroundTopRectangle, Color.White);
+            spriteBatch.Draw(_backgroundImage, _backgroundTopRightRectangle, Color.White);
 
-            GameRef.SpriteBatch.Draw(_logo, new Vector2(
-                                                (GameRef.Graphics.GraphicsDevice.Viewport.Width / 2) - (_logo.Width / 2),
+            spriteBatch.Draw(_logo, new Vector2(
+                                                (viewport.Width / 2) - (_logo.Width / 2),
                                                 100), Color.White);
 
             for (int i = 0; i < _menuText.Length; i++)
@@ -209,29 +220,29 @@ namespace DanmakuNoKyojin.Screens
                 if (i == _menuIndex)
                     textColor = Color.OrangeRed;
 
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(
-                  Game.GraphicsDevice.Viewport.Width / 2f - (ControlManager.SpriteFont.MeasureString(_menuText[i]).X / 2f) + 1,
-                  Game.GraphicsDevice.Viewport.Height / 2f + (50 * i) + 1), Color.Black);
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(
-                  Game.GraphicsDevice.Viewport.Width / 2f - (ControlManager.SpriteFont.MeasureString(_menuText[i]).X / 2f),
-                  Game.GraphicsDevice.Viewport.Height / 2f + (50 * i)), textColor);
+                spriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(
+                  viewport.Width / 2f - (ControlManager.SpriteFont.MeasureString(_menuText[i]).X / 2f) + 1,
+                  viewport.Height / 2f + (50 * i) + 1), Color.Black);
+                spriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(
+                  viewport.Width / 2f - (ControlManager.SpriteFont.MeasureString(_menuText[i]).X / 2f),
+                  viewport.Height / 2f + (50 * i)), textColor);
             }
 
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, "[" + _menuDescription[_menuIndex] + "]", new Vector2(
-                Game.GraphicsDevice.Viewport.Width / 2f - (ControlManager.SpriteFont.MeasureString(_menuDescription[_menuIndex]).X / 2f) - 4 + 1,
-                Game.GraphicsDevice.Viewport.Height - 60 + 1), Color.Black);
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, "[" + _menuDescription[_menuIndex] + "]", new Vector2(
-                Game.GraphicsDevice.Viewport.Width / 2f - (ControlManager.SpriteFont.MeasureString(_menuDescription[_menuIndex]).X / 2f) - 4,
-                Game.GraphicsDevice.Viewport.Height - 60), Color.White);
+            spriteBatch.DrawString(ControlManager.SpriteFont, "[" + _menuDescription[_menuIndex] + "]", new Vector2(
+                viewport.Width / 2f - (ControlManager.SpriteFont.MeasureString(_menuDescription[_menuIndex]).X / 2f) - 4 + 1,
+                viewport.Height - 60 + 1), Color.Black);
+            spriteBatch.DrawString(ControlManager.SpriteFont, "[" + _menuDescription[_menuIndex] + "]", new Vector2(
+                viewport.Width / 2f - (ControlManager.SpriteFont.MeasureString(_menuDescription[_menuIndex]).X / 2f) - 4,
+                viewport.Height - 60), Color.White);
 
             string credits = "Credits: " + PlayerData.Credits.ToString(CultureInfo.InvariantCulture);
 
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, credits, new Vector2(1, Game.GraphicsDevice.Viewport.Height - ControlManager.SpriteFont.MeasureString(credits).Y + 1), Color.Black);
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, credits, new Vector2(0, Game.GraphicsDevice.Viewport.Height - ControlManager.SpriteFont.MeasureString(credits).Y), Color.White);
+            spriteBatch.DrawString(ControlManager.SpriteFont, credits, new Vector2(1, viewport.Height - ControlManager.SpriteFont.MeasureString(credits).Y + 1), Color.Black);
+            spriteBatch.DrawString(ControlManager.SpriteFont, credits, new Vector2(0, viewport.Height - ControlManager.SpriteFont.MeasureString(credits).Y), Color.White);
 
-            GameRef.SpriteBatch.End();
+            //GameRef.SpriteBatch.End();
 
-            base.Draw(gameTime);
+            base.Draw(gameTime, spriteBatch);
         }
 
         #endregion

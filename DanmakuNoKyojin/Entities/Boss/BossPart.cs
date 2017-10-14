@@ -18,6 +18,7 @@ namespace DanmakuNoKyojin.Entities.Boss
     class BossPart : Entity, ICloneable
     {
         private static Random random = new Random();
+        private readonly Texture2D pixel;
         private readonly Boss _bossRef;
         private readonly bool _mainPart;
         private Player player;
@@ -82,6 +83,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             List<BulletPattern> bulletPatterns,
             Color color,
             float initialHealth,
+            Texture2D pixel,
             int iteration = 50,
             float step = 25,
             List<Turret> turrets = null,
@@ -89,6 +91,7 @@ namespace DanmakuNoKyojin.Entities.Boss
             bool mainPart = false)
             : base(gameRef)
         {
+            this.pixel = pixel;
             _bossRef = bossRef;
             _mainPart = mainPart;
             this.player = player;
@@ -379,7 +382,7 @@ namespace DanmakuNoKyojin.Entities.Boss
                 {
                     var bossPart = new BossPart(
                         GameRef, _bossRef, player, _moverManager, null, _color,
-                        _health, 0, 25f, null, newPolygonShape
+                        _health,null,  0, 25f, null, newPolygonShape
                     );
 
                     bossPart.Initialize();

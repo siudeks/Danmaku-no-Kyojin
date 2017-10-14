@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DanmakuNoKyojin.Screens;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
@@ -9,10 +10,24 @@ namespace DanmakuNoKyojin.Controls
         const int startDrawOrder = 5000;
         const int drawOrderInc = 100;
 
-        public event EventHandler<IGameComponent> ComponentAdded;
-        public event EventHandler<IGameComponent> ComponentRemoved;
+        public event EventHandler<GameState> ComponentAdded;
+        public event EventHandler<GameState> ComponentRemoved;
 
         private readonly Stack<GameState> gameStates = new Stack<GameState>();
+        private readonly Dictionary<State, GameScreen> screens = new Dictionary<State, GameScreen>();
+
+        public GameStateManager(GameOverScreen GameOverScreen,
+            OptionsScreen OptionsScreen,
+            TitleScreen TitleScreen,
+            GameplayScreen GameplayScreen,
+            ImprovementScreen ImprovementScreen)
+        {
+            screens.Add(State.GameOverScreen, GameOverScreen);
+            screens.Add(State.OptionsScreen, OptionsScreen);
+            screens.Add(State.TitleScreen, TitleScreen);
+            screens.Add(State.GameOverScreen, GameOverScreen);
+            screens.Add(State.ImprovementScreen, ImprovementScreen);
+        }
 
         public GameState CurrentState
         {
@@ -27,21 +42,34 @@ namespace DanmakuNoKyojin.Controls
             gameStates.Pop();
         }
 
-        private void AddState(GameState newState)
+        private void AddState(State state)
         {
-            gameStates.Push(newState);
+            var screen = states[state];
+            gameStates.Push(screen);
 
-            ComponentAdded?.Invoke(this, newState);
+            ComponentAdded?.Invoke(this, screen);
         }
 
-        public void ChangeState(GameState newState)
+        private Dictionary<State, GameState> states = new Dictionary<State, GameState>();
+
+        public void ChangeState(State expected)
         {
+            var newState = states[expected];
             while (gameStates.Count > 0)
                 RemoveState();
 
-            newState.DrawOrder = startDrawOrder;
+            //newState.DrawOrder = startDrawOrder;
 
-            AddState(newState);
+            AddState(expected);
+        }
+
+        public enum State
+        {
+            GameOverScreen,
+            OptionsScreen,
+            TitleScreen,
+            GameplayScreen,
+            ImprovementScreen
         }
     }
 }

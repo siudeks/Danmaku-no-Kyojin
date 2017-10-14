@@ -1,52 +1,49 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DanmakuNoKyojin.Framework;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
 namespace DanmakuNoKyojin.Controls
 {
-    public abstract partial class GameState : Microsoft.Xna.Framework.DrawableGameComponent
+    public abstract partial class GameState: IGameComponentPart
     {
-        public List<GameComponent> Components { get; private set; } = new List<GameComponent>();
+        public List<IGameComponentPart> Components { get; private set; } = new List<IGameComponentPart>();
         public GameState Tag { get; private set; }
 
         protected GameStateManager StateManager;
 
-        public GameState(Game game, GameStateManager manager)
-            : base(game)
+        public GameState(GameStateManager manager)
         {
             StateManager = manager;
 
             Tag = this;
         }
 
-        public override void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             foreach (var component in Components)
             {
-                if (!component.Enabled) continue;
+                //if (!component.Enabled) continue;
 
                 component.Update(gameTime);
             }
-
-            base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (var component in Components)
             {
-                if (component is DrawableGameComponent drawable)
-                {
-                    if (!drawable.Visible) continue;
+                //if (component is DrawableGameComponent drawable)
+                //{
+                //    if (!drawable.Visible) continue;
 
-                    drawable.Draw(gameTime);
-                }
+                    component.Draw(gameTime, spriteBatch);
+                //}
             }
-
-            base.Draw(gameTime);
         }
 
-        internal protected virtual void StateChange(object sender, EventArgs e)
+        protected void StateChange(object sender, EventArgs e)
         {
             if (StateManager.CurrentState == Tag)
                 Show();
@@ -56,12 +53,12 @@ namespace DanmakuNoKyojin.Controls
 
         protected virtual void Show()
         {
-            Visible = true;
-            Enabled = true;
+            //Visible = true;
+            //Enabled = true;
 
             foreach (var component in Components)
             {
-                component.Enabled = true;
+                //component.Enabled = true;
                 if (component is DrawableGameComponent drawable)
                     drawable.Visible = true;
             }
@@ -69,15 +66,23 @@ namespace DanmakuNoKyojin.Controls
 
         protected virtual void Hide()
         {
-            Visible = false;
-            Enabled = false;
+            //Visible = false;
+            //Enabled = false;
 
-            foreach (GameComponent component in Components)
-            {
-                component.Enabled = false;
-                if (component is DrawableGameComponent drawable)
-                    drawable.Visible = false;
-            }
+            //foreach (var component in Components)
+            //{
+            //    component.Enabled = false;
+            //    if (component is DrawableGameComponent drawable)
+            //        drawable.Visible = false;
+            //}
+        }
+
+        public virtual void LoadContent(IContentLoader provider)
+        {
+        }
+
+        public virtual void Initialize()
+        {
         }
     }
 }

@@ -3,12 +3,12 @@ using System.Globalization;
 using DanmakuNoKyojin.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using DanmakuNoKyojin.Framework;
 
 namespace DanmakuNoKyojin.Screens
 {
-    public class ImprovementScreen : BaseGameState
+    public class ImprovementScreen : GameScreen
     {
         #region Field region
 
@@ -25,14 +25,17 @@ namespace DanmakuNoKyojin.Screens
 
         #endregion
 
-        #region Constructor region
+        private readonly IViewportProvider viewport;
+        private readonly SoundEffect select;
+        private readonly SoundEffect choose;
 
-        public ImprovementScreen(Game game, GameStateManager manager)
-            : base(game, manager)
+        public ImprovementScreen(IViewportProvider viewport, GameStateManager manager, SoundEffect select, SoundEffect choose)
+            : base(manager)
         {
+            this.viewport = viewport;
+            this.select = select;
+            this.choose = choose;
         }
-
-        #endregion
 
         #region XNA Method region
 
@@ -47,25 +50,25 @@ namespace DanmakuNoKyojin.Screens
             base.Initialize();
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(IContentLoader loader)
         {
-            _background = GameRef.Content.Load<Texture2D>("Graphics/Pictures/background");
+            _background = loader.Load<Texture2D>("Graphics/Pictures/background");
 
-            _titleFont = Game.Content.Load<SpriteFont>("Graphics/Fonts/TitleFont");
+            _titleFont = loader.Load<SpriteFont>("Graphics/Fonts/TitleFont");
 
-            _buySound = Game.Content.Load<SoundEffect>(@"Audio/SE/buy");
+            _buySound = loader.Load<SoundEffect>(@"Audio/SE/buy");
 
-            base.LoadContent();
+            base.LoadContent(loader);
         }
 
         public override void Update(GameTime gameTime)
         {
             if (InputHandler.PressedCancel())
-                StateManager.ChangeState(GameRef.TitleScreen);
+                StateManager.ChangeState(GameStateManager.State.TitleScreen);
 
             if (InputHandler.PressedUp())
             {
-                GameRef.Select.Play();
+                select.Play();
 
                 _menuIndex--;
 
@@ -75,7 +78,7 @@ namespace DanmakuNoKyojin.Screens
 
             if (InputHandler.PressedDown())
             {
-                GameRef.Select.Play();
+                select.Play();
 
                 _menuIndex = (_menuIndex + 1) % (_menuText.Length + 1);
             }
@@ -84,8 +87,8 @@ namespace DanmakuNoKyojin.Screens
             {
                 if (_menuIndex == _menuText.Length)
                 {
-                    GameRef.Choose.Play();
-                    StateManager.ChangeState(GameRef.TitleScreen);
+                    choose.Play();
+                    StateManager.ChangeState(GameStateManager.State.TitleScreen);
                 }
 
                 bool error = false;
@@ -242,33 +245,33 @@ namespace DanmakuNoKyojin.Screens
             base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            GameRef.SpriteBatch.Begin();
+            // GameRef.SpriteBatch.Begin();
 
-            GameRef.SpriteBatch.Draw(_background, new Rectangle(0, 0, Config.Resolution.X, Config.Resolution.Y), Color.GreenYellow);
+            spriteBatch.Draw(_background, new Rectangle(0, 0, Config.Resolution.X, Config.Resolution.Y), Color.GreenYellow);
 
             // Title
-            GameRef.SpriteBatch.DrawString(_titleFont, _title,
+            spriteBatch.DrawString(_titleFont, _title,
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2 + 5,
-                    Game.GraphicsDevice.Viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 3) + 5),
+                    viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2 + 5,
+                    viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 3) + 5),
                 Color.Black);
-            GameRef.SpriteBatch.DrawString(_titleFont, _title,
+            spriteBatch.DrawString(_titleFont, _title,
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2,
-                    Game.GraphicsDevice.Viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 3)),
+                    viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2,
+                    viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 3)),
                 Color.White);
 
             // Credits
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _credits,
+            spriteBatch.DrawString(ControlManager.SpriteFont, _credits,
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_credits).X / 2 + 1,
+                    viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_credits).X / 2 + 1,
                     100 + 1),
                 Color.Black);
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _credits,
+            spriteBatch.DrawString(ControlManager.SpriteFont, _credits,
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_credits).X / 2,
+                    viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_credits).X / 2,
                     100), 
                 Color.White);
 
@@ -278,14 +281,14 @@ namespace DanmakuNoKyojin.Screens
             for (int i = 0; i < _menuText.Length; i++)
             {
                 color = Color.White;
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(menuTextOrigin.X + 1, menuTextOrigin.Y + lineHeight * i + 1), Color.Black);
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(menuTextOrigin.X, menuTextOrigin.Y + lineHeight * i), Color.White);
+                spriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(menuTextOrigin.X + 1, menuTextOrigin.Y + lineHeight * i + 1), Color.Black);
+                spriteBatch.DrawString(ControlManager.SpriteFont, _menuText[i], new Vector2(menuTextOrigin.X, menuTextOrigin.Y + lineHeight * i), Color.White);
 
                 if (_menuIndex == i)
                     color = Color.Red;
 
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, "Buy", new Vector2(menuTextOrigin.X + 500 + 1, menuTextOrigin.Y + lineHeight * i + 1), Color.Black);
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, "Buy", new Vector2(menuTextOrigin.X + 500, menuTextOrigin.Y + lineHeight * i), color);
+                spriteBatch.DrawString(ControlManager.SpriteFont, "Buy", new Vector2(menuTextOrigin.X + 500 + 1, menuTextOrigin.Y + lineHeight * i + 1), Color.Black);
+                spriteBatch.DrawString(ControlManager.SpriteFont, "Buy", new Vector2(menuTextOrigin.X + 500, menuTextOrigin.Y + lineHeight * i), color);
             }
 
             // Back
@@ -295,11 +298,11 @@ namespace DanmakuNoKyojin.Screens
 
             string back = "Back to title";
 
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, back, new Vector2(
+            spriteBatch.DrawString(ControlManager.SpriteFont, back, new Vector2(
                 Config.Resolution.X / 2f - ControlManager.SpriteFont.MeasureString(back).X / 2 + 1, 
                 menuTextOrigin.Y + lineHeight * _menuText.Length + 1), 
             Color.Black);
-            GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, back, new Vector2(
+            spriteBatch.DrawString(ControlManager.SpriteFont, back, new Vector2(
                 Config.Resolution.X / 2f - ControlManager.SpriteFont.MeasureString(back).X / 2,
                 menuTextOrigin.Y + lineHeight * _menuText.Length), 
             color);
@@ -307,23 +310,23 @@ namespace DanmakuNoKyojin.Screens
             // Errors
             if (_error != null)
             {
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _error,
+                spriteBatch.DrawString(ControlManager.SpriteFont, _error,
                                                new Vector2(
-                                                   Game.GraphicsDevice.Viewport.Width/2f -
+                                                   viewport.Width/2f -
                                                    ControlManager.SpriteFont.MeasureString(_error).X/2 + 1,
                                                    Config.Resolution.Y - 40 + 1),
                                                Color.Black);
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _error,
+                spriteBatch.DrawString(ControlManager.SpriteFont, _error,
                                                new Vector2(
-                                                   Game.GraphicsDevice.Viewport.Width/2f -
+                                                   viewport.Width/2f -
                                                    ControlManager.SpriteFont.MeasureString(_error).X/2,
                                                    Config.Resolution.Y - 40),
                                                Color.White);
             }
 
-            GameRef.SpriteBatch.End();
+            // GameRef.SpriteBatch.End();
 
-            base.Draw(gameTime);
+            base.Draw(gameTime, spriteBatch);
         }
 
         #endregion

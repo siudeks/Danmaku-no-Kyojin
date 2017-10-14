@@ -116,12 +116,13 @@ namespace DanmakuNoKyojin.Entities
             Ship.LoadContent(contentLoader);
         }
 
-        public void Update(GameTime gameTime, IViewportProvider viewport, SpriteBatch spriteBatch, ParticleManager<ParticleState> particleManager)
+        // public void Update(GameTime gameTime, IViewportProvider viewport, SpriteBatch spriteBatch, ParticleManager<ParticleState> particleManager)
+        public void Update(GameTime gameTime, IViewportProvider viewport)
         {
             if (_lives <= 0)
                 IsAlive = false;
 
-            var inputState = ReadInput(_controller, _viewport, spriteBatch);
+            var inputState = ReadInput(_controller, _viewport);
 
             Ship.MoveCommand(inputState.Forward, inputState.Rotation);
 
@@ -129,7 +130,7 @@ namespace DanmakuNoKyojin.Entities
 
             if (inputState.Fire)
             {
-                Fire(gameTime, particleManager);
+                Fire(gameTime);
             }
 
             if (inputState.Fire)
@@ -172,7 +173,7 @@ namespace DanmakuNoKyojin.Entities
             }
         }
 
-        private static InputData ReadInputFromKeyboard(IViewportProvider _viewport, SpriteBatch spriteBatch)
+        private static InputData ReadInputFromKeyboard(IViewportProvider _viewport)
         {
             var bulletTime = InputHandler.MouseState.RightButton == ButtonState.Pressed;
 
@@ -213,10 +214,10 @@ namespace DanmakuNoKyojin.Entities
             return new InputData(bulletTime, fire, direction, rotation, Vector2.Zero, false);
         }
 
-        private static InputData ReadInput(Config.Controller controller, IViewportProvider viewport, SpriteBatch spriteBatch)
+        private static InputData ReadInput(Config.Controller controller, IViewportProvider viewport)
         {
             if (controller == Config.Controller.Keyboard)
-                return ReadInputFromKeyboard(viewport, spriteBatch);
+                return ReadInputFromKeyboard(viewport);
 
             if (controller == Config.Controller.GamePad)
                 return ReadInputFromPad();
@@ -285,7 +286,7 @@ namespace DanmakuNoKyojin.Entities
 
         }
 
-        private void Fire(GameTime gameTime, ParticleManager<ParticleState> particleManager)
+        private void Fire(GameTime gameTime)
         {
             if (BulletFrequence.TotalMilliseconds > 0)
                 BulletFrequence -= gameTime.ElapsedGameTime;
@@ -374,7 +375,7 @@ namespace DanmakuNoKyojin.Entities
 
                 _shootSound.Play();
 
-                FireParticles(gameTime, particleManager);
+                // FireParticles(gameTime, particleManager);
             }
         }
 

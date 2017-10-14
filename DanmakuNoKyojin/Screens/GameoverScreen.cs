@@ -6,10 +6,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using DanmakuNoKyojin.Framework;
 
 namespace DanmakuNoKyojin.Screens
 {
-    public class GameOverScreen : BaseGameState
+    public class GameOverScreen : GameScreen
     {
         #region Field region
 
@@ -31,10 +32,12 @@ namespace DanmakuNoKyojin.Screens
 
         #region Constructor region
 
-        public GameOverScreen(Game game, GameStateManager manager)
-            : base(game, manager)
+        private readonly IViewportProvider viewport;
+        public GameOverScreen(IViewportProvider viewport, GameStateManager manager)
+            : base(manager)
         {
             _content = new List<string>();
+            this.viewport = viewport;
         }
 
         #endregion
@@ -64,18 +67,18 @@ namespace DanmakuNoKyojin.Screens
             base.Initialize();
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(IContentLoader provider)
         {
-            _background = GameRef.Content.Load<Texture2D>("Graphics/Pictures/background");
-            _titleFont = Game.Content.Load<SpriteFont>("Graphics/Fonts/TitleFont");
+            _background = provider.Load<Texture2D>("Graphics/Pictures/background");
+            _titleFont = provider.Load<SpriteFont>("Graphics/Fonts/TitleFont");
 
-            base.LoadContent();
+            base.LoadContent(provider);
         }
 
         public override void Update(GameTime gameTime)
         {
             if (InputHandler.PressedCancel() || InputHandler.PressedAction())
-                StateManager.ChangeState(GameRef.TitleScreen);
+                StateManager.ChangeState(GameStateManager.State.TitleScreen);
 
             if (InputHandler.PressedUp())
             {
@@ -95,13 +98,13 @@ namespace DanmakuNoKyojin.Screens
                 switch (_menuIndex)
                 {
                     case 0:
-                        StateManager.ChangeState(GameRef.GameplayScreen);
+                        StateManager.ChangeState(GameStateManager.State.GameplayScreen);
                         break;
                     case 1:
-                        StateManager.ChangeState(GameRef.TitleScreen);
+                        StateManager.ChangeState(GameStateManager.State.TitleScreen);
                         break;
                     default:
-                        StateManager.ChangeState(GameRef.TitleScreen);
+                        StateManager.ChangeState(GameStateManager.State.TitleScreen);
                         break;
                 }
             }
@@ -109,35 +112,35 @@ namespace DanmakuNoKyojin.Screens
             base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            GameRef.SpriteBatch.Begin();
+            //GameRef.SpriteBatch.Begin();
 
-            GameRef.SpriteBatch.Draw(_background, new Rectangle(0, 0, Config.Resolution.X, Config.Resolution.Y), Color.Red);
+            spriteBatch.Draw(_background, new Rectangle(0, 0, Config.Resolution.X, Config.Resolution.Y), Color.Red);
 
-            GameRef.SpriteBatch.DrawString(_titleFont, _title,
+            spriteBatch.DrawString(_titleFont, _title,
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2 + 5,
-                    Game.GraphicsDevice.Viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 2) + 5),
+                    viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2 + 5,
+                    viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 2) + 5),
                 Color.Black);
-            GameRef.SpriteBatch.DrawString(_titleFont, _title,
+            spriteBatch.DrawString(_titleFont, _title,
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2,
-                    Game.GraphicsDevice.Viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 2)),
+                    viewport.Width / 2f - _titleFont.MeasureString(_title).X / 2,
+                    viewport.Height / 2f - (_titleFont.MeasureString(_title).Y * 2)),
                 Color.White);
 
             for (int i = 0; i < _content.Count; i++)
             {
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _content[i],
+                spriteBatch.DrawString(ControlManager.SpriteFont, _content[i],
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_content[i]).X / 2 + 1,
-                    Game.GraphicsDevice.Viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_content[i]).Y / 2 + 20 * i - ((20 * _content.Count) / 2f) + 1),
+                    viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_content[i]).X / 2 + 1,
+                    viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_content[i]).Y / 2 + 20 * i - ((20 * _content.Count) / 2f) + 1),
                 Color.Black);
 
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _content[i],
+                spriteBatch.DrawString(ControlManager.SpriteFont, _content[i],
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_content[i]).X / 2,
-                    Game.GraphicsDevice.Viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_content[i]).Y / 2 + 20 * i - ((20 * _content.Count) / 2f)),
+                    viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_content[i]).X / 2,
+                    viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_content[i]).Y / 2 + 20 * i - ((20 * _content.Count) / 2f)),
                 Color.White);
             }
 
@@ -147,22 +150,22 @@ namespace DanmakuNoKyojin.Screens
                 if (i == _menuIndex)
                     color = Color.Red;
 
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _actions[i],
+                spriteBatch.DrawString(ControlManager.SpriteFont, _actions[i],
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_actions[i]).X / 2 + 1,
-                    Game.GraphicsDevice.Viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_actions[i]).Y / 2 + 20 * _content.Count + 20 * i + 1),
+                    viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_actions[i]).X / 2 + 1,
+                    viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_actions[i]).Y / 2 + 20 * _content.Count + 20 * i + 1),
                 Color.Black);
 
-                GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont, _actions[i],
+                spriteBatch.DrawString(ControlManager.SpriteFont, _actions[i],
                 new Vector2(
-                    Game.GraphicsDevice.Viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_actions[i]).X / 2,
-                    Game.GraphicsDevice.Viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_actions[i]).Y / 2 + 20 * _content.Count + 20 * i),
+                    viewport.Width / 2f - ControlManager.SpriteFont.MeasureString(_actions[i]).X / 2,
+                    viewport.Height / 2f - ControlManager.SpriteFont.MeasureString(_actions[i]).Y / 2 + 20 * _content.Count + 20 * i),
                 color);
             }
 
-            GameRef.SpriteBatch.End();
+            //GameRef.SpriteBatch.End();
 
-            base.Draw(gameTime);
+            base.Draw(gameTime, spriteBatch);
         }
 
         #endregion
