@@ -147,8 +147,6 @@ namespace Danmaku
         private bool OnUpdateMessage(UpdateMessage cmd)
         {
             // temporar trick to accelerate th ship
-            Forward = true;
-
             if (Forward) Velocity = Velocity + (float) (Acceleration * cmd.ElapsedGameTime.TotalMilliseconds / 1000);
 
             // temporarly we would like to stop the ship if it is not accelerated.

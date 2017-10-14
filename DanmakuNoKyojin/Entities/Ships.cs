@@ -1,4 +1,5 @@
-﻿using DanmakuNoKyojin.Framework;
+﻿using DanmakuNoKyojin.Camera;
+using DanmakuNoKyojin.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -9,8 +10,13 @@ namespace DanmakuNoKyojin.Entities
     /// </summary>
     public sealed class Ships : IContentBasedPart, IUpdatablePart, IDrawablePart
     {
-
         ShipView enemy;
+        private readonly Camera2D camera;
+
+        public Ships(Camera2D camera)
+        {
+            this.camera = camera;
+        }
 
         public void LoadContent(IContentLoader provider)
         {
@@ -23,9 +29,13 @@ namespace DanmakuNoKyojin.Entities
             enemy.Update(gameTime);
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spiteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            enemy.Draw(gameTime, spiteBatch);
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.GetTransformation());
+
+            enemy.Draw(gameTime, spriteBatch);
+
+            spriteBatch.End();
         }
     }
 }

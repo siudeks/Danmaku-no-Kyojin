@@ -126,7 +126,7 @@ namespace DanmakuNoKyojin.Entities
 
             Ship.MoveCommand(inputState.Forward, inputState.Rotation);
 
-            BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading && inputState.BulletTime)) ? true : false;
+            BulletTime = (PlayerData.BulletTimeEnabled && (!_bulletTimeReloading)) ? true : false;
 
             if (inputState.Fire)
             {
@@ -175,7 +175,7 @@ namespace DanmakuNoKyojin.Entities
 
         private static InputData ReadInputFromKeyboard(IViewportProvider _viewport)
         {
-            var bulletTime = InputHandler.MouseState.RightButton == ButtonState.Pressed;
+            var forward = InputHandler.MouseState.RightButton == ButtonState.Pressed;
 
             var fire = InputHandler.MouseState.LeftButton == ButtonState.Pressed;
 
@@ -188,13 +188,12 @@ namespace DanmakuNoKyojin.Entities
                 direction.Y = 1;
             if (InputHandler.KeyDown(Config.PlayerKeyboardInputs["Left"]))
                 direction.X = -1;
-            var forward = InputHandler.KeyDown(Config.PlayerKeyboardInputs["Forward"]);
 
             var distanceX = (_viewport.Width / 2f) - InputHandler.MouseState.X;
             var distanceY = (_viewport.Height / 2f) - InputHandler.MouseState.Y;
             var rotation = (float)Math.Atan2(distanceY, distanceX) - MathHelper.PiOver2;
 
-            return new InputData(bulletTime, fire, direction, rotation, new Vector2(distanceX, distanceY), forward);
+            return new InputData(fire, direction, rotation, new Vector2(distanceX, distanceY), forward);
         }
 
         private static InputData ReadInputFromPad()
@@ -211,7 +210,7 @@ namespace DanmakuNoKyojin.Entities
                 Math.Atan2(InputHandler.GamePadStates[0].ThumbSticks.Right.Y * (-1),
                InputHandler.GamePadStates[0].ThumbSticks.Right.X) + MathHelper.PiOver2;
 
-            return new InputData(bulletTime, fire, direction, rotation, Vector2.Zero, false);
+            return new InputData(fire, direction, rotation, Vector2.Zero, false);
         }
 
         private static InputData ReadInput(Config.Controller controller, IViewportProvider viewport)
@@ -468,16 +467,14 @@ namespace DanmakuNoKyojin.Entities
 
     struct InputData
     {
-        public bool BulletTime;
         public bool Fire;
         public Vector2 Direction;
         public float Rotation;
         public Vector2 RotationXY;
         public bool Forward;
 
-        public InputData(bool bulletTime, bool fire, Vector2 direction, float rotation, Vector2 rotationXY, bool forward)
+        public InputData(bool fire, Vector2 direction, float rotation, Vector2 rotationXY, bool forward)
         {
-            BulletTime = bulletTime;
             Fire = fire;
             Direction = direction;
             Rotation = rotation;

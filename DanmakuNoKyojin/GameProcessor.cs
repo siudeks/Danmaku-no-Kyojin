@@ -30,6 +30,7 @@ namespace DanmakuNoKyojin
         public GameOverScreen GameOverScreen;
 
         [Inject] public IUpdatablePart[] UpdatableParts { private get; set; }
+        [Inject] public IDrawablePart[] DrawableParts { private get; set; }
         [Inject] public IContentBasedPart[] ContentBasedParts { private get; set; }
         [Inject] public InputHandler InputHandler { private get; set; }
 
@@ -113,6 +114,9 @@ namespace DanmakuNoKyojin
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (var item in drawableParts)
+                item.Draw(gameTime, spriteBatch);
+
+            foreach (var item in DrawableParts)
                 item.Draw(gameTime, spriteBatch);
         }
 

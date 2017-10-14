@@ -10,7 +10,6 @@ namespace DanmakuNoKyojin.Entities
     {
         private TimeSpan _initTime;
         private TimeSpan _currentTime;
-        private bool _active;
         private bool _isFinished;
 
         // Fonts
@@ -25,14 +24,11 @@ namespace DanmakuNoKyojin.Entities
         {
             _initTime = Improvements.TimerInitialTimeData[PlayerData.TimerInitialTimeIndex].Key;
             _currentTime = _initTime;
-            _active = false;
             _isFinished = false;
         }
 
         public void LoadContent(IContentLoader loader)
         {
-            // _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             _secondsFont = loader.Load<SpriteFont>("Graphics/Fonts/TimerSeconds");
         }
 
@@ -69,16 +65,6 @@ namespace DanmakuNoKyojin.Entities
             */
          
             //_spriteBatch.End();
-        }
-
-        public void Play()
-        {
-            _active = true;
-        }
-
-        public void Stop()
-        {
-            _active = false;
         }
 
         public void AddTime(TimeSpan extraTime)

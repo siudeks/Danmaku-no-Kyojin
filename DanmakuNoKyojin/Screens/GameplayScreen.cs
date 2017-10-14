@@ -14,11 +14,14 @@ using DanmakuNoKyojin.Framework;
 
 namespace DanmakuNoKyojin.Screens
 {
-    public class GameplayScreen : GameScreen, IDisposable
+    /// <summary>
+    /// Main gameplay screen.
+    /// 
+    /// Shows your ship and nearest objects as well as background
+    /// </summary>
+    public sealed class GameplayScreen : GameScreen, IDisposable
     {
         public Player Player { get; set; }
-
-        private int _waveNumber;
 
         // Audio
         private SoundEffect hit = null;
@@ -55,13 +58,9 @@ namespace DanmakuNoKyojin.Screens
 
             _playTime = TimeSpan.Zero;
 
-            _waveNumber = 0;
-
             _timer.Initialize();
 
             base.Initialize();
-
-            _timer.Initialize();
         }
 
         public override void LoadContent(IContentLoader loader)
@@ -265,26 +264,12 @@ namespace DanmakuNoKyojin.Screens
                 }
             }
 
-            //// Text
-            //if (Config.Debug)
-            //{
-            //    GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont,
-            //                                   "Boss bullets: " +
-            //                                   _enemy.MoverManager.movers.Count.ToString(CultureInfo.InvariantCulture),
-            //                                   new Vector2(1, 21), Color.Black);
-            //    GameRef.SpriteBatch.DrawString(ControlManager.SpriteFont,
-            //                                   "Boss bullets: " +
-            //                                   _enemy.MoverManager.movers.Count.ToString(CultureInfo.InvariantCulture),
-            //                                   new Vector2(0, 20), Color.White);
-            //}
+            string artifact1 = "GFT";
 
-            // Wave number
-            string waveNumber = "Wave #" + _waveNumber.ToString(CultureInfo.InvariantCulture);
-
-            spriteBatch.DrawString(ControlManager.SpriteFont, waveNumber,
-                new Vector2(Config.Resolution.X / 2f - ControlManager.SpriteFont.MeasureString(waveNumber).X / 2f + 1, Config.Resolution.Y - 49), Color.Black);
-            spriteBatch.DrawString(ControlManager.SpriteFont, waveNumber,
-                new Vector2(Config.Resolution.X / 2f - ControlManager.SpriteFont.MeasureString(waveNumber).X / 2f, Config.Resolution.Y - 50), Color.White);
+            spriteBatch.DrawString(ControlManager.SpriteFont, artifact1,
+                new Vector2(Config.Resolution.X / 2f - ControlManager.SpriteFont.MeasureString(artifact1).X / 2f + 1, Config.Resolution.Y - 49), Color.Black);
+            spriteBatch.DrawString(ControlManager.SpriteFont, artifact1,
+                new Vector2(Config.Resolution.X / 2f - ControlManager.SpriteFont.MeasureString(artifact1).X / 2f, Config.Resolution.Y - 50), Color.Blue);
 
             // Boss current pattern
             /*
