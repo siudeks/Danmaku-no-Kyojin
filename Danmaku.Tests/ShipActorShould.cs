@@ -1,4 +1,5 @@
 using Akka.Actor;
+using Akka.Event;
 using Akka.TestKit.NUnit3;
 using NUnit.Framework;
 using System;
@@ -99,6 +100,18 @@ namespace Danmaku
                         .IsInvicible);
                 });
             });
+        }
+
+        [Test]
+        public void DestroyEnemyWithBullet()
+        {
+            var size = (1, 1);
+
+            var player = Sys.ActorOf(Props.Create(() => new ShipActor(ValueTuple.Create(0f, 0f), size)));
+            var enemy = Sys.ActorOf(Props.Create(() => new ShipActor(ValueTuple.Create(0f, 10f), size)));
+
+            player.Tell(new ShipActor.MoveCommand(false, Math.PI));
+
         }
     }
 }

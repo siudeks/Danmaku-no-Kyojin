@@ -7,14 +7,17 @@ using System.Linq;
 namespace Danmaku
 {
     /// <summary>
-    /// Important: Beacon instance needs to be created before any ShipActor instance
+    /// NaviHub is the Golden Source of data about colission and position of objects.
+    /// 
+    /// NaviHub instance needs to be created before any ShipActor instance
     /// because currently ShipActor assumes that request send to BeaconActor will be handled.
     /// 
     /// Purpose of the actor is to act as a clash resolver for nearest ships.
     /// Every ship needs to be connected with only one beacon.
     /// 
-    /// Initially, only one beacon will be included in game. In the future we can
-    /// imagine more beacons, relocated geografically between ships.
+    /// Initially, only one NaviHub will be included in game. In the future we can
+    /// imagine more Hubs, relocated geografically between ships to handle 
+    /// big number of ships.
     /// </summary>
     public sealed class BeaconActor : ReceiveActor
     {

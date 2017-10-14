@@ -20,6 +20,8 @@ namespace Danmaku
 
         private (float X, float Y) Position;
 
+        public sealed class ShootCommand { }
+
         public sealed class MoveCommand
         {
             public readonly bool Forward;
@@ -32,9 +34,7 @@ namespace Danmaku
             }
         }
 
-        public sealed class StatusRequest
-        {
-        }
+        public sealed class StatusRequest { }
 
         public sealed class StatusNotification : IEquatable<StatusNotification>
         {
@@ -43,7 +43,7 @@ namespace Danmaku
             public readonly double Rotation;
             public readonly bool IsInvicible;
 
-            public StatusNotification(float positionX, float positionY, double rotation,  bool isInvicible)
+            public StatusNotification(float positionX, float positionY, double rotation, bool isInvicible)
             {
                 PositionX = positionX;
                 PositionY = positionY;
@@ -147,18 +147,18 @@ namespace Danmaku
         private bool OnUpdateMessage(UpdateMessage cmd)
         {
             // temporar trick to accelerate th ship
-            if (Forward) Velocity = Velocity + (float) (Acceleration * cmd.ElapsedGameTime.TotalMilliseconds / 1000);
+            if (Forward) Velocity = Velocity + (float)(Acceleration * cmd.ElapsedGameTime.TotalMilliseconds / 1000) * 5;
 
             // temporarly we would like to stop the ship if it is not accelerated.
-            if (!Forward) Velocity = Velocity - 1;
+            if (!Forward) Velocity = Velocity - 5;
 
             if (Velocity > 1000) Velocity = 1000;
             if (Velocity < 0) Velocity = 0;
 
             var ms = (float)cmd.ElapsedGameTime.TotalMilliseconds;
 
-            var x = (float) (Position.X + (Math.Sin(Rotation) * Velocity * ms) / 1000f / 2);
-            var y = (float) (Position.Y + (-Math.Cos(Rotation) * Velocity * ms) / 1000f / 2);
+            var x = (float)(Position.X + (Math.Sin(Rotation) * Velocity * ms) / 1000f / 2);
+            var y = (float)(Position.Y + (-Math.Cos(Rotation) * Velocity * ms) / 1000f / 2);
 
             // do not allow to go outside of game area
             //x = MathHelper.Clamp(x, SpriteSize.Width / 2f, Config.GameAreaX - SpriteSize.Width / 2f);
