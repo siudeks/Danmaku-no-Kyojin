@@ -18,10 +18,9 @@ namespace DanmakuNoKyojin
             system = ActorSystem.Create("default");
             var game = kernel.Get<GameRunner>();
 
-            kernel.Bind<Texture2D>().ToConstant(game.Pixel);
+            var p = game.Pixel;
+            game.GameProcessor = kernel.Get<GameProcessor>(new Ninject.Parameters.ConstructorArgument("pixel", p));
 
-            game.GameProcessor = kernel.Get<GameProcessor>();
-            
             game.Run();
 
             kernel.Dispose();
