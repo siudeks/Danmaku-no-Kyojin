@@ -34,7 +34,7 @@ namespace Danmaku
             var status = await actor.Ask<ShipActor.StatusNotification>(new ShipActor.StatusRequest(), new CancellationTokenSource(100).Token);
 
 
-            var a = 100f; // wellKnownShipAcceleration
+            var a = 500f; // wellKnownShipAcceleration
             var t = time.TotalSeconds;
 
             Assert.That(status.PositionX, Is.EqualTo(1 + a * t * t / 2));
