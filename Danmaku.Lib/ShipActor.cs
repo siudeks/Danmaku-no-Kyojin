@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Danmaku
 {
+    /// <summary>
+    /// Represents single ship. It's class is Interceptor.
+    /// </summary>
     public sealed class ShipActor : ReceiveActor
     {
         // ship acceleration.

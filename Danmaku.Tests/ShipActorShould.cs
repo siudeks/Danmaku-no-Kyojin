@@ -102,28 +102,37 @@ namespace Danmaku
             });
         }
 
+        /// <summary>
+        /// Scenario
+        ///   Destroy a ship with bullet
+        /// When
+        ///   Aggressor is directed to a Victim
+        ///   and Aggressor shoots
+        /// Then
+        ///   Visctim is destroyed
+        /// </summary>
         [Test]
-        public void DestroyEnemyWithBullet()
+        public void DestroyEnemyShip()
         {
             var size = (1, 1);
 
-            var player = Sys.ActorOf(Props.Create(() => new ShipActor(ValueTuple.Create(0f, 0f), size)));
-            var enemy = Sys.ActorOf(Props.Create(() => new ShipActor(ValueTuple.Create(0f, 10f), size)));
+            var aggressor = Sys.ActorOf(Props.Create(() => new ShipActor(ValueTuple.Create(0f, 0f), size)));
+            var victim = Sys.ActorOf(Props.Create(() => new ShipActor(ValueTuple.Create(0f, 10f), size)));
 
-            player.Tell(new ShipActor.MoveCommand(false, Math.PI));
+            aggressor.Tell(new ShipActor.MoveCommand(false, Math.PI));
 
             // register TestActor for DeathWatch of the enemy actor:
             {
-                Watch(enemy);
+                Watch(victim);
 
-                player.Tell(new ShipActor.ShootCommand());
+                aggressor.Tell(new ShipActor.ShootCommand());
 
                 // if bullet's velocity is 1 and distance is smaller then 14.14 (10 * SQRT(2))
                 // hence 15 secs are enough to find the target
                 Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(15)));
 
                 var msg = ExpectMsg<Terminated>();
-                Assert.That(msg.ActorRef, Is.EqualTo(enemy));
+                Assert.That(msg.ActorRef, Is.EqualTo(victim));
             }
         }
     }

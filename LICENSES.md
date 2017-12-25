@@ -1,0 +1,1 @@
+[INGAME_BLOCKS_STONE_1.png](http://angrybirdsstory.wikia.com/wiki/User_blog:Daniel_T._Goggle_Bird/Blocks_Sprite_sheet_%2B_BONUS)
