@@ -1,6 +1,6 @@
 ﻿## Coordinate system
 
-In Danmaki.Lib we use [Cartesian coordinate system](https://en.wikipedia.org/wiki/Cartesian_coordinate_system)
+In Danmaku.Lib we use [Cartesian coordinate system](https://en.wikipedia.org/wiki/Cartesian_coordinate_system)
 
 		         ^
 		 (-1,1)  |  (1,1)
@@ -10,6 +10,5 @@ In Danmaki.Lib we use [Cartesian coordinate system](https://en.wikipedia.org/wik
 		 (-1,-1) |  (1,-1)
 		      
 
-It is a different approach compared to XNA/Monogame where it uses different calculations. As result, we need to recalculate when needed
-values from game coordinates to apply XNA/Monogame rules. 
+It is a different coordinate system approach compared to Monogame. As the result, we need to d orecalculations between Danmaku and Monogame coordinate systems.
 ## 
