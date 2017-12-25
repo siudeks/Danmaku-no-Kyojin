@@ -23,7 +23,7 @@ namespace Danmaku
 
         private (float X, float Y) Position;
 
-        public sealed class ShootCommand { }
+        public sealed class ShootBulletCommand { }
 
         public sealed class MoveCommand
         {

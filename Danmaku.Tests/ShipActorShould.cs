@@ -125,10 +125,13 @@ namespace Danmaku
             {
                 Watch(victim);
 
-                aggressor.Tell(new ShipActor.ShootCommand());
+                aggressor.Tell(new ShipActor.ShootBulletCommand());
 
-                // if bullet's velocity is 1 and distance is smaller then 14.14 (10 * SQRT(2))
+                // assumptions:
+                // * the bullet's velocity is 1 
+                // because the distance between ships is smaller then 14.14 (10 * SQRT(2))
                 // hence 15 secs are enough to find the target
+
                 Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(15)));
 
                 var msg = ExpectMsg<Terminated>();
