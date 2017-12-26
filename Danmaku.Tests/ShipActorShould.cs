@@ -109,7 +109,7 @@ namespace Danmaku
         ///   Aggressor is directed to a Victim
         ///   and Aggressor shoots
         /// Then
-        ///   Visctim is destroyed
+        ///   Victim is destroyed
         /// </summary>
         [Test]
         public void DestroyEnemyShip()
@@ -119,24 +119,21 @@ namespace Danmaku
             var aggressor = Sys.ActorOf(Props.Create(() => new ShipActor(ValueTuple.Create(0f, 0f), size)));
             var victim = Sys.ActorOf(Props.Create(() => new ShipActor(ValueTuple.Create(0f, 10f), size)));
 
-            aggressor.Tell(new ShipActor.MoveCommand(false, Math.PI));
-
             // register TestActor for DeathWatch of the enemy actor:
-            {
-                Watch(victim);
+            Watch(victim);
 
-                aggressor.Tell(new ShipActor.ShootBulletCommand());
+            // direct the aggressor to the victim and shoot
+            aggressor.Tell(new ShipActor.MoveCommand(false, Math.PI / 2));
+            aggressor.Tell(new ShipActor.ShootBulletCommand());
 
-                // assumptions:
-                // * the bullet's velocity is 1 
-                // because the distance between ships is smaller then 14.14 (10 * SQRT(2))
-                // hence 15 secs are enough to find the target
+            // assumptions:
+            // * the bullet's velocity is 1 
+            // because the distance between ships is smaller then 14.14 (10 * SQRT(2))
+            // hence 15 secs are enough to find the target
+            Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(15)));
 
-                Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(15)));
-
-                var msg = ExpectMsg<Terminated>();
-                Assert.That(msg.ActorRef, Is.EqualTo(victim));
-            }
+            var msg = ExpectMsg<Terminated>();
+            Assert.That(msg.ActorRef, Is.EqualTo(victim));
         }
     }
 }
