@@ -12,7 +12,8 @@ namespace Danmaku
     /// NaviHub instance needs to be created before any ShipActor instance
     /// because currently ShipActor assumes that request send to BeaconActor will be handled.
     /// 
-    /// Purpose of the actor is to act as a clash resolver for nearest ships.
+    /// Purpose of the actor is to act as a clash resolver for nearest objects like ship, bullets etc.
+    /// 
     /// Every ship needs to be connected with only one beacon.
     /// 
     /// Initially, only one NaviHub will be included in game. In the future we can
