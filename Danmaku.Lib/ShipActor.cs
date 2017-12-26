@@ -117,7 +117,7 @@ namespace Danmaku
 
             // inform a beacon about the ship.
             var status = new NaviHubActor.ShipStatus(Position.X, Position.Y);
-            Context.System.EventStream.Publish(new NaviHubActor.RegisterShip(status));
+            Context.System.EventStream.Publish(new NaviHubActor.RegisterShipCommand(status));
         }
 
         protected override void PostStop()

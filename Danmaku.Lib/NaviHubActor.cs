@@ -24,11 +24,15 @@ namespace Danmaku
     {
         private List<(IActorRef Ship, ShipStatus Status)> knownShips = new List<(IActorRef, ShipStatus)>();
 
-        public sealed class RegisterShip
+        /// <summary>
+        /// Register a new ship in game loop 
+        /// so it can be included in all game processes.
+        /// </summary>
+        public sealed class RegisterShipCommand
         {
             public ShipStatus CurrentStatus;
 
-            public RegisterShip(ShipStatus current)
+            public RegisterShipCommand(ShipStatus current)
             {
                 Contract.Requires(current != null);
                 CurrentStatus = current;
@@ -52,18 +56,18 @@ namespace Danmaku
         protected override void PreStart()
         {
             base.PreStart();
-            Context.System.EventStream.Subscribe(Self, typeof(RegisterShip));
+            Context.System.EventStream.Subscribe(Self, typeof(RegisterShipCommand));
         }
 
         protected override void PostStop()
         {
-            Context.System.EventStream.Unsubscribe(Self, typeof(RegisterShip));
+            Context.System.EventStream.Unsubscribe(Self, typeof(RegisterShipCommand));
             base.PostStop();
         }
 
         public NaviHubActor()
         {
-            Receive<RegisterShip>(OnRegisterShip);
+            Receive<RegisterShipCommand>(OnRegisterShip);
             Receive<NaviHubActor.ShipStatus>(OnShipStatusNotification);
         }
 
@@ -96,7 +100,7 @@ namespace Danmaku
             return true;
         }
 
-        private bool OnRegisterShip(RegisterShip cmd)
+        private bool OnRegisterShip(RegisterShipCommand cmd)
         {
             knownShips.Add((Sender, cmd.CurrentStatus));
 
