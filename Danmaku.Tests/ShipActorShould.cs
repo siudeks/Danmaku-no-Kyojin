@@ -119,17 +119,17 @@ namespace Danmaku
             var aggressor = Sys.ActorOf(Props.Create(() => new ShipActor(ValueTuple.Create(0f, 0f), size)));
             var victim = Sys.ActorOf(Props.Create(() => new ShipActor(ValueTuple.Create(0f, 10f), size)));
 
-            // register TestActor for DeathWatch of the enemy actor:
+            // use Watch to be notified about the vistim's dead
             Watch(victim);
 
             // direct the aggressor to the victim and shoot
             aggressor.Tell(new ShipActor.MoveCommand(false, Math.PI / 2));
             aggressor.Tell(new ShipActor.ShootBulletCommand());
 
-            // assumptions:
-            // * the bullet's velocity is 1 
             // because the distance between ships is smaller then 14.14 (10 * SQRT(2))
             // hence 15 secs are enough to find the target
+            // assumptions:
+            // * the bullet's velocity is 1 
             Sys.EventStream.Publish(new UpdateMessage(TimeSpan.FromSeconds(15)));
 
             var msg = ExpectMsg<Terminated>();

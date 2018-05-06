@@ -34,6 +34,10 @@ namespace Danmaku
         {
             base.PreStart();
             Context.System.EventStream.Subscribe(Self, typeof(UpdateMessage));
+
+            // inform a beacon about the bullet.
+            var status = new NaviHubActor.BulletStatus(Position.X, Position.Y);
+            Context.System.EventStream.Publish(new NaviHubActor.RegisterBulletCommand(status));
         }
 
         protected override void PostStop()

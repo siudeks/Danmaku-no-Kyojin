@@ -20,6 +20,7 @@ namespace Danmaku
         public bool IsInvicible;
         public (int Width, int Height) SpriteSize;
         public List<IActorRef> listeners = new List<IActorRef>();
+        public List<IActorRef> bullets = new List<IActorRef>();
 
         private (float X, float Y) Position;
 
@@ -81,11 +82,12 @@ namespace Danmaku
 
         private void Initialize()
         {
-            Receive<NaviHubActor.ShipRegistered>(OnShipRegistered);
+            Receive<NaviHubActor.ShipRegisteredEvent>(OnShipRegistered);
             Receive<MoveCommand>(OnMoveCommand);
             Receive<UpdateMessage>(OnUpdateMessage);
             Receive<StatusRequest>(OnStatusRequest);
             Receive<CollisionDetected>(OnCollisionDetected);
+            Receive<ShootBulletCommand>(OnShootBulletCommand);
         }
 
         private bool OnMoveCommand(MoveCommand cmd)
@@ -95,7 +97,7 @@ namespace Danmaku
             return true;
         }
 
-        private bool OnShipRegistered(NaviHubActor.ShipRegistered obj)
+        private bool OnShipRegistered(NaviHubActor.ShipRegisteredEvent obj)
         {
             listeners.Add(Sender);
 
@@ -107,6 +109,14 @@ namespace Danmaku
             IsInvicible = true;
 
             CalculateStatusAndNotifyListeners();
+            return true;
+        }
+
+        private bool OnShootBulletCommand(ShootBulletCommand obj)
+        {
+            var props = Props.Create<BulletActor>();
+            var bullet = Context.System.ActorOf(props);
+            bullets.Add(bullet);
             return true;
         }
 

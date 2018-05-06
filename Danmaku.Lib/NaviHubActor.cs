@@ -7,12 +7,13 @@ using System.Linq;
 namespace Danmaku
 {
     /// <summary>
-    /// NaviHub is the Golden Source of data about colission and position of objects.
+    /// NaviHub is the Golden Source of data about colission and position of objects. 
+    /// If some objects are moving, only NaviHub is able to detect and inform about collision.
     /// 
     /// NaviHub instance needs to be created before any ShipActor instance
     /// because currently ShipActor assumes that request send to BeaconActor will be handled.
     /// 
-    /// Purpose of the actor is to act as a clash resolver for nearest objects like ship, bullets etc.
+    /// Purpose of the actor is to act as a clash resolver for objects like ship, bullets etc.
     /// 
     /// Every ship needs to be connected with only one beacon.
     /// 
@@ -23,6 +24,7 @@ namespace Danmaku
     public sealed class NaviHubActor : ReceiveActor
     {
         private List<(IActorRef Ship, ShipStatus Status)> knownShips = new List<(IActorRef, ShipStatus)>();
+        private List<(IActorRef Bullet, BulletStatus Status)> knownBullets = new List<(IActorRef Bullet, BulletStatus Status)>();
 
         /// <summary>
         /// Register a new ship in game loop 
@@ -39,7 +41,24 @@ namespace Danmaku
             }
         }
 
-        public sealed class ShipRegistered { }
+        /// <summary>
+        /// Register a new ship in game loop 
+        /// so it can be included in all game processes.
+        /// </summary>
+        public sealed class RegisterBulletCommand
+        {
+            public BulletStatus CurrentStatus;
+
+            public RegisterBulletCommand(BulletStatus current)
+            {
+                Contract.Requires(current != null);
+                CurrentStatus = current;
+            }
+        }
+
+        public sealed class ShipRegisteredEvent { }
+
+        public sealed class BulletRegisteredEvent { }
 
         public sealed class ShipStatus
         {
@@ -53,21 +72,36 @@ namespace Danmaku
             }
         }
 
+        public sealed class BulletStatus
+        {
+            public readonly float positionX;
+            public readonly float positionY;
+
+            public BulletStatus(float positionX, float positionY)
+            {
+                this.positionX = positionX;
+                this.positionY = positionY;
+            }
+        }
+
         protected override void PreStart()
         {
             base.PreStart();
             Context.System.EventStream.Subscribe(Self, typeof(RegisterShipCommand));
+            Context.System.EventStream.Subscribe(Self, typeof(RegisterBulletCommand));
         }
 
         protected override void PostStop()
         {
             Context.System.EventStream.Unsubscribe(Self, typeof(RegisterShipCommand));
+            Context.System.EventStream.Unsubscribe(Self, typeof(RegisterBulletCommand));
             base.PostStop();
         }
 
         public NaviHubActor()
         {
             Receive<RegisterShipCommand>(OnRegisterShip);
+            Receive<RegisterBulletCommand>(OnRegisterBullet);
             Receive<NaviHubActor.ShipStatus>(OnShipStatusNotification);
         }
 
@@ -104,7 +138,15 @@ namespace Danmaku
         {
             knownShips.Add((Sender, cmd.CurrentStatus));
 
-            Sender.Tell(new ShipRegistered());
+            Sender.Tell(new ShipRegisteredEvent());
+            return true;
+        }
+
+        private bool OnRegisterBullet(RegisterBulletCommand cmd)
+        {
+            knownBullets.Add((Sender, cmd.CurrentStatus));
+
+            Sender.Tell(new BulletRegisteredEvent());
             return true;
         }
     }
