@@ -149,5 +149,7 @@ namespace Danmaku
             Sender.Tell(new BulletRegisteredEvent());
             return true;
         }
+
+        public static Props Props() => Akka.Actor.Props.Create(() => new NaviHubActor());
     }
 }

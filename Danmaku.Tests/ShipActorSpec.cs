@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 namespace Danmaku
 {
     [TestFixture]
-    public sealed class ShipActorShould : TestKit
+    public sealed class ShipActorSpec : TestKit
     {
         [SetUp]
         public void Initialize()
         {
             // we need to create a beacon which needs to be required to support 
             // collision check for the nearest ships.
-            var naviHubProps = Props.Create(() => new NaviHubActor());
-            var naviHub = Sys.ActorOf(naviHubProps);
+            // (nearest from the beacon perspective)
+            Sys.ActorOf(NaviHubActor.Props());
         }
 
         [Test]
